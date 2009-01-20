@@ -1,3 +1,4 @@
+#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
@@ -14,7 +15,7 @@ some_handler(GtkWidget *widget)
      * so that it appears in the global symbol table. */
 }
 
-extern "C" gint OnButton1Click(GtkWidget * widget, gpointer data)
+extern "C" G_MODULE_EXPORT gint OnButton1Click(GtkWidget * widget, gpointer data)
 {
     g_print("Test\n");
     GtkWidget * drawingArea = glade_xml_get_widget(xml, "drawingarea1");
@@ -43,7 +44,7 @@ int TimeToTick(string time)
    
     return (hour * 60) + min;
 }
-extern "C" gint on_button2_clicked(GtkWidget * widget, gpointer data)
+extern "C" G_MODULE_EXPORT gint on_button2_clicked(GtkWidget * widget, gpointer data)
 {
     g_print("Load\n");
 //    GtkWidget * drawArea = (GtkWidget *) data;
@@ -53,13 +54,13 @@ extern "C" gint on_button2_clicked(GtkWidget * widget, gpointer data)
     tr.ReadFromFile("hn.txt");
     g_print("%s\n", tr.Name.c_str());
     g_print("%f\n", tr.Length);
-    for (int i = 0; i < tr.Stations.size(); ++i)
+    for (unsigned int i = 0; i < tr.Stations.size(); ++i)
     {
         g_print("%s,%f\n", tr.Stations[i].Name.c_str(), tr.Stations[i].Pos); //, tr.Stations[i].Level, tr.Stations[i].IsHidden);
     }
     Train t;
     t.ReadFromFile("1462.txt");
-    for (int i = 0; i < t.Detail.size(); ++i)
+    for (unsigned int i = 0; i < t.Detail.size(); ++i)
     {
         g_print("%s,%s,%s\n", t.Detail[i].Arrival.c_str(), t.Detail[i].Departural.c_str(), t.Detail[i].Station.c_str()); 
     }
@@ -71,7 +72,7 @@ extern "C" gint on_button2_clicked(GtkWidget * widget, gpointer data)
     int topMargin = 100;
     int ptPerHour = 60;
     int leftStationWidth = 100;
-    for (int i = 0; i < tr.Stations.size(); ++i)
+    for (unsigned int i = 0; i < tr.Stations.size(); ++i)
     {
         if (!tr.Stations[i].IsHidden)
         {
@@ -156,7 +157,7 @@ extern "C" gint on_button2_clicked(GtkWidget * widget, gpointer data)
     return TRUE;
 }
 
-extern "C"  gint configure_event(GtkWidget * widget, GdkEventConfigure * event)
+extern "C"  G_MODULE_EXPORT gint configure_event(GtkWidget * widget, GdkEventConfigure * event)
 {
     g_print("configure_event%d\n", widget->window);
     if (pixmap)
@@ -166,9 +167,10 @@ extern "C"  gint configure_event(GtkWidget * widget, GdkEventConfigure * event)
 
     pixmap = gdk_pixmap_new(widget->window, widget->allocation.width, widget->allocation.height, -1);
     gdk_draw_rectangle(pixmap, widget->style->white_gc, TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
+	return FALSE;
 
 }
-extern "C"  gint expose_event(GtkWidget * widget, GdkEventExpose * event)
+extern "C"  G_MODULE_EXPORT gint expose_event(GtkWidget * widget, GdkEventExpose * event)
 {
     g_print("expose_event %d\n", widget->window);
     gdk_draw_pixmap(widget->window, widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
