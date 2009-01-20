@@ -1,0 +1,21 @@
+#summary Introduction of this project
+
+= Introduction =
+
+This project aims to implement a cross-platform train graph drawing software. By inputting the information of the train lines and trains, the software can draw train graph automatically. At the same time, it can simulate the train running status by animations. 
+
+There has already been a similar program called ETRC, developed by LGuo, which can be obtained from the BBS of Hasea (One of the railfan forum in China). It is an excellent program, but it is not a Free Software and also not cross-platform. 
+
+URL to download ETRC: http://bbs.hasea.com/viewthread.php?tid=227051
+
+= Development Plan =
+
+This project will be finished using GTK+ for cross-platform support. The main implementation language is C++. (However, we will using many C style C++ for interacting with the GTK+ library)
+
+Glade will also be used for user interface designing. 
+
+Since I was really new to GTK+, this will also be an experiment field for me to learn GTK+.
+
+= How to join = 
+
+You are welcomed to join the project if you wish. Please leave me a message so I can add you to the member list of this project. 
