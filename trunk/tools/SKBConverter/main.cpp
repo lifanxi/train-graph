@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <tchar.h>
+#include <string>
 #include <commctrl.h>
 #include <iostream>
 #include <fstream>
@@ -79,17 +80,63 @@ bool GetList(HANDLE hProcess, HWND hTable)
 	tvItm.pszText = pBuffer;
 	tvItm.cchTextMax = MAX_CHAR_LEN;
 	TCHAR buffer[MAX_CHAR_LEN];
-
+	string filename; // Used for output TRF file
+	ofstream trfFile;
 	for (int i = 0; i < count; ++i)
 	{
 		for (int j = 0; j < 14; ++j)
 		{
 			tvItm.iItem = i;
 			tvItm.iSubItem = j;
-
 			WriteProcessMemory(hProcess, pItem, &tvItm, sizeof(LVITEM), NULL);
 			SendMessage(hTable, LVM_GETITEMTEXT, i, (LPARAM) pItem);
 			ReadProcessMemory(hProcess, pBuffer, buffer, MAX_CHAR_LEN, NULL);
+			if (j == 0)
+			{
+				if (buffer[0] == ' ')
+					filename = string(buffer+1);
+				else
+					filename = string(buffer);
+				string t1, t2;
+				string * pt = &t1;
+				for (int e = 0; e < filename.length(); ++ e)
+				{
+					if (filename[e] == ' ')
+						continue;
+					if (filename[e] == '/')
+					{
+						filename[e] = '_';
+						if (pt == &t1)
+							pt = &t2;
+						else
+							pt = 0;
+						continue;
+					}
+					if (pt != 0)
+					{
+						pt->push_back(filename[e]);
+					}
+				}
+				if (t1[t1.length() -1] % 2 == 0)
+				{
+					swap(t1, t2);
+					if (!t1.empty())
+					{
+						if (t1[t1.length() -1] % 2 == 0)
+						{
+							filename += string(".bak");
+						}
+					}
+				}
+				filename = string("C:\\trf\\") + filename;
+				filename += string(".trf");
+				trfFile.open(filename.c_str(), ios::out);
+				trfFile << "trf2," << (buffer[0] == ' '?buffer+1:buffer) << "," << t1 << "," << t2 << endl;
+			}
+			else if (j == 3)
+				trfFile << buffer << endl;
+			else if (j == 5)
+				trfFile << buffer << endl;
 			outFile << buffer << "\t";
 		}
 		outFile << endl;
@@ -116,19 +163,50 @@ bool GetList(HANDLE hProcess, HWND hTable)
 			assert(iSubCount != 0);
 			for (int x = 0; x < iSubCount; ++x)
 			{
+				string last;
+				bool dup = false;
 				for (int y = 0; y < 8; ++y)
 				{
 					tvItm.iItem = x;
 					tvItm.iSubItem = y;
-
 					WriteProcessMemory(hProcess, pItem, &tvItm, sizeof(LVITEM), NULL);
 					SendMessage(hSubTable, LVM_GETITEMTEXT, x, (LPARAM) pItem);
 					ReadProcessMemory(hProcess, pBuffer, buffer, MAX_CHAR_LEN, NULL);
 					outFile2 << buffer << "\t";
+					switch (y)
+					{
+					case 2:
+						trfFile << buffer << ",";
+						break;
+					case 4:
+						if (buffer[0] == 0)
+							dup = true;
+						else
+							trfFile << buffer << ",";
+						break;
+					case 5:
+						if (buffer[0] == 0)
+						{
+							trfFile << last << endl;
+						}
+						else
+						{
+							if (dup == true)
+							{
+								trfFile << buffer << "," << buffer << endl;
+								dup = false;
+							}
+							else
+								trfFile << buffer << endl;
+						}
+						break;
+					}
+					last = buffer;
 				}
 				outFile2 << endl;
 			}
 			SendMessage(hwnd, WM_CLOSE, 0, 0);
+			trfFile.close();
 		}
 		else
 		{
@@ -145,6 +223,21 @@ bool GetList(HANDLE hProcess, HWND hTable)
 
 int main(int argc, char * argv[])
 {
+	int min = 1;
+	int max = 9999;
+	
+	// Handle commmand line
+	if (argc == 3)
+	{
+		min = atoi(argv[1]);
+		max = atoi(argv[2]);
+	}
+	else if (argc != 1)
+	{
+		MessageBox(NULL,TEXT("Wrong Parameter!"),TEXT("Error"), MB_OK);	
+		return 1;
+	}
+	
 	// Start SMSKB
 	STARTUPINFO siStartupInfo;
     PROCESS_INFORMATION piProcessInfo;
@@ -157,14 +250,13 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
+	// Wait for the program to finish initialization
 	Sleep(5000);
 
+	// Find SMSKB windows
 	TCHAR * title = 0;
-	if (argc == 1)
-	{
-		title = TEXT("盛名时刻表-最专业的列车时刻表查询软件! ");
-	}
-	
+	title = TEXT("盛名时刻表-最专业的列车时刻表查询软件! ");
+
 	HWND hMain = MyFindWindow(title);	
 	HWND hTable = NULL, hInput = NULL, hSubmit = NULL;
 	if (hMain != 0)
@@ -194,6 +286,7 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
+	// Get process handle
 	DWORD dwProcessID = 0;
 	GetWindowThreadProcessId(hMain, &dwProcessID);
 	if (dwProcessID == 0)
@@ -212,11 +305,12 @@ int main(int argc, char * argv[])
 	assert(hInput != NULL);
 	assert(hSubmit != NULL);
 	
+	// Init output file
 	outFile.open("c:\\1.txt");
 	outFile2.open("c:\\2.txt");
-
+	
 	// Main function
-	for (int i = 8777; i < 9999; ++i)
+	for (int i = min; i < max; ++i)
 	{
 		bool bResult = SubmitQuery(hInput, i, hSubmit);
 		Sleep(200);
@@ -226,14 +320,18 @@ int main(int argc, char * argv[])
 		}
 	}
 
+	// Close SMSKB
 	SendMessage(hMain, WM_CLOSE, 0, 0);
     WaitForSingleObject(piProcessInfo.hProcess, INFINITE);
 
+	// Close handles
     CloseHandle(piProcessInfo.hProcess);
     CloseHandle(piProcessInfo.hThread);
     CloseHandle(hProcess);
 
+	// Close output files
 	outFile.close();
 	outFile2.close();
+
 	return 0;
 }
