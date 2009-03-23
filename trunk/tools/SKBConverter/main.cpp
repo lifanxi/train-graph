@@ -255,7 +255,7 @@ int main(int argc, char * argv[])
 
 	// Find SMSKB windows
 	TCHAR * title = 0;
-	title = TEXT("盛名时刻表-最专业的列车时刻表查询软件! ");
+	title = TEXT("盛名旅行助手:");
 
 	HWND hMain = MyFindWindow(title);	
 	HWND hTable = NULL, hInput = NULL, hSubmit = NULL;
