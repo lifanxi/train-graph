@@ -1,5 +1,7 @@
 package org.paradise.etrc.data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Stop {
@@ -26,5 +28,30 @@ public class Stop {
 
 		return ((Stop) obj).stationName.equalsIgnoreCase(this.stationName);
 	}
-
+	
+	public static Stop makeStop(String theName, String strArrive, String strLeave) {
+		SimpleDateFormat df = new SimpleDateFormat("H:mm");
+		Date theArrive = null;
+		Date theLeave = null;
+		
+		try {
+			theArrive = df.parse(strArrive);
+		} catch (ParseException e) {
+			//e.printStackTrace();
+		}
+		
+		try {
+			theLeave = df.parse(strLeave);
+		} catch (ParseException e) {
+			//e.printStackTrace();
+		}
+		
+		if(theArrive == null)
+			theArrive = theLeave;
+		
+		if(theLeave == null)
+			theLeave = theArrive;
+		
+		return new Stop(theName, theArrive, theLeave);
+	}
 }

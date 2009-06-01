@@ -27,9 +27,10 @@ public class Train {
 	 */
 	public String trainNameFull = null;
 
-	public String startStation = "";
-
-	public String terminalStation = "";
+//	改成getStartStation()方法，直接取stop[0]的站名
+//	public String startStation = "";
+//	改成getTerminalStation()方法，直接取stop[stopNum-1]的站名
+//	public String terminalStation = "";
 
 	public int stopNum = 0;
 
@@ -43,8 +44,8 @@ public class Train {
 	public Train copy() {
 		Train tr = new Train();
 		tr.color = color;
-		tr.startStation = startStation;
-		tr.terminalStation = terminalStation;
+//		tr.startStation = startStation;
+//		tr.terminalStation = terminalStation;
 		tr.trainNameDown = trainNameDown;
 		tr.trainNameUp = trainNameUp;
 		tr.trainNameFull = trainNameFull;
@@ -53,6 +54,14 @@ public class Train {
 			tr.stops[i] = stops[i].copy();
 		}
 		return tr;
+	}
+	
+	public String getStartStation() {
+		return stops[0].stationName;
+	}
+	
+	public String getTerminalStation() {
+		return stops[stopNum - 1].stationName;
 	}
 
 	/**
@@ -145,14 +154,14 @@ public class Train {
 
 		//始发站
 		if ((line = in.readLine()) != null) {
-			this.startStation = line;
+			//this.startStation = line;
 		} else {
 			throw new IOException("始发站读取错");
 		}
 
 		//终到站
 		if ((line = in.readLine()) != null) {
-			this.terminalStation = line;
+			//this.terminalStation = line;
 		} else {
 			throw new IOException("终到读取错");
 		}
@@ -190,10 +199,10 @@ public class Train {
 				  trainNameUp);
 		out.newLine();
 		//始发站
-		out.write(startStation);
+		out.write(getStartStation());
 		out.newLine();
 		//终到站
-		out.write(terminalStation);
+		out.write(getTerminalStation());
 		out.newLine();
 		//停站
 		for (int i = 0; i < stopNum; i++) {
@@ -210,10 +219,10 @@ public class Train {
 			paserTrainNameLine(line);
 			break;
 		case 1:
-			startStation = line;
+			//startStation = line;
 			break;
 		case 2:
-			terminalStation = line;
+			//terminalStation = line;
 			break;
 		default:
 			parseStopLine(line);
@@ -421,8 +430,8 @@ public class Train {
 	}
 
 	public String toString() {
-		String strRt = getTrainName() + "次从" + startStation + "到"
-				+ terminalStation + "，共经停" + stopNum + "个车站\r\n";
+		String strRt = getTrainName() + "次从" + getStartStation() + "到"
+				+ getTerminalStation() + "，共经停" + stopNum + "个车站\r\n";
 
 		for (int i = 0; i < stopNum; i++)
 			strRt += stops[i].stationName + "站 "
@@ -438,8 +447,8 @@ public class Train {
 		try {
 			t.loadFromFile("c:\\N518_519_w.trf");
 
-			System.out.println(t.getTrainName() + "次从" + t.startStation + "到"
-					+ t.terminalStation + "，共经停" + t.stopNum + "个车站");
+			System.out.println(t.getTrainName() + "次从" + t.getStartStation() + "到"
+					+ t.getTerminalStation() + "，共经停" + t.stopNum + "个车站");
 			for (int i = 0; i < t.stopNum; i++)
 				System.out.println(t.stops[i].stationName + "站 "
 						+ Train.toTrainFormat(t.stops[i].arrive) + " 到 "
@@ -501,5 +510,43 @@ public class Train {
 		default:
 			return new Color(0, 128, 0);
 		}
+	}
+
+	public static String makeFullName(Vector names) {
+		String name1 = "ZZZ";
+		String name2 = "ZZZ";
+		String name3 = "ZZZ";
+		String name4 = "ZZZ";
+		
+		for(int i=0; i<names.size(); i++) {
+			String theName = (String) names.get(i);
+			if(theName.compareTo(name1) < 0) {
+				name4 = name3;
+				name3 = name2;
+				name2 = name1;
+				name1 = theName;
+			}
+			else if(theName.compareTo(name2) < 0) {
+				name4 = name3;
+				name3 = name2;
+				name2 = theName;
+			}
+			else if(theName.compareTo(name3) < 0) {
+				name4 = name3;
+				name3 = theName;
+			}
+			else if(theName.compareTo(name4) < 0)
+				name4 = theName;
+		}
+		
+		String name = name1;
+		if(!name2.equals("ZZZ"))
+			name += "/" + name2;
+		if(!name3.equals("ZZZ"))
+			name += "/" + name3;
+		if(!name4.equals("ZZZ"))
+			name += "/" + name4;
+		
+		return name;
 	}
 }

@@ -408,9 +408,9 @@ public class TrainsDialog extends JDialog {
 			case 0:
 				return chart.trains[rowIndex].getTrainName();
 			case 1:
-				return chart.trains[rowIndex].startStation;
+				return chart.trains[rowIndex].getStartStation();
 			case 2:
-				return chart.trains[rowIndex].terminalStation;
+				return chart.trains[rowIndex].getTerminalStation();
 			case 3:
 				return chart.trains[rowIndex].color;
 			default:
