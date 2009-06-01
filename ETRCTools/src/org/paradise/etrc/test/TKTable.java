@@ -1,7 +1,5 @@
 package org.paradise.etrc.test;
 
-import java.awt.Graphics;
-
 public class TKTable {
 /*	
  public int c;

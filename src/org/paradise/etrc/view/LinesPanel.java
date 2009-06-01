@@ -5,7 +5,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.text.*;
 
 import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.*;
@@ -555,12 +554,12 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		Stop afterStop = mainView.getDrawStops(train)[line.p1.getDrawStopIndex()];
 		String arriveTime = mainView.getTime((line.p2.x - line.p1.x) / 2
 				+ line.p1.x);
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		try {
-			Date arrive = df.parse(arriveTime);
-			Date leave = arrive;
+//		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+//		try {
+//			Date arrive = df.parse(arriveTime);
+//			Date leave = arrive;
 			String newStationName = chart.circuit.stations[addIndex].name;
-			train.insertStopAfter(afterStop, newStationName, arrive, leave);
+			train.insertStopAfter(afterStop, newStationName, arriveTime, arriveTime);
 
 			setState(STATE_ADD_STOP);
 			mainView.activeTrainDrawing = new TrainDrawing(chart, mainView, train);
@@ -576,10 +575,10 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 					+ ", NewStation: " + chart.circuit.stations[addIndex].name
 					// +",leave1:"+m1
 					// +",arrive2:"+m2
-					+ ", newTime: " + arrive);
-		} catch (ParseException ex) {
-			ex.printStackTrace();
-		}
+					+ ", newTime: " + arriveTime);
+//		} catch (ParseException ex) {
+//			ex.printStackTrace();
+//		}
 	}
 
 	private void setColor() {

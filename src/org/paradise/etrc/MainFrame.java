@@ -35,27 +35,31 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	public JLabel statusBarRight = new JLabel();
 
 	private Properties defaultProp;
-	private Properties prop;
-	private String Working_Chart = "Working_Chart";
+	public Properties prop;
+	public static String Prop_Working_Chart = "Working_Chart";
+	public static String Prop_Show_UP = "Show_UP";
+	public static String Prop_Show_Down = "Show_Down";
 	
-	private String Sample_Chart_File = "sample.trc";
-	private String Properties_File = "htrc.prop";
+	private static String Sample_Chart_File = "sample.trc";
+	private static String Properties_File = "htrc.prop";
 	
 	public boolean isNewCircuit = false;
 
-	private static final int MAX_HISTORY_RECORD = 12;
-	public Vector history;
-	public JComboBox cbHistory;
+	private static final int MAX_TRAIN_SELECT_HISTORY_RECORD = 12;
+	public Vector trainSelectHistory;
+	public JComboBox cbTrainSelectHistory;
 	
 	//Construct the frame
 	public MainFrame() {
 		defaultProp = new Properties();
-		defaultProp.setProperty(Working_Chart, Sample_Chart_File);
+		defaultProp.setProperty(Prop_Working_Chart, Sample_Chart_File);
+		defaultProp.setProperty(Prop_Show_UP, "Y");
+		defaultProp.setProperty(Prop_Show_Down, "N");
 		
 		prop = new Properties(defaultProp);
 		
-		history = new Vector();
-		cbHistory = new JComboBox(new DefaultComboBoxModel(history));
+		trainSelectHistory = new Vector();
+		cbTrainSelectHistory = new JComboBox(new DefaultComboBoxModel(trainSelectHistory));
 		
 		try {
 			prop.load(new FileInputStream(Properties_File));
@@ -132,17 +136,17 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		//_name不为空的时候，加入hitory
 		if (!_name.equalsIgnoreCase("")) {
 			//如果已经存在于history中则删除之，以保证新加入的位于第一个
-			if(history.contains(_name))
-				history.remove(_name);
+			if(trainSelectHistory.contains(_name))
+				trainSelectHistory.remove(_name);
 			
-			history.add(0, _name);
+			trainSelectHistory.add(0, _name);
 			
 			//超过最大历史记录数，则删除最老的
-			if(history.size() > MAX_HISTORY_RECORD)
-				for(int i=12; i<history.size(); i++)
-					history.remove(i);
+			if(trainSelectHistory.size() > MAX_TRAIN_SELECT_HISTORY_RECORD)
+				for(int i=12; i<trainSelectHistory.size(); i++)
+					trainSelectHistory.remove(i);
 			
-			cbHistory.setModel(new DefaultComboBoxModel(history));
+			cbTrainSelectHistory.setModel(new DefaultComboBoxModel(trainSelectHistory));
 		}
 
 		setTitle();
@@ -213,8 +217,6 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 				.getResource("/pic/up.png"));
 		jtButtonDown = new JToggleButton(imageDown);
 		jtButtonUp = new JToggleButton(imageUp);
-		jtButtonDown.setSelected(true);
-		jtButtonUp.setSelected(true);
 		jtButtonDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mainView.changeShowDown();
@@ -227,17 +229,32 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		});
 		jtButtonUp.setToolTipText("Display Up-Going Trains");
 		jtButtonDown.setToolTipText("Display Down-Going Trains");
+		
+		//读配置文件设置上下行状态按钮
+		mainView.showUpDownState = MainView.SHOW_NONE;
+		if(prop.getProperty(Prop_Show_Down).equalsIgnoreCase("Y")) {
+			jtButtonDown.setSelected(true);
+			mainView.showUpDownState ^= MainView.SHOW_DOWN;
+		}
+		else
+			jtButtonDown.setSelected(false);
+		if(prop.getProperty(Prop_Show_UP).equalsIgnoreCase("Y")) {
+			jtButtonUp.setSelected(true);
+			mainView.showUpDownState ^= MainView.SHOW_UP;
+		}
+		else
+			jtButtonUp.setSelected(false);
 
 		jToolBar.addSeparator();
 		jToolBar.add(jtButtonDown);
 		jToolBar.add(jtButtonUp);
 		
 		//历史记录
-		cbHistory.setFont(new Font("Dialog", Font.PLAIN, 12));
-		cbHistory.setMinimumSize(new Dimension(64, 20));
-		cbHistory.setMaximumSize(new Dimension(64, 20));
-		cbHistory.setEditable(true);
-		cbHistory.addActionListener(new ActionListener(){
+		cbTrainSelectHistory.setFont(new Font("Dialog", Font.PLAIN, 12));
+		cbTrainSelectHistory.setMinimumSize(new Dimension(64, 20));
+		cbTrainSelectHistory.setMaximumSize(new Dimension(64, 20));
+		cbTrainSelectHistory.setEditable(true);
+		cbTrainSelectHistory.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae) {
 				//当用键盘输入的时候会触发两次Action
 				//一次是comboBoxChanged，另一次是comboBoxEdited
@@ -245,7 +262,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 				if(!ae.getActionCommand().equalsIgnoreCase("comboBoxChanged"))
 					return;
 				
-				String trainToFind = (String) cbHistory.getSelectedItem();
+				String trainToFind = (String) cbTrainSelectHistory.getSelectedItem();
 
 				if(trainToFind == null)
 					return;
@@ -258,7 +275,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			}
 		});
 		jToolBar.addSeparator();
-		jToolBar.add(cbHistory);
+		jToolBar.add(cbTrainSelectHistory);
 
 		return jToolBar;
 	}
@@ -365,7 +382,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	}
 
 	private void initChart() {
-		File chartFile = new File(prop.getProperty(Working_Chart));
+		File chartFile = new File(prop.getProperty(Prop_Working_Chart));
 		try {
 			chart = new Chart(chartFile);
 		} catch (IOException e) {
@@ -379,7 +396,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			}
 		}
 		finally {
-			prop.setProperty(Working_Chart, chartFile.getAbsolutePath());
+			prop.setProperty(Prop_Working_Chart, chartFile.getAbsolutePath());
 		}
 	}
 
@@ -595,7 +612,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	}
 
 	private void doSaveChart() {
-		File savingFile = new File(prop.getProperty(Working_Chart));
+		File savingFile = new File(prop.getProperty(Prop_Working_Chart));
 		
 		//如果是在Sample_Chart_File上操作的，则改调“另存为”
 		if(savingFile.getName().equalsIgnoreCase(Sample_Chart_File)) {
@@ -641,7 +658,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 			try {
 				chart.saveToFile(f);
-				prop.setProperty(Working_Chart, f.getAbsolutePath());
+				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
 				System.err.println("Err:" + ex.getMessage());
 				this.statusBarMain.setText("保存运行图出错！");
@@ -672,7 +689,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 				mainView.repaint();
 				mainView.setTrainNum();
 				setTitle();
-				prop.setProperty(Working_Chart, f.getAbsolutePath());
+				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
 				System.err.println("Err:" + ex.getMessage());
 				statusBarMain.setText("载入运行图出错！");

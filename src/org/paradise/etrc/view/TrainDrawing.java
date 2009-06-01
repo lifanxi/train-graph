@@ -1,5 +1,7 @@
 package org.paradise.etrc.view;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.awt.*;
@@ -57,9 +59,9 @@ public class TrainDrawing {
     //int lastY = -1;
     ChartPoint lastPoint = new ChartPoint(-1, -1, ChartPoint.UNKOW);
     for (int i = 0; i < drawStops.length; i++) {
-      Date arriveClock = drawStops[i].arrive;
+      String arriveClock = drawStops[i].arrive;
       int x0 = mainView.getPelsX(arriveClock);
-      Date leaveClock = drawStops[i].leave;
+      String leaveClock = drawStops[i].leave;
       int x1 = mainView.getPelsX(leaveClock);
 
       int y0 = mainView.getPelsY(drawStops[i].stationName);
@@ -346,11 +348,19 @@ public class TrainDrawing {
    */
   public String getInfo() {
     Stop stop[] = mainView.getDrawStops(train);
-    Date in = stop[0].arrive;
-    Date out = stop[stop.length-1].leave;
+	SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+    
+	long min = 0;
+	try {
+		Date in = df.parse(stop[0].arrive);
+	    Date out = df.parse(stop[stop.length-1].leave);
+	    
+	    long time = out.getTime() - in.getTime();
+	    min = time/(1000*60);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
 
-    long time = out.getTime() - in.getTime();
-    long min = time/(1000*60);
     if(min < 0)
       min += 24*60;
 
@@ -805,10 +815,8 @@ public class TrainDrawing {
 
       int y1 = y + mainView.trainNameRecMargin;
       int y2 = y1 + mainView.trainNameRecHeight;
-      int px[] = {
-          x, x - 5, x + 5};
-      int py[] = {
-          y2 + 10, y2, y2};
+      int px[] = {x, x - 5, x + 5};
+      int py[] = {y2 + 10, y2, y2};
       g.fillPolygon(px, py, 3);
       drawNameRec(g, x-5, y1, isActive);
     }
@@ -840,8 +848,9 @@ public class TrainDrawing {
 
       int y1 = y - mainView.trainNameRecMargin;
 
-      g.fillRect(x-5, y1-mainView.trainNameRecHeight-5, 11, 4);
-
+//    g.fillRect(x-5, y1-mainView.trainNameRecHeight-5, 11, 4);
+      drawTailRecDown(g, x-5, y1-mainView.trainNameRecHeight-5);
+      
       drawNameRec(g, x-5, y1-mainView.trainNameRecHeight, isActive);
     }
 
@@ -852,7 +861,8 @@ public class TrainDrawing {
 
       int y1 = y + mainView.trainNameRecMargin;
 
-      g.fillRect(x-5, y1+mainView.trainNameRecHeight+2, 11, 4);
+//    g.fillRect(x-5, y1+mainView.trainNameRecHeight+2, 11, 4);
+      drawTailRecUp(g, x-5, y1+mainView.trainNameRecHeight+2);
 
       drawNameRec(g, x-5, y1, isActive);
     }
@@ -872,7 +882,8 @@ public class TrainDrawing {
 
       int y1 = y + mainView.trainNameRecMargin;
 
-      g.fillRect(x-5, y1+mainView.trainNameRecHeight+2, 11, 4);
+//    g.fillRect(x-5, y1+mainView.trainNameRecHeight+2, 11, 4);
+      drawTailRecDown(g, x-5, y1+mainView.trainNameRecHeight+2);
 
       drawNameRec(g, x-5, y1, isActive);
     }
@@ -884,11 +895,39 @@ public class TrainDrawing {
 
       int y1 = y - mainView.trainNameRecMargin;
 
-      g.fillRect(x-5, y1-mainView.trainNameRecHeight-5, 11, 4);
+//    g.fillRect(x-5, y1-mainView.trainNameRecHeight-5, 11, 4);
+      drawTailRecUp(g, x-5, y1-mainView.trainNameRecHeight-5);
 
       drawNameRec(g, x-5, y1-mainView.trainNameRecHeight, isActive);
     }
+    
+    //画下行始发终到车的尾框
+    private void drawTailRecDown(Graphics g, int x, int y) {
+        g.fillRect(x, y, 11, 4);
+        
+        Color drawingColor = g.getColor();
+        g.setColor(Color.white);
+        
+        g.drawLine(x+1, y, x+5, y+4);
+        g.drawLine(x+9, y, x+5, y+4);
+        
+        g.setColor(drawingColor);
+    }
+    
+    //画上行始发终到车的尾框
+    private void drawTailRecUp(Graphics g, int x, int y) {
+        g.fillRect(x, y, 11, 4);
+        
+        Color drawingColor = g.getColor();
+        g.setColor(Color.white);
+        
+        g.drawLine(x+1, y+4, x+5, y);
+        g.drawLine(x+9, y+4, x+5, y);
+        
+        g.setColor(drawingColor);
+    }
 
+    //画车次框
     private void drawNameRec(Graphics g, int x, int y, boolean isActive) {
       if(isActive)
         drawNameRecActive(g, x, y);

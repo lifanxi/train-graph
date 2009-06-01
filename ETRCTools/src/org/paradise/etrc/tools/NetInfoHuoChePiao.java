@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Vector;
 
 import org.paradise.etrc.data.Stop;
@@ -96,8 +93,10 @@ public class NetInfoHuoChePiao {
 					case 5:
 						//System.out.println(content + ")");
 						stLeave = content;
-						train.appendStop(createStop(stName, stArrive, stLeave));
+						train.appendStop(Stop.makeStop(stName, stArrive, stLeave));
 						break;
+					default:
+						System.out.println(inputLine);
 					}
 				}
 			}
@@ -110,36 +109,6 @@ public class NetInfoHuoChePiao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private Stop createStop(String stName, String stArrive, String stLeave) {
-		SimpleDateFormat df = new SimpleDateFormat("H:mm");
-
-		//站名 stName
-
-		//到点
-		Date arrive = null;
-		try {
-			arrive = df.parse(stArrive);
-		} catch (ParseException e) {
-			//System.err.println(stName + "站到点读取错");
-		}
-
-		//发点
-		Date leave = null;
-		try {
-			leave = df.parse(stLeave);
-		} catch (ParseException e) {
-			//System.err.println(stName + "站发点读取错");
-		}
-		
-		if(arrive == null)
-			arrive = leave;
-		
-		if(leave == null)
-			leave = arrive;
-		
-		return new Stop(stName, arrive, leave);
 	}
 	
 	private String paserTrainInfoLine(String inputLine) {
@@ -199,15 +168,15 @@ public class NetInfoHuoChePiao {
 			
 			new NetInfoHuoChePiao().getTrainData(train);
 			
-			String trainFileName = "c:\\trains\\lhzx\\";
-			trainFileName = trainFileName + train.getTrainName().replace('/', '_') + ".trf";
-			
-			try {
-				train.writeTo(trainFileName);
-			} catch (IOException e) {
-				e.printStackTrace();
-				break;
-			}
+//			String trainFileName = "c:\\trains\\lhzx\\";
+//			trainFileName = trainFileName + train.getTrainName().replace('/', '_') + ".trf";
+//			
+//			try {
+//				train.writeTo(trainFileName);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				break;
+//			}
 			
 			System.out.print(train);
 		}

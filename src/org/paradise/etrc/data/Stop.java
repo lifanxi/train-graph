@@ -6,17 +6,27 @@ import java.util.Date;
 
 public class Stop {
 	public String stationName;
+	public String arrive;
+	public String leave;
+//	public String trainName;
+//	public int dist;
 
-	public Date arrive, leave;
-
-	public Stop(String _name, Date _arrive, Date _leave) {
+	public Stop(String _name, String _arrive, String _leave) {
 		stationName = _name;
 		arrive = _arrive;
 		leave = _leave;
+		
+//		trainName = "";
+//		dist = 0;
 	}
 
 	public Stop copy() {
-		return new Stop(this.stationName, this.arrive, this.leave);
+		Stop st = new Stop(this.stationName, this.arrive, this.leave);
+		
+//		st.trainName = this.trainName;
+//		st.dist = this.dist;
+		
+		return st;
 	}
 
 	public boolean equals(Object obj) {
@@ -33,6 +43,8 @@ public class Stop {
 		SimpleDateFormat df = new SimpleDateFormat("H:mm");
 		Date theArrive = null;
 		Date theLeave = null;
+		String myArrive = "";
+		String myLeave = "";
 		
 		try {
 			theArrive = df.parse(strArrive);
@@ -45,13 +57,19 @@ public class Stop {
 		} catch (ParseException e) {
 			//e.printStackTrace();
 		}
-		
+
+		//如果到点解析不成功就把到点设为发点
 		if(theArrive == null)
-			theArrive = theLeave;
+			myArrive = strLeave;
+		else
+			myArrive = strArrive;
 		
+		//如果发点解析不成功就把发点设为到点
 		if(theLeave == null)
-			theLeave = theArrive;
+			myLeave = strArrive;
+		else
+			myLeave = strLeave;
 		
-		return new Stop(theName, theArrive, theLeave);
+		return new Stop(theName, myArrive, myLeave);
 	}
 }

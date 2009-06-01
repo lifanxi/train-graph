@@ -51,8 +51,8 @@ public class TrainNameList {
                 String as1[] = pasertk((String)vector1.elementAt(l));
                 if(as[0].trim().equals(as1[0].trim()) && Togoc(as[1]) < Togoc(as1[1]))
                 {
-                    int i1 = Togoc(as1[0]);
-                    String as2[] = readcc(i1);
+//                    int i1 = Togoc(as1[0]);
+//                    String as2[] = readcc(i1);
 //                    boolean flag = false;
 //                    if(b.length() > 0)
 //                    {
