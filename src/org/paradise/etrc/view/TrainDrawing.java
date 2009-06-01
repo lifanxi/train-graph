@@ -910,7 +910,7 @@ public class TrainDrawing {
         
         g.drawLine(x+1, y, x+5, y+4);
         g.drawLine(x+9, y, x+5, y+4);
-        
+         
         g.setColor(drawingColor);
     }
     

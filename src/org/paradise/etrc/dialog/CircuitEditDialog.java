@@ -24,7 +24,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
-import org.paradise.etrc.ETRC;
+import org.paradise.etrc.DETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Station;
@@ -60,7 +60,7 @@ public class CircuitEditDialog extends JDialog {
 	 */
 	private Circuit doLoadCircuit() {
 		JFileChooser chooser = new JFileChooser();
-		ETRC.setFont(chooser);
+		DETRC.setFont(chooser);
 
 		chooser.setDialogTitle("载入线路");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -91,7 +91,7 @@ public class CircuitEditDialog extends JDialog {
 	 */
 	private void doSaveCircuit(Circuit circuit) {
 		JFileChooser chooser = new JFileChooser();
-		ETRC.setFont(chooser);
+		DETRC.setFont(chooser);
 
 		chooser.setDialogTitle("保存线路");
 		chooser.setApproveButtonText("保存");

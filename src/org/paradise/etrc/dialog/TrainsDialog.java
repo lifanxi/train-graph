@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 import javax.swing.event.*;
 
-import org.paradise.etrc.ETRC;
+import org.paradise.etrc.DETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Stop;
@@ -237,7 +237,7 @@ public class TrainsDialog extends JDialog {
 				//bring up the dialog.
 				colorButton.setForeground(currentColor);
 				colorChooser.setColor(currentColor);
-				ETRC.setFont(dialog);
+				DETRC.setFont(dialog);
 				dialog.setVisible(true);
 
 				//Make the renderer reappear.
