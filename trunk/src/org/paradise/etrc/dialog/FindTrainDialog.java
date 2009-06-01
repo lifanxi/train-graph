@@ -132,7 +132,7 @@ MainFrame mainFrame = null;
     if(trainName.trim().equalsIgnoreCase(""))
     	return;
     
-    if(mainFrame.mainView.findAndMoveToTrain(trainName))
+    if(mainFrame.chartView.findAndMoveToTrain(trainName))
       this.statusBar.setText(trainName);
     else {
       this.statusBar.setText("没有找到");

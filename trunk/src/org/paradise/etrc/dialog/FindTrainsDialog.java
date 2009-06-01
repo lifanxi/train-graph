@@ -87,7 +87,7 @@ public class FindTrainsDialog extends JDialog {
 		public void run() {
 			hold(500);
 			mainFrame.chart.clearTrains();
-			mainFrame.mainView.repaint();
+			mainFrame.chartView.repaint();
 			
 			msgLabel.setText("正在查找车次，请稍等...");
 			
@@ -105,8 +105,9 @@ public class FindTrainsDialog extends JDialog {
 				}
 			}
 			
-			mainFrame.mainView.repaint();
-			mainFrame.mainView.setTrainNum();
+			mainFrame.chartView.repaint();
+			mainFrame.chartView.setTrainNum();
+	        mainFrame.runView.refresh();
 
 			progressPanel.gotoEnd();
 

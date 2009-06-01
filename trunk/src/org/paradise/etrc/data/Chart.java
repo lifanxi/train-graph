@@ -22,7 +22,7 @@ public class Chart {
 	//本运行图的线路
 	public Circuit circuit;
 
-	//本运行图所包含的车次，最多240趟
+	//本运行图所包含的车次，最多600趟
 	public static final int MAX_TRAIN_NUM = 600;
 	public Train trains[] = new Train[MAX_TRAIN_NUM];
 
