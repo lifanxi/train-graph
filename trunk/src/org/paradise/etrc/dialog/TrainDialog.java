@@ -11,8 +11,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.*;
-import java.util.Date;
 
 import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
@@ -166,8 +164,8 @@ public class TrainDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
 				String name = "站名";
-				Date arrive = new Date();
-				Date leave = new Date();
+				String arrive = "00:00";
+				String leave = "00:00";
 				((TrainTableModel)table.getModel()).train.insertStop(new Stop(name, arrive, leave), 
 						table.getSelectedRow());
 
@@ -185,8 +183,8 @@ public class TrainDialog extends JDialog {
 					return;
 				
 				String name = "站名";
-				Date arrive = new Date();
-				Date leave = new Date();
+				String arrive = "00:00";
+				String leave = "00:00";
 				((TrainTableModel)table.getModel()).train.insertStop(new Stop(name, arrive, leave), curIndex+1);
 
 				table.revalidate();
@@ -365,9 +363,9 @@ public class TrainDialog extends JDialog {
 			case 0:
 				return train.stops[rowIndex].stationName;
 			case 1:
-				return Train.toTrainFormat(train.stops[rowIndex].arrive);
+				return train.stops[rowIndex].arrive;
 			case 2:
-				return Train.toTrainFormat(train.stops[rowIndex].leave);
+				return train.stops[rowIndex].leave;
 			default:
 				return null;
 			}
@@ -381,23 +379,25 @@ public class TrainDialog extends JDialog {
 		 * @param columnIndex int
 		 */
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			SimpleDateFormat df = new SimpleDateFormat("H:mm");
-			try {
+//			SimpleDateFormat df = new SimpleDateFormat("H:mm");
+//			try {
 				switch (columnIndex) {
 				case 0:
 					train.stops[rowIndex].stationName = (String) aValue;
 					break;
 				case 1:
-					train.stops[rowIndex].arrive = df.parse((String) aValue);
+//					train.stops[rowIndex].arrive = df.parse((String) aValue);
+					train.stops[rowIndex].arrive = (String) aValue;
 					break;
 				case 2:
-					train.stops[rowIndex].leave = df.parse((String) aValue);
+//					train.stops[rowIndex].leave = df.parse((String) aValue);
+					train.stops[rowIndex].leave = (String) aValue;
 					break;
 				default:
 				}
-			} catch (ParseException ex) {
-				ex.printStackTrace();
-			}
+//			} catch (ParseException ex) {
+//				ex.printStackTrace();
+//			}
 			fireTableCellUpdated(rowIndex, columnIndex);
 		}
 

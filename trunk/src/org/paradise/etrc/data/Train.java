@@ -1,7 +1,6 @@
 package org.paradise.etrc.data;
 
 import java.io.*;
-import java.text.*;
 import java.util.*;
 
 import java.awt.*;
@@ -207,8 +206,8 @@ public class Train {
 		//停站
 		for (int i = 0; i < stopNum; i++) {
 			out.write(stops[i].stationName + ","
-					+ toTrainFormat(stops[i].arrive) + ","
-					+ toTrainFormat(stops[i].leave));
+					+ stops[i].arrive + ","
+					+ stops[i].leave);
 			out.newLine();
 		}
 	}
@@ -230,7 +229,7 @@ public class Train {
 	}
 
 	private void parseStopLine(String line) throws IOException {
-		SimpleDateFormat df = new SimpleDateFormat("H:mm");
+//		SimpleDateFormat df = new SimpleDateFormat("H:mm");
 
 		String stStop[] = line.split(",");
 		if (stStop.length < 3)
@@ -241,24 +240,24 @@ public class Train {
 
 		//到点
 		String stArrive = stStop[1];
-		Date arrive = new Date(0);
-		try {
-			arrive = df.parse(stArrive);
-		} catch (ParseException e) {
-			System.err.print("E");
-			throw new IOException(stName + "站到点读取错");
-		}
+//		Date arrive = new Date(0);
+//		try {
+//			arrive = df.parse(stArrive);
+//		} catch (ParseException e) {
+//			System.err.print("E");
+//			throw new IOException(stName + "站到点读取错");
+//		}
 
 		//发点
 		String stLeave = stStop[2];
-		Date leave = new Date(0);
-		try {
-			leave = df.parse(stLeave);
-		} catch (ParseException e) {
-			throw new IOException(stName + "站发点读取错");
-		}
+//		Date leave = new Date(0);
+//		try {
+//			leave = df.parse(stLeave);
+//		} catch (ParseException e) {
+//			throw new IOException(stName + "站发点读取错");
+//		}
 
-		Stop stop = new Stop(stName, arrive, leave);
+		Stop stop = new Stop(stName, stArrive, stLeave);
 		stops[stopNum] = stop;
 		stopNum++;
 	}
@@ -345,7 +344,7 @@ public class Train {
 	}
 
 	public void insertStopAfter(Stop afterStop, String newStopName,
-			Date arrive, Date leave) {
+			String arrive, String leave) {
 		Stop newStop = new Stop(newStopName, arrive, leave);
 		Stop newStops[] = new Stop[MAX_STOP_NUM];
 		int newStopNum = 0;
@@ -370,14 +369,14 @@ public class Train {
 		}
 	}
 
-	public void setArrive(String name, Date _arrive) {
+	public void setArrive(String name, String _arrive) {
 		for (int i = 0; i < stopNum; i++) {
 			if (stops[i].stationName.equalsIgnoreCase(name))
 				stops[i].arrive = _arrive;
 		}
 	}
 
-	public void setLeave(String name, Date _leave) {
+	public void setLeave(String name, String _leave) {
 		for (int i = 0; i < stopNum; i++) {
 			if (stops[i].stationName.equalsIgnoreCase(name))
 				stops[i].leave = _leave;
@@ -413,10 +412,10 @@ public class Train {
 	 * @param time Date
 	 * @return String
 	 */
-	public static String toTrainFormat(Date time) {
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		return df.format(time);
-	}
+//	public static String toTrainFormat(Date time) {
+//		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+//		return df.format(time);
+//	}
 
 	public boolean equals(Object obj) {
 		if (obj == null)
@@ -435,8 +434,8 @@ public class Train {
 
 		for (int i = 0; i < stopNum; i++)
 			strRt += stops[i].stationName + "站 "
-					+ Train.toTrainFormat(stops[i].arrive) + " 到 "
-					+ Train.toTrainFormat(stops[i].leave) + " 发\r\n";
+					+ stops[i].arrive + " 到 "
+					+ stops[i].leave + " 发\r\n";
 
 		return strRt;
 	}
@@ -451,8 +450,8 @@ public class Train {
 					+ t.getTerminalStation() + "，共经停" + t.stopNum + "个车站");
 			for (int i = 0; i < t.stopNum; i++)
 				System.out.println(t.stops[i].stationName + "站 "
-						+ Train.toTrainFormat(t.stops[i].arrive) + " 到 "
-						+ Train.toTrainFormat(t.stops[i].leave) + " 发");
+						+ t.stops[i].arrive + " 到 "
+						+ t.stops[i].leave + " 发");
 
 			File f = new File("c:\\test_w.trf");
 			BufferedWriter out = new BufferedWriter(new FileWriter(f));

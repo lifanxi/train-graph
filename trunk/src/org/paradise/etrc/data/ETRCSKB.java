@@ -6,9 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -194,30 +191,32 @@ public class ETRCSKB {
 				String tkName = tkInfo[1];
 				String str_arrive = tkInfo[2];
 				String str_leave = tkInfo[3];
+				
+				train.appendStop(Stop.makeStop(tkName, str_arrive, str_leave));
 	
-				SimpleDateFormat df = new SimpleDateFormat("H:mm");
-				Date arrive = null;
-				Date leave = null;
-				
-				try {
-					arrive = df.parse(str_arrive);
-				} catch (ParseException e) {
-					//e.printStackTrace();
-				}
-				
-				try {
-					leave = df.parse(str_leave);
-				} catch (ParseException e) {
-					//e.printStackTrace();
-				}
-				
-				if(arrive == null)
-					arrive = leave;
-				
-				if(leave == null)
-					leave = arrive;
-				
-				train.appendStop(new Stop(tkName, arrive, leave));
+//				SimpleDateFormat df = new SimpleDateFormat("H:mm");
+//				Date arrive = null;
+//				Date leave = null;
+//				
+//				try {
+//					arrive = df.parse(str_arrive);
+//				} catch (ParseException e) {
+//					//e.printStackTrace();
+//				}
+//				
+//				try {
+//					leave = df.parse(str_leave);
+//				} catch (ParseException e) {
+//					//e.printStackTrace();
+//				}
+//				
+//				if(arrive == null)
+//					arrive = leave;
+//				
+//				if(leave == null)
+//					leave = arrive;
+//				
+//				train.appendStop(new Stop(tkName, arrive, leave));
 			}
 		}
 		

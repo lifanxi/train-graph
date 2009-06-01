@@ -1,14 +1,11 @@
 package org.paradise.etrc.tools;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Vector;
 
 import org.paradise.etrc.data.Stop;
@@ -30,77 +27,119 @@ public class NetInfoShenTie {
 	private final String URL_getPriceInfo2 = "&toStationName=";
 	
 	private final String URL_bianzu = "http://www.sronline.com.cn/smart40/ShowCompileTrain?train_no=770000100680";
-	
-	private HttpURLConnection connect(String urlString)	throws IOException {
-		System.out.println("Connect to: " + urlString);
-		
-		HttpURLConnection httpConn = (HttpURLConnection) (new URL(urlString)).openConnection();
 
-		httpConn.setDoOutput(true);
-		httpConn.setRequestMethod("GET");
-		httpConn.addRequestProperty("Connection", "Keep-Alive");
-		httpConn.addRequestProperty("Content-Type", "text/xml");
-
-		return httpConn;
-	}
+	private final String URL_trainAll = "http://www.sronline.com.cn/smart40/TrainAllList";
+	private final String URL_getTrainInfoA = "http://www.sronline.com.cn/smart40/ShowStopTimeTrain?trainTrainnoDate=2007-02-04&fromTrainno=";
+	private final String URL_getTrainInfoB = "http://www.sronline.com.cn/smart40/ShowStopTimeTrain?trainTrainnoDate=2007-02-03&fromTrainno=";
 	
-	public Train getTrainInfo(String fromTrainNo) throws IOException {
-		String url = URL_getTrainInfo + fromTrainNo;
+	public Vector getAllTrain() throws IOException {
+		String url = URL_trainAll;
 
 		HttpURLConnection connection = connect(url);
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 		String line;
-		int count = 0;
+		int count = -1;
+		String fromName = "";
+		String fromStation = "";
+		String toStation = "";
+		Vector trainFromNames = new Vector();
+		
+		while ( (line = in.readLine()) != null) {
+//			System.out.println(line);
+			if(line.equalsIgnoreCase("<TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#DFEFFF WIDTH=100 >"))
+				count = 0;
+			
+			switch(count){
+			case 2:
+				fromName = line;
+				break;
+			case 5:
+				fromStation = line;
+				break;
+			case 8:
+				toStation = line;
+//				System.out.println(fromName + ": " + fromStation + "-" + toStation);
+				
+				if(trainFromNames.contains(fromName)) {
+					System.out.println(fromName + ": " + fromStation + "-" + toStation);
+					fromName += "B";
+				}
+				trainFromNames.add(fromName);
+				
+				break;
+			}
+			
+			count++;
+		}
+
+		//paserAllTrainLine(line);
+		return trainFromNames;
+	}
+	
+	public Train getTrainInfo(STDB db, String fromTrainNo, int trainID) throws IOException, SQLException {
+		String url;
+		if(fromTrainNo.endsWith("B")) {
+			fromTrainNo = fromTrainNo.substring(0, fromTrainNo.length()-1);
+			url = URL_getTrainInfoB + fromTrainNo.trim();
+			
+			System.out.println(fromTrainNo + "B");
+		}
+		else
+			url = URL_getTrainInfoA + fromTrainNo.trim();
+
+		HttpURLConnection connection = connect(url);
+		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+		String line;
 		int status = 0;
 		StringBuffer buffer = new StringBuffer();
 		while ( (line = in.readLine()) != null) {
-			if(line.equalsIgnoreCase("<TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>"))
+			if(line.startsWith(trainInfoDataBeginPatten)){
 				status = 1;
+			}
 			
-			if(line.equalsIgnoreCase("</TABLE>"))
+			if(line.endsWith("</TABLE>"))
 				status = 2;
 			
 			if(status == 1) {
 				buffer.append(line);
-//				if(!line.startsWith("<TD")) {
-//					System.out.print(count + " ---- ");
-//					System.out.println(line);
-//					count++;
-//				}
 			}
 		}
 		
-		return paserLine(buffer.toString());
+		return paserTrainInfoLine(db, buffer.toString(), trainID);
 	}
 	
-	private String dataBeginPatten = "<TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=";
-	private String dataEndPatten = "</TD>";
-	private Train paserLine(String line) {
+	private String trainInfoDataBeginPatten = "<TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=";
+	private String trainInfoDataEndPatten = "</TD>";
+	private Train paserTrainInfoLine(STDB db, String line, int trainID) throws SQLException {
 		Train theTrain = new Train();
 		String remain = line;
 		int count = 0;
-		Vector trainName = new Vector();
+		Vector trainNames = new Vector();
 
+		String trainNameCurrent = "";
 		String stationName = "";
 		String strArrive = "";
 		String strLeave = "";
 		String strLevel = "";
 		String strType = "";
 		int dist = 0;
-
-		while(remain.indexOf(dataBeginPatten) >= 0) {
-			int begin = remain.indexOf(dataBeginPatten) + 8;
-			int end = remain.indexOf(dataEndPatten);
-			String data = remain.substring(begin + dataBeginPatten.length(), end);
-			remain = remain.substring(end + dataEndPatten.length());
+		
+		while(remain.indexOf(trainInfoDataBeginPatten) >= 0) {
+			int begin = remain.indexOf(trainInfoDataBeginPatten) + 8;
+			int end = remain.indexOf(trainInfoDataEndPatten);
+			String data = remain.substring(begin + trainInfoDataBeginPatten.length(), end);
+			remain = remain.substring(end + trainInfoDataEndPatten.length());
 
 			switch(count%8){
 			case 0:
-				if(!trainName.contains(data))
-					trainName.add(data);
+				trainNameCurrent = data;
+				if(!trainNames.contains(trainNameCurrent))
+					trainNames.add(trainNameCurrent);
 			break;
 			case 1:
+				//站序
 			break;
 			case 2:
 				stationName = data;
@@ -120,7 +159,9 @@ public class NetInfoShenTie {
 			case 7:
 				strType = data;
 
-				theTrain.appendStop(Stop.makeStop(stationName, strArrive, strLeave));
+				Stop stop = Stop.makeStop(stationName, strArrive, strLeave);
+				theTrain.appendStop(stop);
+				db.insertStop2(trainID, trainNameCurrent, stationName, stop.arrive, stop.leave, dist);
 			break;
 			}
 			
@@ -131,7 +172,7 @@ public class NetInfoShenTie {
 		if(theTrain.stopNum == 0)
 			return null;
 		
-		theTrain.trainNameFull = Train.makeFullName(trainName);
+		theTrain.trainNameFull = Train.makeFullName(trainNames);
 //		theTrain.startStation = theTrain.stops[0].stationName;
 //		theTrain.terminalStation = theTrain.stops[theTrain.stopNum - 1].stationName;
 		return theTrain;
@@ -175,10 +216,25 @@ public class NetInfoShenTie {
 		System.out.println(count);
 	}
 
+	private HttpURLConnection connect(String urlString)	throws IOException {
+		System.out.println("Connect to: " + urlString);
+		
+		HttpURLConnection httpConn = (HttpURLConnection) (new URL(urlString)).openConnection();
+
+		httpConn.setDoOutput(true);
+		httpConn.setRequestMethod("GET");
+		httpConn.addRequestProperty("Connection", "Keep-Alive");
+		httpConn.addRequestProperty("Content-Type", "text/xml");
+
+		return httpConn;
+	}
+	
 	public static void main(String[] args) {
 		NetInfoShenTie net = new NetInfoShenTie();
+		STDB db = new STDB();
 		
 		try {
+			db.connectDB();
 //			net.getPriceInfo("上海", "杭州东");
 //			
 //			net.getBianzu();
@@ -186,13 +242,33 @@ public class NetInfoShenTie {
 //			BufferedReader allTrainListHtm = new BufferedReader(new FileReader("C:\\trains\\srInfo\\TrainAllList.htm"));
 //			net.paserAllTrainList(allTrainListHtm);
 			
-			Train theTrain = net.getTrainInfo("2258");
-//			Train theTrain = net.paserLine("<TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>T758</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>01</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>泰州</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>11:42</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC></TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>0</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>T758</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>02</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>江都</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>12:11</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>12:14</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>0</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>T758</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>03</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>扬州</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>12:31</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>12:35</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>0</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>04</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>南京</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>13:43</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>13:50</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>15</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>05</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>镇江</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>14:23</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>14:27</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>79</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>06</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>常州</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>15:07</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>15:11</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>151</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>07</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>无锡</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>15:34</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>15:38</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>190</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>08</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>苏州</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>15:58</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>16:02</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>232</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>09</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>昆山</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>16:19</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>16:21</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>267</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>10</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>上海南</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>17:05</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>17:30</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>330</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#EEEEEE>新型有空调</TD></TR><TR><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>T755</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>11</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>杭州</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>19:00</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC></TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>503</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>特快</TD><TD ALIGN=CENTER VALIGN=CENTER BGCOLOR=#FFFFCC>新型有空调</TD></TR>");
-			System.out.println(theTrain);
+//			Train theTrain = net.getTrainInfo(db, "2258");
+//			System.out.println(theTrain);
 			
-//			throw new IOException("OKOKOK!");
+			Vector fromNames = net.getAllTrain();
+			for(int i=131; i<fromNames.size(); i++) {
+				String name = (String) fromNames.get(i);
+//				System.out.println(name);
+				
+				Train theTrain = net.getTrainInfo(db, name, i);
+				if(theTrain != null)
+					System.out.println(i + "> " 
+						+ theTrain.getTrainName() + ": " 
+						+ theTrain.getStartStation() + "-"
+						+ theTrain.getTerminalStation());
+			}
+			
+			db.closeDB();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				db.closeDB();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

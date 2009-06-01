@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.paradise.etrc.data.Circuit;
@@ -131,6 +129,56 @@ public class SMSKBReader {
 		}
 
 		in.close();
+	}
+	
+	private void findStranger() throws IOException {
+		File file = new File(path + "cc.txt");
+		InputStream in = new DataInputStream(new FileInputStream(file));
+
+		in.skip(3);
+		
+		int len = 33;
+		byte buffer[]= new byte[len];
+		int num = (in.available() - 3) / len + 1;
+
+		for (int i = 0; i < num; i++) {
+			in.read(buffer);
+			String record = new String(buffer, "UTF-8");
+
+			String name = record.substring(0, record.length() - 14).trim();
+			findStrangerByName(name);
+		}
+
+		in.close();
+	}
+
+	private void findStrangerByName(String name) {
+		if((name.endsWith("A")) || (name.endsWith("B")))
+			name = name.substring(0, name.length()-1);
+		
+		String[] ns = name.split("/");
+		
+		Train train = null;
+		if(ns.length >= 2){
+			if(ns.length >= 3){
+				//System.out.print(name);
+				train = getTrain(name);
+			}
+			else {				
+				int n1 = Integer.parseInt(ns[0].substring(1,ns[0].length()));
+				int n2 = Integer.parseInt(ns[1].substring(1,ns[1].length()));
+				
+				if((n1%2==0 && n2%2==0) || (n1%2==1 && n2%2==1))
+//					System.out.println(name);
+					train = getTrain(name);
+			}
+		}
+		
+		if(train != null) {
+			System.out.print(train.getTrainName() + ",");
+			System.out.print(train.getStartStation() + ",");
+			System.out.println(train.getTerminalStation());
+		}
 	}
 
 	//读cc.txt文件获取带索引的车次全名列表
@@ -285,29 +333,29 @@ public class SMSKBReader {
 			
 //			System.out.println(tkName + "站 " + str_arrive + "到 " + str_leave + "发");
 			
-			SimpleDateFormat df = new SimpleDateFormat("H:mm");
-			Date arrive = null;
-			Date leave = null;
+//			SimpleDateFormat df = new SimpleDateFormat("H:mm");
+//			Date arrive = null;
+//			Date leave = null;
+//			
+//			try {
+//				arrive = df.parse(str_arrive);
+//			} catch (ParseException e) {
+//				//e.printStackTrace();
+//			}
+//			
+//			try {
+//				leave = df.parse(str_leave);
+//			} catch (ParseException e) {
+//				//e.printStackTrace();
+//			}
+//			
+//			if(arrive == null)
+//				arrive = leave;
+//			
+//			if(leave == null)
+//				leave = arrive;
 			
-			try {
-				arrive = df.parse(str_arrive);
-			} catch (ParseException e) {
-				//e.printStackTrace();
-			}
-			
-			try {
-				leave = df.parse(str_leave);
-			} catch (ParseException e) {
-				//e.printStackTrace();
-			}
-			
-			if(arrive == null)
-				arrive = leave;
-			
-			if(leave == null)
-				leave = arrive;
-			
-			train.appendStop(new Stop(tkName, arrive, leave));
+			train.appendStop(Stop.makeStop(tkName, str_arrive, str_leave));
 		}
 		
 //		train.startStation = train.stops[0].stationName;
@@ -476,7 +524,7 @@ public class SMSKBReader {
 
 	public static void main(String[] args) {
 		try {
-			SMSKBReader sm = new SMSKBReader("C:\\trains\\smdata\\data\\");
+			SMSKBReader sm = new SMSKBReader("C:\\trains\\04.盛名时刻表\\smdata\\data\\");
 			
 			System.out.println("cc = " + sm.cc.size());
 			System.out.println("ccIndex = " + sm.ccIndex.size());
@@ -487,13 +535,14 @@ public class SMSKBReader {
 			//sm.dumpToETRC("C:\\trains\\");
 			
 			//倒出到ST数据库
-			sm.dumpToSTDB(new STDB());
+			//sm.dumpToSTDB(new STDB());
 			
+			sm.findStranger();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} //catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }

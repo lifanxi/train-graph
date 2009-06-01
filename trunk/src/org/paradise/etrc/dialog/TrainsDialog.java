@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.event.TableModelListener;
 import java.awt.event.*;
-import java.util.Date;
 
 import javax.swing.event.*;
 
@@ -179,8 +178,8 @@ public class TrainsDialog extends JDialog {
 		Train newTrain = new Train();
 		newTrain.trainNameDown = "0000";
 		newTrain.stopNum = 2;
-		newTrain.stops[0] = new Stop("起点", new Date(), new Date());
-		newTrain.stops[1] = new Stop("终点", new Date(), new Date());
+		newTrain.stops[0] = new Stop("起点", "00:00", "00:00");
+		newTrain.stops[1] = new Stop("终点", "00:00", "00:00");
 		TrainDialog dialog = new TrainDialog(mainFrame, newTrain);
 
 		dialog.editTrain();

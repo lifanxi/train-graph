@@ -5,7 +5,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.text.*;
 
 import org.paradise.etrc.*;
 import org.paradise.etrc.data.*;
@@ -31,8 +30,8 @@ public class MainView extends JPanel implements KeyListener {
 
 	public static final int DEFAULT_LEFT_MARGIN = 45;
 	public static final int DEFAULT_RIGHT_MARGIN = 45;
-	public static final int DEFAULT_TOP_MARGIN = 60;
-	public static final int DEFAULT_BOTTOM_MARGIN = 60;
+	public static final int DEFAULT_TOP_MARGIN = 66;
+	public static final int DEFAULT_BOTTOM_MARGIN = 66;
 
 	public int leftMargin = DEFAULT_LEFT_MARGIN;
 	public int rightMargin = DEFAULT_RIGHT_MARGIN;
@@ -40,7 +39,7 @@ public class MainView extends JPanel implements KeyListener {
 	public int bottomMargin = DEFAULT_BOTTOM_MARGIN;
 
 	public int trainNameRecMargin = 1;
-	public int trainNameRecHeight = 45;
+	public int trainNameRecHeight = 54;
 	public int circuitPanelWidth = 80;
 	public int clockPanelHeight = 16;
 
@@ -180,7 +179,7 @@ public class MainView extends JPanel implements KeyListener {
 	 * @param clock Date
 	 * @return int
 	 */
-	public int getPelsX(Date clock) {
+	public int getPelsX(String clock) {
 		return getPelsX(getCoordinate(clock));
 	}
 
@@ -224,18 +223,18 @@ public class MainView extends JPanel implements KeyListener {
 	 * @param time Date
 	 * @return int
 	 */
-	public int getCoordinate(Date time) {
-		SimpleDateFormat dfHour = new SimpleDateFormat("H");
-		SimpleDateFormat dfMinute = new SimpleDateFormat("m");
+	public int getCoordinate(String time) {
+//		SimpleDateFormat dfHour = new SimpleDateFormat("H");
+//		SimpleDateFormat dfMinute = new SimpleDateFormat("m");
 		
 //		int h = time.getHours() - mainFrame.chart.startHour;
-		int h = Integer.parseInt(dfHour.format(time)) 
+		int h = Integer.parseInt(time.split(":")[0]) 
 				- mainFrame.chart.startHour;
 		if (h < 0)
 			h += 24;
 
 //		int m = time.getMinutes();
-		int m = Integer.parseInt(dfMinute.format(time));
+		int m = Integer.parseInt(time.split(":")[1]);
 
 		return h * 60 + m;
 	}
@@ -248,7 +247,7 @@ public class MainView extends JPanel implements KeyListener {
 
 	public static final int SHOW_ALL = 3; //0011 = SHOW_UP | SHOW_DOWN
 
-	public int showUpDownState = SHOW_ALL;
+	public int showUpDownState = SHOW_NONE;
 
 	private ImageIcon imAll = new ImageIcon(MainView.class
 			.getResource("/pic/all.png"));
@@ -283,21 +282,29 @@ public class MainView extends JPanel implements KeyListener {
 			cornerUpDown.setIcon(imAll);
 			mainFrame.jtButtonDown.setSelected(true);
 			mainFrame.jtButtonUp.setSelected(true);
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_Down, "Y");
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_UP, "Y");
 			break;
 		case SHOW_DOWN:
 			cornerUpDown.setIcon(imDown);
 			mainFrame.jtButtonDown.setSelected(true);
 			mainFrame.jtButtonUp.setSelected(false);
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_Down, "Y");
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_UP, "N");
 			break;
 		case SHOW_UP:
 			cornerUpDown.setIcon(imUp);
 			mainFrame.jtButtonDown.setSelected(false);
 			mainFrame.jtButtonUp.setSelected(true);
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_Down, "N");
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_UP, "Y");
 			break;
 		case SHOW_NONE:
 			cornerUpDown.setIcon(imNone);
 			mainFrame.jtButtonDown.setSelected(false);
 			mainFrame.jtButtonUp.setSelected(false);
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_Down, "N");
+			mainFrame.prop.setProperty(MainFrame.Prop_Show_UP, "N");
 			break;
 		}
 		panelLines.repaint();
@@ -340,7 +347,7 @@ public class MainView extends JPanel implements KeyListener {
 		if (clockMinute < 0)
 			clockMinute += 60;
 
-		String stMinute = clockMinute < 10 ? "0" + clockMinute : ""
+		String strMinute = clockMinute < 10 ? "0" + clockMinute : ""
 				+ clockMinute;
 
 		int clockHour = mainFrame.chart.startHour + hours;
@@ -349,7 +356,10 @@ public class MainView extends JPanel implements KeyListener {
 		if (clockHour >= 24)
 			clockHour -= 24;
 
-		return clockHour + ":" + stMinute;
+		String strHour = clockHour < 10 ? "0" + clockHour : ""
+			+ clockHour;
+
+		return strHour + ":" + strMinute;
 	}
 
 	public String getTime(int px) {
@@ -626,20 +636,21 @@ public class MainView extends JPanel implements KeyListener {
 
 			int y = activeTrainDrawing.movingPoint.y;
 			String newTime = getTime(newx);
-			SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-			try {
-				Date newArrive = df.parse(newTime);
+//			SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+//			try {
+//				Date newArrive = df.parse(newTime);
+//				String newArrive = newTime;
 				Train train = activeTrainDrawing.train;
-				train.setArrive(movingStation, newArrive);
+				train.setArrive(movingStation, newTime);
 
 				//TrainDrawing.ChartPoint moving = activeTrain.movingPoint;
 				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
 				activeTrainDrawing.setMovingPoint(newx, y,
 						TrainDrawing.ChartPoint.STOP_ARRIVE);
 				repaint();
-			} catch (ParseException ex) {
-				ex.printStackTrace();
-			}
+//			} catch (ParseException ex) {
+//				ex.printStackTrace();
+//			}
 			break;
 		case KeyEvent.VK_ENTER:
 			panelLines.setState(LinesPanel.STATE_CHANGE_LEAVE);
@@ -669,20 +680,20 @@ public class MainView extends JPanel implements KeyListener {
 			int y = activeTrainDrawing.movingPoint.y;
 
 			String newTime = getTime(newx);
-			SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-			try {
-				Date newLeave = df.parse(newTime);
+//			SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+//			try {
+//				Date newLeave = df.parse(newTime);
 				Train train = activeTrainDrawing.train;
-				train.setLeave(movingStation, newLeave);
+				train.setLeave(movingStation, newTime);
 
 				//TrainDrawing.ChartPoint moving = activeTrain.movingPoint;
 				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
 				activeTrainDrawing.setMovingPoint(newx, y,
 						TrainDrawing.ChartPoint.STOP_LEAVE);
 				repaint();
-			} catch (ParseException ex) {
-				ex.printStackTrace();
-			}
+//			} catch (ParseException ex) {
+//				ex.printStackTrace();
+//			}
 			break;
 		case KeyEvent.VK_ENTER:
 			panelLines.setState(LinesPanel.STATE_NORMAL);

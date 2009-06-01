@@ -52,12 +52,12 @@ public class AboutBox extends JDialog implements ActionListener {
 		label1.setFont(new java.awt.Font("Dialog", 0, 12));
 		label1.setText("LGuo的电子运行图");
 
-		label2.setText("Version 1.61 Beta ");
-		label3.setText("Build 200701210010");
+		label2.setText("Version 1.70 Beta ");
+		label3.setText("Build 200702080021");
 
 		label4.setFont(new java.awt.Font("Dialog", 0, 12));
 		label4.setText("郭磊（海子ID: lguo）出品");
-		label5.setText("特别鸣谢：海子网 achen1 等网友！   ");
+		label5.setText("鸣谢：海子网 achen1 等网友！   ");
 		label5.setFont(new java.awt.Font("Dialog", 0, 12));
 
 		button1.setActionCommand("Ok");

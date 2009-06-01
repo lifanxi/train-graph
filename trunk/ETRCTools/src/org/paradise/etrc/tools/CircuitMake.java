@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Vector;
 
 import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Station;

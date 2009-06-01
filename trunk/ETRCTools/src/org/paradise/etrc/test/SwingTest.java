@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
-import javax.swing.table.*;
+//import javax.swing.table.*;
 
 /** 
  * Swing 组件测试程序
@@ -19,6 +19,12 @@ import javax.swing.table.*;
 public class SwingTest extends JFrame
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5659806329792984243L;
+
+
+	/**
      * 主模块，初始化所有子模块，并设置主框架的相关属性
      */
     public SwingTest()
@@ -41,15 +47,15 @@ public class SwingTest extends JFrame
         c.add(bottomPanel,BorderLayout.SOUTH);
         
         // 利用无名内隐类，增加窗口事件
-        this.addWindowListener(new WindowAdapter()
-            {
-                public void WindowClosing(WindowEvent e)
-                {   
-                    // 释放资源，退出程序
-                    dispose();
-                    System.exit(0);
-                }
-            });
+//        this.addWindowListener(new WindowAdapter()
+//            {
+//                public void WindowClosing(WindowEvent e)
+//                {   
+//                    // 释放资源，退出程序
+//                    dispose();
+//                    System.exit(0);
+//                }
+//            });
             
         
         
@@ -71,7 +77,11 @@ public class SwingTest extends JFrame
      */
     class MenuTest extends JMenuBar
     {
-        private JDialog aboutDialog;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -1524296021981108254L;
+		private JDialog aboutDialog;
             
         /**
          * 菜单初始化操作
@@ -140,13 +150,13 @@ public class SwingTest extends JFrame
             
             aboutDialog.setSize(450,225);
             aboutDialog.setLocation(300,300);                        
-            aboutDialog.addWindowListener(new WindowAdapter()
-            {
-                public void WindowClosing(WindowEvent e)
-                {
-                    dispose();
-                }                    
-            });            
+//            aboutDialog.addWindowListener(new WindowAdapter()
+//            {
+//                public void WindowClosing(WindowEvent e)
+//                {
+//                    dispose();
+//                }                    
+//            });            
         }
     }
     
@@ -158,7 +168,11 @@ public class SwingTest extends JFrame
      */
     class LeftPanel extends JPanel
     {
-        private int i = 0;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -6557407169396681042L;
+		private int i = 0;
         public LeftPanel()
         {
             
@@ -205,7 +219,11 @@ public class SwingTest extends JFrame
      */
     class BottomPanel extends JPanel
     {
-        private JProgressBar pb;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 4186177834310778004L;
+		private JProgressBar pb;
         ////////////////////////////////////////
         //public class 
         //////////////////////////////
@@ -261,7 +279,12 @@ public class SwingTest extends JFrame
      */
     class RightPanel extends JPanel
     {
-        public RightPanel()
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -5459126005216969927L;
+
+		public RightPanel()
         {
             this.setLayout(new GridLayout(8,1));        
             
@@ -275,7 +298,7 @@ public class SwingTest extends JFrame
                 {
                     JFileChooser file = new JFileChooser();
                     int result = file.showOpenDialog(new JPanel());
-                    if (result ==file.APPROVE_OPTION) 
+                    if (result ==JFileChooser.APPROVE_OPTION) 
                     {
                         String fileName = file.getSelectedFile().getName();                    
                         String dir = file.getCurrentDirectory().toString();
@@ -351,7 +374,12 @@ public class SwingTest extends JFrame
      */
     class CenterPanel extends JPanel
     {
-        public CenterPanel()
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -7872282703460489730L;
+
+		public CenterPanel()
         {
             JTabbedPane tab = new JTabbedPane(JTabbedPane.TOP);
             
