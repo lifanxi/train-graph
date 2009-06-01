@@ -33,6 +33,8 @@ public class WZInPointSet extends WizardDialog {
 	
 	public WZInPointSet(JFrame _frame, int _step, String _wizardTitle, String _stepTitle) {
 		super(_frame, _step, _wizardTitle, _stepTitle);
+		
+		this.canFinish = false;
 	}
 
 	public void setData(Chart _chart, Train _train) {
@@ -53,9 +55,15 @@ public class WZInPointSet extends WizardDialog {
 		circuitList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent lse) {
 				int row = ((JList) lse.getSource()).getSelectedIndex();
-				curStation = chart.circuit.stations[row];
-				System.out.println(curStation.name);
-				tfTime.setText(calculTime());
+				
+				if(row < 0) {
+					curStation = null;
+					tfTime.setText("");
+				}
+				else {
+					curStation = chart.circuit.stations[row];
+					tfTime.setText(calculTime());
+				}
 			}
         });
 		
@@ -76,7 +84,7 @@ public class WZInPointSet extends WizardDialog {
 	private Component createTimePane() {
 		JPanel panel = new JPanel();
 		
-		JLabel lb = new JLabel("入图时间：");
+		JLabel lb = new JLabel("入图/始发时间：");
 		tfTime = new JTextField();
 		tfTime.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent arg0) {
@@ -99,6 +107,9 @@ public class WZInPointSet extends WizardDialog {
 
 	//计算当前选中车站的推算通过时间（如果有图定时间则取到达时间）
 	private String calculTime() {
+		if(curStation == null)
+			return "";
+		
 		//有这个停站
 		int stopIndex = train.findStopIndex(curStation.name);
 		if(stopIndex >= 0) {
@@ -106,13 +117,21 @@ public class WZInPointSet extends WizardDialog {
 		}
 		else {
 			Station firstStation = chart.circuit.getFirstStopOnMe(train);
+			
+			if(firstStation == null)
+				return "";
+			
 			int distGap = curStation.dist - firstStation.dist;
-			int timeGap = distGap * 60 / Train.getDefaultVelocityByName(train.getTrainName(chart.circuit));
+			int timeGap = distGap * 60 / Train.getDefaultVelocityByName(train.getTrainName());
 			
 			Stop stop = train.findStop(firstStation.name);
 			
 			int timeA = Train.trainTimeToInt(stop.arrive);
-			int timeIn = timeA - Math.abs(timeGap);
+			int timeIn = 0;
+			if(train.isDownTrain(chart.circuit) == Train.DOWN_TRAIN)
+				timeIn = timeA + timeGap;
+			else
+				timeIn = timeA - timeGap;
 			
 			return Train.intToTrainTime(timeIn);
 		}
@@ -145,8 +164,6 @@ public class WZInPointSet extends WizardDialog {
 	protected void setTime(String input) {
 		oldTime = Train.formatTime(oldTime, input.trim());
 		tfTime.setText(oldTime);
-		
-		//train.xstop.setTime;
 	}
 
 	private JComponent createInfoField() {
@@ -201,12 +218,28 @@ public class WZInPointSet extends WizardDialog {
 			}
 		}
 
-		int index = chart.circuit.getStationIndex(train.getStartStation());
+		int index = -1;
+		if(curStation != null)
+			index = chart.circuit.getStationIndex(curStation.name);
+		
 		circuitList.setSelectedIndex(index);
-		circuitList.ensureIndexIsVisible(index+1);
+		circuitList.ensureIndexIsVisible(index);
 	}
 
 	public Dimension getPreferredSize() {
 		return new Dimension(380, 380);
+	}
+	
+	public void doNext() {
+		String time = tfTime.getText().trim();
+		if(time.equalsIgnoreCase(""))
+			return;
+		else {
+			//TODO: train.xstop.setTime;
+			Stop stop = new Stop(curStation.name, time, time, false);
+			chart.insertNewStopToTrain(train, stop);
+			
+			super.doNext();
+		}
 	}
 }
