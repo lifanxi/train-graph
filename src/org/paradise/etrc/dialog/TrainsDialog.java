@@ -9,12 +9,12 @@ import java.awt.event.*;
 
 import javax.swing.event.*;
 
-import org.paradise.etrc.DETRC;
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
-import org.paradise.etrc.view.*;
+import org.paradise.etrc.view.chart.ChartView;
 
 /**
  * @author lguo@sina.com
@@ -60,13 +60,13 @@ public class TrainsDialog extends JDialog {
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
 		cbUnderColor.setText("水印显示反向车次");
-		cbUnderColor.setSelected(!(mainFrame.mainView.underDrawingColor == null));
+		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (((JCheckBox) e.getSource()).isSelected())
-					mainFrame.mainView.underDrawingColor = MainView.DEFAULT_UNDER_COLOR;
+					mainFrame.chartView.underDrawingColor = ChartView.DEFAULT_UNDER_COLOR;
 				else
-					mainFrame.mainView.underDrawingColor = null;
+					mainFrame.chartView.underDrawingColor = null;
 			}
 		});
 
@@ -133,7 +133,8 @@ public class TrainsDialog extends JDialog {
 				chart.delTrain(table.getSelectedRow());
 
 				table.revalidate();
-				mainFrame.mainView.repaint();
+				mainFrame.chartView.repaint();
+		        mainFrame.runView.refresh();
 			}
 		});
 		
@@ -170,7 +171,8 @@ public class TrainsDialog extends JDialog {
 			}
 			
 			table.revalidate();
-			mainFrame.mainView.repaint();
+			mainFrame.chartView.repaint();
+	        mainFrame.runView.refresh();
 		}
 	}
 	
@@ -195,7 +197,8 @@ public class TrainsDialog extends JDialog {
 			}
 			
 			table.revalidate();
-			mainFrame.mainView.repaint();
+			mainFrame.chartView.repaint();
+	        mainFrame.runView.refresh();
 		}
 	}
 
@@ -237,7 +240,7 @@ public class TrainsDialog extends JDialog {
 				//bring up the dialog.
 				colorButton.setForeground(currentColor);
 				colorChooser.setColor(currentColor);
-				DETRC.setFont(dialog);
+				ETRC.setFont(dialog);
 				dialog.setVisible(true);
 
 				//Make the renderer reappear.

@@ -8,7 +8,7 @@ import javax.swing.border.*;
 import com.borland.jbcl.layout.*;
 
 import org.paradise.etrc.*;
-import org.paradise.etrc.view.MainView;
+import org.paradise.etrc.view.chart.ChartView;
 
 /**
  * @author lguo@sina.com
@@ -71,7 +71,7 @@ MainFrame mainFrame = null;
 
     tfRight.setMinimumSize(new Dimension(12, 22));
     tfRight.setPreferredSize(new Dimension(20, 22));
-    tfRight.setText(mainFrame.mainView.rightMargin+"");
+    tfRight.setText(mainFrame.chartView.rightMargin+"");
 
     lbLeft.setText("左：");
     lbLeft.setFont(new java.awt.Font("宋体", 0, 12));
@@ -81,7 +81,7 @@ MainFrame mainFrame = null;
     tfLeft.setRequestFocusEnabled(true);
     tfLeft.setMinimumSize(new Dimension(12, 22));
     tfLeft.setPreferredSize(new Dimension(20, 22));
-    tfLeft.setText(mainFrame.mainView.leftMargin+"");
+    tfLeft.setText(mainFrame.chartView.leftMargin+"");
 
     lbDown.setText("下：");
     lbDown.setFont(new java.awt.Font("宋体", 0, 12));
@@ -90,7 +90,7 @@ MainFrame mainFrame = null;
 
     tfDown.setMinimumSize(new Dimension(12, 22));
     tfDown.setPreferredSize(new Dimension(20, 22));
-    tfDown.setText(mainFrame.mainView.bottomMargin+"");
+    tfDown.setText(mainFrame.chartView.bottomMargin+"");
 
     lbUp.setText("上：");
     lbUp.setFont(new java.awt.Font("宋体", 0, 12));
@@ -99,7 +99,7 @@ MainFrame mainFrame = null;
 
     tfUp.setMinimumSize(new Dimension(12, 22));
     tfUp.setPreferredSize(new Dimension(20, 22));
-    tfUp.setText(mainFrame.mainView.topMargin+"");
+    tfUp.setText(mainFrame.chartView.topMargin+"");
 
     btOK.setFont(new java.awt.Font("宋体", 0, 12));
     btOK.setText("设定");
@@ -198,10 +198,10 @@ MainFrame mainFrame = null;
    * doDefault
    */
   private void doDefault() {
-    this.tfUp.setText(MainView.DEFAULT_TOP_MARGIN+"");
-    this.tfDown.setText(MainView.DEFAULT_BOTTOM_MARGIN+"");
-    this.tfLeft.setText(MainView.DEFAULT_LEFT_MARGIN+"");
-    this.tfRight.setText(MainView.DEFAULT_RIGHT_MARGIN+"");
+    this.tfUp.setText(ChartView.DEFAULT_TOP_MARGIN+"");
+    this.tfDown.setText(ChartView.DEFAULT_BOTTOM_MARGIN+"");
+    this.tfLeft.setText(ChartView.DEFAULT_LEFT_MARGIN+"");
+    this.tfRight.setText(ChartView.DEFAULT_RIGHT_MARGIN+"");
     this.statusBar.setText("设定图表边距");
   }
 
@@ -232,12 +232,12 @@ MainFrame mainFrame = null;
       }
       else{
         if(this.mainFrame != null) {
-          mainFrame.mainView.topMargin = up;
-          mainFrame.mainView.bottomMargin = down;
-          mainFrame.mainView.leftMargin = left;
-          mainFrame.mainView.rightMargin = right;
+          mainFrame.chartView.topMargin = up;
+          mainFrame.chartView.bottomMargin = down;
+          mainFrame.chartView.leftMargin = left;
+          mainFrame.chartView.rightMargin = right;
 
-          mainFrame.mainView.repaint();
+          mainFrame.chartView.repaint();
           mainFrame.validate();
         }
         this.statusBar.setText("设定图表边距");

@@ -9,17 +9,23 @@ import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
 import java.awt.print.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.dialog.*;
-import org.paradise.etrc.dview.DynamicView;
 import org.paradise.etrc.filter.CSVFilter;
 import org.paradise.etrc.filter.TRCFilter;
 import org.paradise.etrc.filter.TRFFilter;
-import org.paradise.etrc.view.*;
+import org.paradise.etrc.view.chart.ChartView;
+import org.paradise.etrc.view.dynamic.DynamicView;
+
+//import com.sun.image.codec.jpeg.JPEGCodec;
+//import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * @author lguo@sina.com
@@ -29,10 +35,12 @@ import org.paradise.etrc.view.*;
 public class MainFrame extends JFrame implements ActionListener, Printable {
 	private static final long serialVersionUID = 1L;
 	
-	public MainView mainView;
-	public DynamicView dView;
-	public Chart chart;
-
+	public JSplitPane splitPane;
+	public ChartView chartView;
+	public DynamicView runView;
+	
+	private boolean isShowRun = true;
+	
 	public JLabel statusBarMain = new JLabel();
 	public JLabel statusBarRight = new JLabel();
 
@@ -41,16 +49,17 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	public static String Prop_Working_Chart = "Working_Chart";
 	public static String Prop_Show_UP = "Show_UP";
 	public static String Prop_Show_Down = "Show_Down";
+	public static String Prop_Show_Run = "Show_Run";
 	
 	private static String Sample_Chart_File = "sample.trc";
 	private static String Properties_File = "htrc.prop";
 	
 	public boolean isNewCircuit = false;
+	public Chart chart;
 
 	private static final int MAX_TRAIN_SELECT_HISTORY_RECORD = 12;
 	public Vector trainSelectHistory;
 	public JComboBox cbTrainSelectHistory;
-	public JSplitPane splitPane;
 	
 	//Construct the frame
 	public MainFrame() {
@@ -58,6 +67,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		defaultProp.setProperty(Prop_Working_Chart, Sample_Chart_File);
 		defaultProp.setProperty(Prop_Show_UP, "Y");
 		defaultProp.setProperty(Prop_Show_Down, "N");
+		defaultProp.setProperty(Prop_Show_Run, "Y");
 		
 		prop = new Properties(defaultProp);
 		
@@ -94,13 +104,21 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	//Component initialization
 	private void jbInit() throws Exception {
+		chartView = new ChartView(this);
+		runView = new DynamicView(this);
+		
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, runView, chartView);
+		splitPane.setDividerLocation(runView.getPreferredSize().height);
+		splitPane.setDividerSize(3);
+		runView.setMinimumSize(runView.getPreferredSize());
+
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		this.setFont(new java.awt.Font("宋体", 0, 10));
 		this.setLocale(java.util.Locale.getDefault());
 		this.setResizable(true);
 		this.setState(Frame.NORMAL);
 		this.setIconImage(new ImageIcon(org.paradise.etrc.MainFrame.class
-				.getResource("/pic/icon.gif")).getImage());		
+				.getResource("/pic/icon.gif")).getImage());
 		
 		JPanel contentPane;
 		contentPane = (JPanel) this.getContentPane();
@@ -116,22 +134,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		statusPanel.setLayout(new BorderLayout());
 		statusPanel.add(statusBarMain, BorderLayout.CENTER);
 		statusPanel.add(statusBarRight, BorderLayout.EAST);
+
 		contentPane.add(statusPanel, BorderLayout.SOUTH);
-
 		contentPane.add(loadToolBar(), BorderLayout.NORTH);
-
-		dView = new DynamicView(this);
-		mainView = new MainView(this);
-		
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, dView, mainView);
-//		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(dView.getPreferredSize().height);
-//		Dimension chartSize = new Dimension(getWidth(), contentPane.getHeight()-dView.getPreferredSize().height-100);
-//		Dimension chartSize = new Dimension(getWidth(), 500);
-		dView.setMinimumSize(dView.getPreferredSize());
-//		mainView.setMinimumSize(mainView.getPreferredSize());
-
 		contentPane.add(splitPane, BorderLayout.CENTER);
+
 		this.setTitle();
 	}
 
@@ -189,16 +196,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	}
 
 	public JToggleButton jtButtonDown;
-
+	public JToggleButton jtButtonShowRun;
 	public JToggleButton jtButtonUp;
 
 	private JToolBar loadToolBar() {
 		JToolBar jToolBar = new JToolBar();
-		
-		//test
-		JButton jbTest = createTBButton("findTrain", "Do Test", Test);
-		jToolBar.add(jbTest);
-		jToolBar.addSeparator();
 		
 		//文件操作
 		JButton jbOpenFile = createTBButton("openFile", "Open A Chart", File_Load_Chart);
@@ -227,72 +229,94 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		jToolBar.add(jbSetupH);
 		jToolBar.add(jbSetupV);
 		
+		//动态图是否开启
+		ImageIcon imageRun = new ImageIcon(this.getClass().getResource("/pic/show_run.png"));
+		jtButtonShowRun = new JToggleButton(imageRun);
+		jtButtonShowRun.setToolTipText("Show Dynamic Chart");
+		jtButtonShowRun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainFrame.this.changeShowRunState();
+			}
+		});
+		
+		//读配置文件设定是否显示动态图
+		if(prop.getProperty(Prop_Show_Run).equalsIgnoreCase("Y")) {
+			isShowRun = true;
+		}
+		else {
+			isShowRun = false;
+		}
+		updateShowRunState();
+		
+		jToolBar.addSeparator();
+		jToolBar.add(jtButtonShowRun);
+		
 		//上下行显示选择
-//		ImageIcon imageDown = new ImageIcon(org.paradise.etrc.MainFrame.class
-//				.getResource("/pic/down.png"));
-//		ImageIcon imageUp = new ImageIcon(org.paradise.etrc.MainFrame.class
-//				.getResource("/pic/up.png"));
-//		jtButtonDown = new JToggleButton(imageDown);
-//		jtButtonUp = new JToggleButton(imageUp);
-//		jtButtonDown.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				dView.changeShowDown();
-//			}
-//		});
-//		jtButtonUp.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				dView.changShownUp();
-//			}
-//		});
-//		jtButtonUp.setToolTipText("Display Up-Going Trains");
-//		jtButtonDown.setToolTipText("Display Down-Going Trains");
-//		
-//		//读配置文件设置上下行状态按钮
-//		dView.showUpDownState = MainView.SHOW_NONE;
-//		if(prop.getProperty(Prop_Show_Down).equalsIgnoreCase("Y")) {
-//			jtButtonDown.setSelected(true);
-//			dView.showUpDownState ^= MainView.SHOW_DOWN;
-//		}
-//		else
-//			jtButtonDown.setSelected(false);
-//		if(prop.getProperty(Prop_Show_UP).equalsIgnoreCase("Y")) {
-//			jtButtonUp.setSelected(true);
-//			dView.showUpDownState ^= MainView.SHOW_UP;
-//		}
-//		else
-//			jtButtonUp.setSelected(false);
-//
-//		jToolBar.addSeparator();
-//		jToolBar.add(jtButtonDown);
-//		jToolBar.add(jtButtonUp);
+		ImageIcon imageDown = new ImageIcon(this.getClass().getResource("/pic/down.png"));
+		ImageIcon imageUp = new ImageIcon(this.getClass().getResource("/pic/up.png"));
+		jtButtonDown = new JToggleButton(imageDown);
+		jtButtonUp = new JToggleButton(imageUp);
+		jtButtonUp.setToolTipText("Display Up-Going Trains");
+		jtButtonDown.setToolTipText("Display Down-Going Trains");
+		jtButtonDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				chartView.changeShowDown();
+			}
+		});
+		jtButtonUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				chartView.changShownUp();
+			}
+		});
+		
+		//读配置文件设置上下行状态按钮
+		chartView.showUpDownState = ChartView.SHOW_NONE;
+		if(prop.getProperty(Prop_Show_Down).equalsIgnoreCase("Y")) {
+			jtButtonDown.setSelected(true);
+			chartView.showUpDownState ^= ChartView.SHOW_DOWN;
+		}
+		else
+			jtButtonDown.setSelected(false);
+		if(prop.getProperty(Prop_Show_UP).equalsIgnoreCase("Y")) {
+			jtButtonUp.setSelected(true);
+			chartView.showUpDownState ^= ChartView.SHOW_UP;
+		}
+		else
+			jtButtonUp.setSelected(false);
+		//让ChartView右下角的上下行状态显示图标显示正确的内容
+		chartView.updateUpDownDisplay();
+
+		jToolBar.addSeparator();
+		jToolBar.add(jtButtonDown);
+		jToolBar.add(jtButtonUp);
 		
 		//历史记录
-//		cbTrainSelectHistory.setFont(new Font("Dialog", Font.PLAIN, 12));
-//		cbTrainSelectHistory.setMinimumSize(new Dimension(64, 20));
-//		cbTrainSelectHistory.setMaximumSize(new Dimension(64, 20));
-//		cbTrainSelectHistory.setEditable(true);
-//		cbTrainSelectHistory.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent ae) {
-//				//当用键盘输入的时候会触发两次Action
-//				//一次是comboBoxChanged，另一次是comboBoxEdited
-//				//我们只处理与下拉选择一样的那一次：comboBoxChanged
-//				if(!ae.getActionCommand().equalsIgnoreCase("comboBoxChanged"))
-//					return;
-//				
-//				String trainToFind = (String) cbTrainSelectHistory.getSelectedItem();
-//
-//				if(trainToFind == null)
-//					return;
-//
-//				if(trainToFind.trim().equalsIgnoreCase(""))
-//					return;
-//				
-//				if(!dView.findAndMoveToTrain(trainToFind))
-//					new MessageBox(MainFrame.this, "没有找到" + trainToFind + "次列车！").showMessage();
-//			}
-//		});
-//		jToolBar.addSeparator();
-//		jToolBar.add(cbTrainSelectHistory);
+		cbTrainSelectHistory.setFont(new Font("Dialog", Font.PLAIN, 12));
+		cbTrainSelectHistory.setMinimumSize(new Dimension(64, 20));
+		cbTrainSelectHistory.setMaximumSize(new Dimension(64, 20));
+		cbTrainSelectHistory.setEditable(true);
+		cbTrainSelectHistory.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				//当用键盘输入的时候会触发两次Action
+				//一次是comboBoxChanged，另一次是comboBoxEdited
+				//我们只处理与下拉选择一样的那一次：comboBoxChanged
+				if(!ae.getActionCommand().equalsIgnoreCase("comboBoxChanged"))
+					return;
+				
+				String trainToFind = (String) cbTrainSelectHistory.getSelectedItem();
+
+				if(trainToFind == null)
+					return;
+
+				if(trainToFind.trim().equalsIgnoreCase(""))
+					return;
+				
+				if(!chartView.findAndMoveToTrain(trainToFind))
+					new MessageBox(MainFrame.this, "没有找到" + trainToFind + "次列车！").showMessage();
+			}
+		});
+		jToolBar.addSeparator();
+		jToolBar.add(cbTrainSelectHistory);
 
 		return jToolBar;
 	}
@@ -310,8 +334,6 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		
 		return jbOnToolBar;
 	}
-	
-	private final String Test = "Test";
 
 	private final String File_Load_Chart = "File_Load_Chart";
 	private final String File_Save_Chart = "File_Save_Chart";
@@ -460,14 +482,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			this.doPrintChart();
 		} else if (command.equalsIgnoreCase(Help_About)) {
 			this.doHelpAbout();
-		} else if (command.equalsIgnoreCase(Test)) {
-			this.doTest();
 		}
-	}
-	
-	private void doTest() {
-		//this.dView.timeAdd(1);
-		this.splitPane.setDividerLocation(0);
 	}
 
 	private void doTrainTools() {
@@ -492,7 +507,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		new CircuitEditDialog(this, circuit).showDialog();
 		
 		this.setTitle();
-		dView.repaint();
+		chartView.repaint();
+		runView.refresh();
 		
 		this.isNewCircuit = true;
 	}
@@ -508,15 +524,17 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		dlg.pack();
 		dlg.setVisible(true);
 
-		dView.repaint();
-		dView.setTrainNum();
+		chartView.repaint();
+		chartView.setTrainNum();
+		runView.refresh();
 	}
 
 	private void doEditCircuit() {
 		new CircuitEditDialog(this, this.chart.circuit.copy()).showDialog();
 		
 		this.setTitle();
-		dView.repaint();
+		chartView.repaint();
+		runView.refresh();
 	}
 
 	/**
@@ -569,8 +587,9 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doClearChart() {
 		chart.clearTrains();
-		dView.repaint();
-		dView.setTrainNum();
+		chartView.repaint();
+		chartView.setTrainNum();
+		runView.refresh();
 	}
 
 	/**
@@ -578,6 +597,16 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doPrintChart() {
 		new MessageBox(this, "JAVA的打印能力太弱，不想做这个功能了。").showMessage();
+		
+		try {
+			BufferedImage image = chartView.getBufferedImage();
+
+			ImageIO.write(image, "gif", new File("c:\\ETRC.gif"));
+		}
+		catch(Exception ioe) {
+			ioe.printStackTrace();
+		}
+		
 //		//获取默认打印作业
 //		PrinterJob myPrtJob = PrinterJob.getPrinterJob();
 //
@@ -663,7 +692,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doSaveChartAs() {
 		JFileChooser chooser = new JFileChooser();
-		DETRC.setFont(chooser);
+		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle("保存运行图");
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -697,7 +726,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doLoadChart() {
 		JFileChooser chooser = new JFileChooser();
-		DETRC.setFont(chooser);
+		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle("载入运行图");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -712,10 +741,9 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 			try {
 				chart.loadFromFile(f);
-//				dView.invalidate();
-				dView.refresh();
-				dView.repaint();
-//				dView.setTrainNum();
+				chartView.repaint();
+				chartView.setTrainNum();
+				runView.refresh();
 				setTitle();
 				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
@@ -733,7 +761,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			return;
 
 		JFileChooser chooser = new JFileChooser();
-		DETRC.setFont(chooser);
+		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle("载入车次");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -776,9 +804,10 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 			//System.out.println("1.Move to: "+loadingTrain.getTrainName());
 			//mainView.buildTrainDrawings();
-			dView.repaint();
-			dView.setTrainNum();
-//			dView.moveToTrain(loadingTrain);
+			chartView.repaint();
+			chartView.setTrainNum();
+			chartView.moveToTrain(loadingTrain);
+			runView.refresh();
 			//panelChart.panelLines.repaint();
 		}
 
@@ -851,6 +880,24 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		
 		return lcb;
 	}
+	
+	private void changeShowRunState() {
+		isShowRun = isShowRun ? false : true;
+		updateShowRunState();
+	}
+
+	private void updateShowRunState() {
+		jtButtonShowRun.setSelected(isShowRun);
+		if(isShowRun) {
+			splitPane.setDividerLocation(runView.getPreferredSize().height);
+			splitPane.setDividerSize(3);
+		}
+		else {
+			splitPane.setDividerLocation(0);
+			splitPane.setDividerSize(0);
+		}
+		prop.setProperty(Prop_Show_Run, isShowRun ? "Y" : "N");
+	}
 
 	//Overridden so we can exit when window is closed
 	protected void processWindowEvent(WindowEvent e) {
@@ -859,7 +906,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			super.processWindowEvent(e);
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
 			super.processWindowEvent(e);
-			dView.requestFocus();
+			chartView.requestFocus();
 		}
 	}
 }

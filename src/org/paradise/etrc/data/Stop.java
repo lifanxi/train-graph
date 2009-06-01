@@ -40,7 +40,7 @@ public class Stop {
 	}
 	
 	public static Stop makeStop(String theName, String strArrive, String strLeave) {
-		SimpleDateFormat df = new SimpleDateFormat("H:mm");
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		Date theArrive = null;
 		Date theLeave = null;
 		String myArrive = "";
@@ -60,15 +60,15 @@ public class Stop {
 
 		//如果到点解析不成功就把到点设为发点
 		if(theArrive == null)
-			myArrive = strLeave;
+			myArrive = df.format(theLeave);
 		else
-			myArrive = strArrive;
+			myArrive = df.format(theArrive);
 		
 		//如果发点解析不成功就把发点设为到点
 		if(theLeave == null)
-			myLeave = strArrive;
+			myLeave = df.format(theArrive);
 		else
-			myLeave = strLeave;
+			myLeave = df.format(theLeave);
 		
 		return new Stop(theName, myArrive, myLeave);
 	}

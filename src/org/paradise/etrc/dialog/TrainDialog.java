@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.paradise.etrc.DETRC;
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.filter.CSVFilter;
@@ -235,7 +235,7 @@ public class TrainDialog extends JDialog {
 
 	protected void doSaveTrain(Train savingTrain) {
 		JFileChooser chooser = new JFileChooser();
-		DETRC.setFont(chooser);
+		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle("保存车次");
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -267,7 +267,7 @@ public class TrainDialog extends JDialog {
 
 	protected Train doLoadTrain() {
 		JFileChooser chooser = new JFileChooser();
-		DETRC.setFont(chooser);
+		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle("载入车次");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
