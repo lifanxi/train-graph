@@ -55,8 +55,8 @@ public class TrainDialog extends JDialog {
 	
 	public Train getTrain() {
 		Train train = ((TrainTableModel)table.getModel()).train;
-		train.startStation = train.stops[0].stationName;
-		train.terminalStation = train.stops[train.stopNum - 1].stationName;
+//		train.startStation = train.stops[0].stationName;
+//		train.terminalStation = train.stops[train.stopNum - 1].stationName;
 		train.trainNameDown = tfNameD.getText().trim();
 		train.trainNameUp = tfNameU.getText().trim();
 		train.trainNameFull = tfName.getText().trim();

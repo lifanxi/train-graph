@@ -221,8 +221,8 @@ public class ETRCSKB {
 			}
 		}
 		
-		train.startStation = train.stops[0].stationName;
-		train.terminalStation = train.stops[train.stopNum - 1].stationName;
+//		train.startStation = train.stops[0].stationName;
+//		train.terminalStation = train.stops[train.stopNum - 1].stationName;
 		train.trainNameFull = trainName;
 		
 		String names[] = train.trainNameFull.split("/");

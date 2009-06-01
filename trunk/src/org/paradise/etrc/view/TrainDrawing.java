@@ -71,7 +71,7 @@ public class TrainDrawing {
       //第一个停站的到达点，判断p0是入图还是始发
       if (i == 0) {
         //始发
-        if (drawStops[i].stationName.equalsIgnoreCase(train.startStation)) {
+        if (drawStops[i].stationName.equalsIgnoreCase(train.getStartStation())) {
           p0.type = ChartPoint.START;
           firstRect = new TrainNameRect(p0, trainName, direction);
         }
@@ -85,7 +85,7 @@ public class TrainDrawing {
       //最后一个停站的出发点，判断p1是出图还是终到
       if (i == drawStops.length - 1) {
         //终到
-        if (drawStops[i].stationName.equalsIgnoreCase(train.terminalStation)) {
+        if (drawStops[i].stationName.equalsIgnoreCase(train.getTerminalStation())) {
           p1.type = ChartPoint.TERMINAL;
           lastRect = new TrainNameRect(p1, trainName, direction);
         }
@@ -361,7 +361,7 @@ public class TrainDrawing {
     	return train.getTrainName() + "Error!";
 
     return train.getTrainName() + "次 "
-        + train.startStation + "至" + train.terminalStation
+        + train.getStartStation() + "至" + train.getTerminalStation()
         + " 在" + chart.circuit.name + "行驶" + dist + "公里 "
         + "耗时" + min + "分钟 旅行速度" + dist*60/min +"公里/小时";
   }

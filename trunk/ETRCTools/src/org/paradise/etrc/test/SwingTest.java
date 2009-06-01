@@ -10,27 +10,27 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 /** 
- * Swing ¡Á¨¦?????????¨°
- * ????Swing?¨´??¡Á¨¦???¡ã???¨¤????????
- * @author ?¨¬?¨ª.?? 2003.4.17 ?¨ª23:14
+ * Swing ç»„ä»¶æµ‹è¯•ç¨‹åº
+ * æµ‹è¯•Swingæ‰€æœ‰ç»„ä»¶åŠå…¶ç›¸åº”çš„äº‹ä»¶
+ * @author å¤©ç¿¼.æ 2003.4.17 æ™š23:14
  * @link http://www.robochina.org
  * @link robococde@etang.com
  */
 public class SwingTest extends JFrame
 {
     /**
-     * ?¡Â???¨¦?????????¨´??¡Á????¨¦?????¨¨???¡Â?¨°?????¨¤??????
+     * ä¸»æ¨¡å—ï¼Œåˆå§‹åŒ–æ‰€æœ‰å­æ¨¡å—ï¼Œå¹¶è®¾ç½®ä¸»æ¡†æ¶çš„ç›¸å…³å±æ€§
      */
     public SwingTest()
     {
-        // ???????¨´?????¨¦
+        // åˆå§‹åŒ–æ‰€æœ‰æ¨¡å—
         MenuTest menuTest = new MenuTest();
         LeftPanel leftPanel = new LeftPanel();
         RightPanel rightPanel = new RightPanel();
         BottomPanel bottomPanel = new BottomPanel();
         CenterPanel centerPanel = new CenterPanel();
         
-        // ?¨¨???¡Â?¨°????????
+        // è®¾ç½®ä¸»æ¡†æ¶çš„å¸ƒå±€
         Container c = this.getContentPane();
         // c.setLayout(new BorderLayout())
         this.setJMenuBar(menuTest);
@@ -40,12 +40,12 @@ public class SwingTest extends JFrame
         c.add(centerPanel,BorderLayout.CENTER);
         c.add(bottomPanel,BorderLayout.SOUTH);
         
-        // ?????????????¨¤???????¡ã??????
+        // åˆ©ç”¨æ— åå†…éšç±»ï¼Œå¢åŠ çª—å£äº‹ä»¶
         this.addWindowListener(new WindowAdapter()
             {
                 public void WindowClosing(WindowEvent e)
                 {   
-                    // ??¡¤?¡Á????????????¨°
+                    // é‡Šæ”¾èµ„æºï¼Œé€€å‡ºç¨‹åº
                     dispose();
                     System.exit(0);
                 }
@@ -54,8 +54,8 @@ public class SwingTest extends JFrame
         
         
         setSize(700,500);
-        setTitle("Swing ¡Á¨¦???¨®???¨°??¡ã?");
-        // ????frame??¡À¨º????,???????¡À??¡À?????¡¤?¡À?????window????
+        setTitle("Swing ç»„ä»¶å¤§å…¨ç®€ä½“ç‰ˆ");
+        // éšè—frameçš„æ ‡é¢˜æ ,æ­¤åŠŸæš‚æ—¶å…³é—­ï¼Œä»¥æ–¹ä¾¿ä½¿ç”¨windowäº‹ä»¶
         // setUndecorated(true);
         setLocation(200,150);
         show();        
@@ -63,7 +63,7 @@ public class SwingTest extends JFrame
 
     ////////////////////////////////////////////////////////////////////////////
     /**
-     * ?????????¨ª???¨¦
+     * èœå•æ å¤„ç†æ¨¡å—
      * JMenuBar --+
      *            --JMenu--+
      *                       --JMenuItem  --ActionListener 
@@ -74,13 +74,13 @@ public class SwingTest extends JFrame
         private JDialog aboutDialog;
             
         /**
-         * ????????????¡Á¡Â
+         * èœå•åˆå§‹åŒ–æ“ä½œ
          */    
         public MenuTest()
         {
-            JMenu fileMenu = new JMenu("????");
-            JMenuItem exitMenuItem = new JMenuItem("????",KeyEvent.VK_E);
-            JMenuItem aboutMenuItem = new JMenuItem("????...",KeyEvent.VK_A);            
+            JMenu fileMenu = new JMenu("æ–‡ä»¶");
+            JMenuItem exitMenuItem = new JMenuItem("é€€å‡º",KeyEvent.VK_E);
+            JMenuItem aboutMenuItem = new JMenuItem("å…³äº...",KeyEvent.VK_A);            
                                                 
             fileMenu.add(exitMenuItem);
             fileMenu.add(aboutMenuItem);
@@ -91,7 +91,7 @@ public class SwingTest extends JFrame
             aboutDialog = new JDialog();
             initAboutDialog();
                         
-            // ????????
+            // èœå•äº‹ä»¶
             exitMenuItem.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent e)
@@ -105,7 +105,7 @@ public class SwingTest extends JFrame
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    // "????"???¡ã?¨°?????¨ª
+                    // "å…³äº"å¯¹è¯æ¡†çš„å¤„ç†
                     aboutDialog.show();
                 }
             });            
@@ -113,7 +113,7 @@ public class SwingTest extends JFrame
         }
         
         /**
-         * ¡¤??????????¡ã?¨°
+         * è¿”å›å…³äºå¯¹è¯æ¡†
          */
         public JDialog getAboutDialog()
         {
@@ -121,21 +121,21 @@ public class SwingTest extends JFrame
         }
         
         /**
-         * ?¨¨??"????"???¡ã?¨°???????¡ã?¨¬??????,??¡Á¡Â??JFrame???¨´??????????
-         * ?¨°??????????
+         * è®¾ç½®"å…³äº"å¯¹è¯æ¡†çš„å¤–è§‚åŠå“åº”äº‹ä»¶,æ“ä½œå’ŒJFrameä¸€æ ·éƒ½æ˜¯åœ¨å†…å®¹
+         * æ¡†æ¶ä¸Šè¿›è¡Œçš„
          */
         public void initAboutDialog()
         {
-            aboutDialog.setTitle("????");
+            aboutDialog.setTitle("å…³äº");
             
             Container con =aboutDialog.getContentPane();
              
-            // Swing ??????html????
+            // Swing ä¸­ä½¿ç”¨htmlè¯­å¥
             Icon icon = new ImageIcon("smile.gif");
             JLabel aboutLabel = new JLabel("<html><b><font size=5>"+
-            "<center>Swing ¡Á¨¦???¨®???¨°??¡ã???"+"<br>?¨¬?¨ª.??",icon,JLabel.CENTER);
+            "<center>Swing ç»„ä»¶å¤§å…¨ç®€ä½“ç‰ˆï¼"+"<br>å¤©ç¿¼.æ",icon,JLabel.CENTER);
                         
-            //JLabel aboutLabel = new JLabel("Swing ¡Á¨¦???¨®???¨°??¡ã???",icon,JLabel.CENTER);
+            //JLabel aboutLabel = new JLabel("Swing ç»„ä»¶å¤§å…¨ç®€ä½“ç‰ˆï¼",icon,JLabel.CENTER);
             con.add(aboutLabel,BorderLayout.CENTER);
             
             aboutDialog.setSize(450,225);
@@ -152,7 +152,7 @@ public class SwingTest extends JFrame
     
     ////////////////////////////////////////////////////////////////////////////
     /**
-     * ¡Á?¡Á¨®¡À????¨¦??????JPanel,????????????JTree
+     * æœ€å·¦è¾¹æ¨¡å—ï¼Œç»§æ‰¿JPanel,åˆå§‹åŒ–å†…å®¹ä¸ºJTree
      * JPanel--+
      *         --JTree
      */
@@ -175,13 +175,13 @@ public class SwingTest extends JFrame
             JTree tree = new JTree(root);
             tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
             
-            // ??????????????
+            // æ¯ä¸ªèŠ‚ç‚¹çš„è¡Œé«˜
             tree.setRowHeight(20);            
             tree.addTreeSelectionListener(new TreeSelectionListener ()
             {
                 public void valueChanged(TreeSelectionEvent e)
                 {
-                    // ?????¨¤?????¡À???????????¨¤tree??1.????¡À??????¨º?¡Â??final 2.???¡§?????¨¤?????¨®
+                    // å†…éšç±»ä¸èƒ½ç›´æ¥å¼•ç”¨å¤–éƒ¨ç±»treeï¼Œ1.å¤–éƒ¨å˜é‡å¯ç”³æ˜ä¸ºfinal 2.æ–°å»ºå¤–éƒ¨ç±»çš„å¯¹è±¡
                     JTree tree =(JTree)e.getSource();
                     DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
                     i++;
@@ -199,7 +199,7 @@ public class SwingTest extends JFrame
     
     ////////////////////////////////////////////////////////////////////////////
     /**
-     * ¡Á??????????¨¦??????JPanel,?????????????????????????¡§?¡À?¡Â????
+     * æœ€ä¸‹é¢å±‚æ¨¡å—ï¼Œç»§æ‰¿JPanel,åˆå§‹åŒ–å†…å®¹ä¸ºè¿›åº¦æ¡ï¼Œå¹¶ç”±å®šæ—¶å™¨æ§åˆ¶
      * JPanel--+
      *         --JProcessBar  --Timer
      */
@@ -214,7 +214,7 @@ public class SwingTest extends JFrame
             pb = new JProgressBar();
             pb.setPreferredSize(new Dimension(680,20));
             
-            // ?¨¨???¡§?¡À?¡Â?????????????????????¨ª
+            // è®¾ç½®å®šæ—¶å™¨ï¼Œç”¨æ¥æ§åˆ¶è¿›åº¦æ¡çš„å¤„ç†
             Timer time = new Timer(1,new ActionListener()
             { 
                 int counter = 0;
@@ -224,7 +224,7 @@ public class SwingTest extends JFrame
                     pb.setValue(counter);
                     Timer t = (Timer)e.getSource();
                     
-                    // ??????????????¡Á??¨®????????¡¤?????
+                    // å¦‚æœè¿›åº¦æ¡è¾¾åˆ°æœ€å¤§å€¼é‡æ–°å¼€å‘è®¡æ•°
                     if (counter == pb.getMaximum())
                     {
                         t.stop();
@@ -245,7 +245,7 @@ public class SwingTest extends JFrame
         }
         
         /**
-         * ?¨¨??????????????????
+         * è®¾ç½®è¿›åº¦æ¡çš„æ•°æ®æ¨¡å‹
          */
         public void setProcessBar(BoundedRangeModel rangeModel)
         {
@@ -255,7 +255,7 @@ public class SwingTest extends JFrame
     
     ////////////////////////////////////////////////////////////////////////////
     /**
-     * ¡Á???¡À????¨¦??????JPanel,???????¡Â??¡ã???
+     * æœ€å³è¾¹æ¨¡å—ï¼Œç»§æ‰¿JPanel,åˆå§‹åŒ–å„ç§æŒ‰é’®
      * JPanel--+
      *         --JButton  --JToggleButton -- JList -- JCombox --JCheckBox ....
      */
@@ -266,9 +266,9 @@ public class SwingTest extends JFrame
             this.setLayout(new GridLayout(8,1));        
             
             
-            // ???????¡Â??¡ã???
-            JCheckBox checkBox = new JCheckBox("????¡ã???");            
-            JButton button = new JButton("?¨°??????");
+            // åˆå§‹åŒ–å„ç§æŒ‰é’®
+            JCheckBox checkBox = new JCheckBox("å¤é€‰æŒ‰é’®");            
+            JButton button = new JButton("æ‰“å¼€æ–‡ä»¶");
             button.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent e)
@@ -279,7 +279,7 @@ public class SwingTest extends JFrame
                     {
                         String fileName = file.getSelectedFile().getName();                    
                         String dir = file.getCurrentDirectory().toString();
-                          JOptionPane.showConfirmDialog(null,dir+"\\"+fileName,"??????????",JOptionPane.YES_OPTION);
+                          JOptionPane.showConfirmDialog(null,dir+"\\"+fileName,"é€‰æ‹©çš„æ–‡ä»¶",JOptionPane.YES_OPTION);
                      }
                 }
             });
@@ -287,29 +287,29 @@ public class SwingTest extends JFrame
             //public
             //////////////////////////////////////////
                     
-            JToggleButton toggleButton = new JToggleButton("????¡ã???");
+            JToggleButton toggleButton = new JToggleButton("åŒæ€æŒ‰é’®");
             
             ButtonGroup    buttonGroup = new ButtonGroup();
-            JRadioButton radioButton1 = new JRadioButton("????¡ã???1",false);
-            JRadioButton radioButton2 = new JRadioButton("????¡ã???2",false);
+            JRadioButton radioButton1 = new JRadioButton("å•é€‰æŒ‰é’®1",false);
+            JRadioButton radioButton2 = new JRadioButton("å•é€‰æŒ‰é’®2",false);
             
-            // ¡Á¨¦???¨°?????¨ª
+            // ç»„åˆæ¡†çš„å¤„ç†
             JComboBox comboBox = new JComboBox();
-            comboBox.setToolTipText("???¡Â??????¡À¨ª????????");
+            comboBox.setToolTipText("ç‚¹å‡»ä¸‹æ‹‰åˆ—è¡¨å¢åŠ é€‰é¡¹");
             comboBox.addActionListener(new ActionListener() 
             {
                 public void actionPerformed(ActionEvent e)
                 {
                     JComboBox comboBox =(JComboBox)e.getSource();
-                    comboBox.addItem("???¨°?¡À");
-                    comboBox.addItem("¡¤????¡À");
+                    comboBox.addItem("ç¨‹åºå‘˜");
+                    comboBox.addItem("åˆ†æå‘˜");
                 }
             });
             
-            // ??¡À¨ª?¨°?????¨ª
+            // åˆ—è¡¨æ¡†çš„å¤„ç†
             DefaultListModel litem = new DefaultListModel();
-            litem.addElement("????");
-            litem.addElement("????");
+            litem.addElement("é¦™è•‰");
+            litem.addElement("æ°´æœ");
             JList list = new JList(litem);
             
             
@@ -319,15 +319,15 @@ public class SwingTest extends JFrame
                 {
                     JList l = (JList)e.getSource();
                     Object s= l.getSelectedValue();
-                    JOptionPane.showMessageDialog(null,s,"?????¨°",JOptionPane.YES_OPTION);
+                    JOptionPane.showMessageDialog(null,s,"æ¶ˆæ¯æ¡†",JOptionPane.YES_OPTION);
                 }
             });
             
-            // ????¡ã???¡Á¨¦
+            // å¢åŠ æŒ‰é’®ç»„
             buttonGroup.add(radioButton1);
             buttonGroup.add(radioButton2);
             
-            // ?????¡Â??¡ã?????JPanel??????
+            // å¢åŠ å„ç§æŒ‰é’®åˆ°JPanelä¸­æ˜¾ç¤º
             add(button);
             add(toggleButton);
             add(checkBox);
@@ -343,8 +343,8 @@ public class SwingTest extends JFrame
     
     ////////////////////////////////////////////////////////////////////////////
     /**
-     * ?????????¨¦??????JPanel,??????????,???????????¨¨????¡À?????¡À¨ª??,
-     * ??¡À?????????¡¤?????¡¤???
+     * ä¸­é—´å±‚æ¨¡å—ï¼Œç»§æ‰¿JPanel,åˆå§‹åŒ–é¡µç­¾,å¹¶åœ¨é¡µç­¾ä¸­è®¾ç½®æ–‡æœ¬åŒºï¼Œè¡¨æ ¼,
+     * æ–‡æœ¬åŒºä¸Šä¸‹ç”¨åˆ†éš”æ¡åˆ†éš”
      * JPanel--+
      *         -JTabbedPane--+
      *                          --Draw    --JTable  -JTextAreas -JText --JPopupMenu
@@ -355,19 +355,19 @@ public class SwingTest extends JFrame
         {
             JTabbedPane tab = new JTabbedPane(JTabbedPane.TOP);
             
-            JTextField textField = new JTextField("??¡À??¨°,???¡Â?¨°??<????¡ã???>??????????");
+            JTextField textField = new JTextField("æ–‡æœ¬åŸŸ,ç‚¹å‡»æ‰“å¼€<æ–‡ä»¶æŒ‰é’®>å¯é€‰æ‹©æ–‡ä»¶");
             textField.setActionCommand("textField");
             
             JTextPane textPane = new JTextPane();
             textPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-            textPane.setText("¡À¨¤???¡Â,??¡Á????¡Â??¡À???????¡Á?????¡¤???????");
+            textPane.setText("ç¼–è¾‘å™¨,è¯•ç€ç‚¹å‡»æ–‡æœ¬åŒºï¼Œè¯•ç€æ‹‰åŠ¨åˆ†éš”æ¡ã€‚");
                         
             textPane.addMouseListener(new MouseAdapter () 
             {
                 public void mousePressed (MouseEvent e)
                 {
                     JTextPane textPane = (JTextPane)e.getSource();
-                    textPane.setText("¡À¨¤???¡Â???¡Â?¨¹??????");
+                    textPane.setText("ç¼–è¾‘å™¨ç‚¹å‡»å‘½ä»¤æˆåŠŸ");
                 //    textField.setText(""+textPane.getText());
                 }
             });
@@ -382,7 +382,7 @@ public class SwingTest extends JFrame
                 public void insertUpdate(DocumentEvent e)
                 {
                     Document text = (Document)e.getDocument();
-                    text.setText("????????");
+                    text.setText("å¤åˆ¶æˆåŠŸ");
                 }                
             });
             */
@@ -399,9 +399,9 @@ public class SwingTest extends JFrame
             pane.add(table.getTableHeader(),BorderLayout.NORTH);
             pane.add(table);
                         
-            tab.addTab("??¡À?????",splitPane);
+            tab.addTab("æ–‡æœ¬æ¼”ç¤º",splitPane);
             //tab.addTab(table.getTableHeader());
-            tab.addTab("¡À¨ª??????",pane);
+            tab.addTab("è¡¨æ ¼æ¼”ç¤º",pane);
             tab.setPreferredSize(new Dimension(500,600));
             this.add(tab);
             this.setEnabled(true);            
@@ -411,7 +411,7 @@ public class SwingTest extends JFrame
     
     public static void main(String args[])
     {
-        // ?¨¨???¡Â?¨°??????,?????????????????¨°???????¡ì??
+        // è®¾ç½®ä¸»æ¡†æ¶å±æ€§,æ­¤å¤„æ²¡æœ‰ä½¿ç”¨ï¼Œå¯æ‰“å¼€çœ‹çœ‹æ•ˆæœ
         //try
         //{
         //    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
