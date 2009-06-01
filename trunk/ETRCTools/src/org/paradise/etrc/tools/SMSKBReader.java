@@ -543,7 +543,7 @@ public class SMSKBReader {
 			System.out.println("cctk = " + sm.cctk.size());
 
 			//倒出到ETRC
-//			sm.dumpToETRC("C:\\trains\\etrc_data_20070226\\");
+			sm.dumpToETRC("C:\\trains\\etrc_data_20070417\\");
 			
 			//倒出到ST数据库
 			//sm.dumpToSTDB(new STDB());

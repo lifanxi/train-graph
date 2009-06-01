@@ -24,11 +24,6 @@ public class AddTrainWizard extends Wizard {
 		WZInPointSet step3 = new WZInPointSet(chartView.mainFrame, 3, "添加新车", "确定入图（始发）点");
 		WZOutPointSet step4 = new WZOutPointSet(chartView.mainFrame, 4, "添加新车", "确定出图（终到）点");
 		
-		step2.canPrev = false;
-//		step3.canNext = false;
-//		step1.canFinish = false;
-		step2.canFinish = false;
-
 		String fullName;
 		String downName = null;
 		String upName = null;
@@ -111,7 +106,7 @@ public class AddTrainWizard extends Wizard {
 				rt = step3.doModal();
 				break;
 			case 4:
-				step4.setTrain(train);
+				step4.setData(chartView.mainFrame.chart, train);
 				rt = step4.doModal();
 				break;
 			}

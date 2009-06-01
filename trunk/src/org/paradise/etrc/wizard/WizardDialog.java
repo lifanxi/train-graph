@@ -218,11 +218,12 @@ public abstract class WizardDialog extends JDialog {
 		this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
 				(frmSize.height - dlgSize.height) / 2 + loc.y);
 
-		pack();
 		updateUI();
+		pack();
 		
 		setModal(true);
 		setVisible(true);
+		updateUI();
 
 		return rtState;
 	}

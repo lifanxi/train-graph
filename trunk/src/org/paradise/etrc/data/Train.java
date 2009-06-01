@@ -455,7 +455,19 @@ public class Train {
 			lastDist = thisDist;
 		}
 		//遍历完仍然未能确定
-		return UNKOWN;
+		return isDownTrainByTrainName(c);
+	}
+
+	private int isDownTrainByTrainName(Circuit c) {
+		String name = getTrainName();
+		if((name.endsWith("1")) ||
+		   (name.endsWith("3")) ||
+		   (name.endsWith("5")) ||
+		   (name.endsWith("7")) ||
+		   (name.endsWith("9")))
+			return Train.DOWN_TRAIN;
+		else
+			return Train.UP_TRAIN;
 	}
 
 	/**
