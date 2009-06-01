@@ -17,7 +17,6 @@ public class ChartSetDialog extends JDialog {
 
 	private MainFrame mainFrame;
 	private JTabbedPane tbPane;
-	private JCheckBox cbUnderColor;
 	private JLabel statusBar;
 	
 	private JTextField d0;
@@ -74,16 +73,49 @@ public class ChartSetDialog extends JDialog {
 		
 		this.setLayout(new BorderLayout());
 		this.add(tbPane, BorderLayout.NORTH);
-		this.add(createButtonPanel(), BorderLayout.CENTER);
+		this.add(createDownPanel(), BorderLayout.CENTER);
 		this.add(statusBar, BorderLayout.SOUTH);
 	}
-
+	
 	private JPanel createButtonPanel() {
 		JPanel panel = new JPanel();
 		
+		JPanel panelBT = new JPanel();
+		JButton btDefault = createJButton("默认");
+		JButton btOK      = createJButton("设定");
+	
+		panelBT.add(btDefault);
+		panelBT.add(btOK);
+		
+		panel.setLayout(new BorderLayout());
+		panel.add(panelBT, BorderLayout.EAST);
+		
+		return panel;
+	}
+
+	private JPanel createDownPanel() {
+		JPanel panel = new JPanel();
+		
+		JCheckBox cbDrawPoint;
+		cbDrawPoint = new JCheckBox();
+		cbDrawPoint.setFont(new java.awt.Font("Dialog", 0, 12));
+		cbDrawPoint.setText("始终突出画到发点");
+		cbDrawPoint.setSelected(mainFrame.chartView.isDrawNormalPoint);
+		cbDrawPoint.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.isDrawNormalPoint = true;
+				else
+					mainFrame.chartView.isDrawNormalPoint = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});
+		
+		JCheckBox cbUnderColor;
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText("水印显示反向车次");
+		cbUnderColor.setText("开启反向水印显示");
 		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -95,13 +127,15 @@ public class ChartSetDialog extends JDialog {
 				mainFrame.chartView.repaint();
 			}
 		});
-		panel.add(cbUnderColor);
 		
-		JButton btDefault = createJButton("默认");
-		JButton btOK      = createJButton("设定");
-	
-		panel.add(btDefault);
-		panel.add(btOK);
+		JPanel panelCB = new JPanel();
+		panelCB.setLayout(new GridLayout(1,2));
+		panelCB.add(cbUnderColor);
+		panelCB.add(cbDrawPoint);
+		
+		panel.setLayout(new BorderLayout());
+		panel.add(panelCB, BorderLayout.CENTER);
+		panel.add(createButtonPanel(), BorderLayout.SOUTH);
 		
 		return panel;
 	}
@@ -137,7 +171,7 @@ public class ChartSetDialog extends JDialog {
 	
 	public Dimension getPreferredSize() {
 		int w = 270;
-		int h = tbPane.getPreferredSize().height + 83;
+		int h = tbPane.getPreferredSize().height + 108;
 		return new Dimension(w, h);
 	}
 	

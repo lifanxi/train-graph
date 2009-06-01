@@ -105,7 +105,7 @@ public class CircuitMakeDialog extends JDialog {
 				String name1 = (String) list1.getSelectedValue();
 				String name2 = (String) list2.getSelectedValue();
 				
-				if(new YesNoBox("请确认" + xianlu + " " + name1 + " 至 " + name2 + " 为下行方向！").askYesNo()) {
+				if(new YesNoBox("请确认" + xianlu + " " + name1 + " 至 " + name2 + " 为下行方向！").askForYes()) {
 					Vector selectedStations = new Vector();
 					int index1 = list1.getSelectedIndex();
 					int index2 = list2.getSelectedIndex();

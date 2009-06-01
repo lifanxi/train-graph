@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import java.awt.event.*;
 
 import org.paradise.etrc.data.*;
+import org.paradise.etrc.slice.ChartSlice;
 
 /**
  * @author lguo@sina.com
@@ -40,8 +41,12 @@ public class CircuitPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getPoint().x > ChartView.circuitPanelWidth - 25)
 					chartView.changeDistUpDownState();
-				else
+				else {
 					chartView.setActiveSation(e.getPoint().y + 12);
+					if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2)
+						if(chartView.activeStation != null)
+							new ChartSlice(chartView.mainFrame.chart).makeStationSlice(chartView.activeStation);
+				}
 			}
 		});
 	}

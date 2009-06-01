@@ -93,7 +93,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	public void doExit() {
 		if(chart != null)
-			if(new YesNoBox(this, "是否在退出前保存运行图？").askYesNo())
+			if(new YesNoBox(this, "是否在退出前保存运行图？").askForYes())
 				doSaveChart(); 
 		
 		try {
@@ -553,7 +553,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	private void doTrainTools() {
 		//new MessageBox(this, "todo：从网络获取数据生成车次描述文件(.trf文件)。").showMessage();
-		if(new YesNoBox(this, "删除所有车次，从本系统自带的时刻表中自动导入经过本线路（停2站以上）的车次，是否继续？").askYesNo()) {
+		if(new YesNoBox(this, "删除所有车次，从本系统自带的时刻表中自动导入经过本线路（停2站以上）的车次，是否继续？").askForYes()) {
 			FindTrainsDialog waitingBox = new FindTrainsDialog(this);
 			waitingBox.findTrains();
 		}
@@ -828,7 +828,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 * doLoadTrain
 	 */
 	public void doLoadTrain() {
-		if(!(new YesNoBox(this, "（批量）读入车次文件，覆盖已经存在的车次，是否继续？").askYesNo()))
+		if(!(new YesNoBox(this, "（批量）读入车次文件，覆盖已经存在的车次，是否继续？").askForYes()))
 			return;
 
 		JFileChooser chooser = new JFileChooser();

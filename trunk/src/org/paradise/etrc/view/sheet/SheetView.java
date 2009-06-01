@@ -12,7 +12,8 @@ import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.Train;
-import org.paradise.etrc.dialog.MessageBox;
+//import org.paradise.etrc.dialog.MessageBox;
+import org.paradise.etrc.slice.ChartSlice;
 
 public class SheetView extends JPanel {
 	private static final long serialVersionUID = -341968803023065919L;
@@ -88,10 +89,14 @@ public class SheetView extends JPanel {
 
 			public void mouseClicked(MouseEvent me) {
 				if(me.getClickCount() >= 2 && me.getButton() == MouseEvent.BUTTON1) {
-					String station = (String) ((JList)me.getSource()).getSelectedValue();
-					new MessageBox(mainFrame, "TODO: 给出"
-							   + station.substring(0, station.length()-1)
-							   + "所有列车停靠、通过（推算）时刻表。 ").showMessage();
+					String rowHeaderName = (String) ((JList)me.getSource()).getSelectedValue();
+					String staName = rowHeaderName.substring(0, rowHeaderName.length()-3);
+					Station station = mainFrame.chart.circuit.getStation(staName);
+//					new MessageBox(mainFrame, "TODO: 给出 "
+//							   + station.name
+//							   + "站 所有列车停靠、通过（推算）时刻表。 ").showMessage();
+					
+					new ChartSlice(mainFrame.chart).makeStationSlice(station);
 				}
 			}
         });

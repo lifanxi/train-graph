@@ -3,6 +3,7 @@ package org.paradise.etrc.tools;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,7 +71,7 @@ public class SMSKBReader {
 		readcc();
 		readzm();
 		
-		for(int i=0; i<=11; i++)
+		for(int i=0; i<=20; i++)
 			readcctk(i);
 	}
 	
@@ -161,7 +162,7 @@ public class SMSKBReader {
 		Train train = null;
 		if(ns.length >= 2){
 			if(ns.length >= 3){
-				//System.out.print(name);
+//				System.out.println(name);
 				train = getTrain(name);
 			}
 			else {				
@@ -224,9 +225,19 @@ public class SMSKBReader {
 	}
 	
 	private void readcctk(int fileNo) throws IOException {
-		String fileName = "cctksy" + fileNo;
-		File file = new File(path + fileName + ".txt");
-		InputStream in = new DataInputStream(new FileInputStream(file));
+		InputStream in = null;
+		
+		try {
+			String fileName = "cctksy" + fileNo;
+			File file = new File(path + fileName + ".txt");
+			in = new DataInputStream(new FileInputStream(file));
+		}
+		catch(FileNotFoundException e) {
+//			e.printStackTrace();
+		}
+		
+		if(in==null)
+			return;
 
 		in.skip(3);
 		
@@ -532,12 +543,13 @@ public class SMSKBReader {
 			System.out.println("cctk = " + sm.cctk.size());
 
 			//倒出到ETRC
-			//sm.dumpToETRC("C:\\trains\\");
+//			sm.dumpToETRC("C:\\trains\\etrc_data_20070226\\");
 			
 			//倒出到ST数据库
 			//sm.dumpToSTDB(new STDB());
 			
-			sm.findStranger();
+//			sm.findStranger();
+//			System.out.println(sm.getTrain("N95"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} //catch (SQLException e) {

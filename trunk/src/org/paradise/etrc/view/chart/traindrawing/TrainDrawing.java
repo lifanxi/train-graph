@@ -74,8 +74,8 @@ public class TrainDrawing {
       int y0 = chartView.getPelsY(drawStops[i].stationName);
       int y1 = chartView.getPelsY(drawStops[i].stationName);
 
-      ChartPoint p0 = new ChartPoint(this, x0, y0, ChartPoint.STOP_ARRIVE, drawStops[i].isSchedular);
-      ChartPoint p1 = new ChartPoint(this, x1, y1, ChartPoint.STOP_LEAVE, drawStops[i].isSchedular);
+      ChartPoint p0 = new ChartPoint(this, x0, y0, ChartPoint.STOP_ARRIVE, drawStops[i].isPassenger);
+      ChartPoint p1 = new ChartPoint(this, x1, y1, ChartPoint.STOP_LEAVE, drawStops[i].isPassenger);
 
       //第一个停站的到达点，判断p0是入图还是始发
       if (i == 0) {
@@ -113,17 +113,17 @@ public class TrainDrawing {
 
       //在停车过程中过边界：停车线分两段画
       if (x1 < x0) {
-        pe0 = new ChartPoint(this, chartView.getPelsX(24 * 60), y0, ChartPoint.EDGE, drawStops[i].isSchedular);
-        pe1 = new ChartPoint(this, chartView.getPelsX(0), y0, ChartPoint.EDGE, drawStops[i].isSchedular);
-        lines.add(new TrainLine(this, p0, pe0, TrainLine.STOP_LINE, drawStops[i].isSchedular));
-        lines.add(new TrainLine(this, pe1, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
+        pe0 = new ChartPoint(this, chartView.getPelsX(24 * 60), y0, ChartPoint.EDGE, drawStops[i].isPassenger);
+        pe1 = new ChartPoint(this, chartView.getPelsX(0), y0, ChartPoint.EDGE, drawStops[i].isPassenger);
+        lines.add(new TrainLine(this, p0, pe0, TrainLine.STOP_LINE, drawStops[i].isPassenger));
+        lines.add(new TrainLine(this, pe1, p1, TrainLine.STOP_LINE, drawStops[i].isPassenger));
         leftName = new TrainNameLR(pe1, trainName, true);
         rightName = new TrainNameLR(pe0, trainName, false);
         lastPoint = p1;
       }
       //最后一站（不需要判断下站过界问题）
       else if (i == drawStops.length - 1) {
-        lines.add(new TrainLine(this, p0, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
+        lines.add(new TrainLine(this, p0, p1, TrainLine.STOP_LINE, drawStops[i].isPassenger));
 
         lastPoint = p1;
       }
@@ -137,22 +137,22 @@ public class TrainDrawing {
           //计算右边界点坐标
           int bx = chartView.getPelsX(24 * 60);
           int by = y1 + (bx - x1) * (y2 - y1) / (x2 - x1);
-          pe0 = new ChartPoint(this, bx, by, ChartPoint.EDGE, drawStops[i].isSchedular);
-          pe1 = new ChartPoint(this, chartView.getPelsX(0), by, ChartPoint.EDGE, drawStops[i].isSchedular);
+          pe0 = new ChartPoint(this, bx, by, ChartPoint.EDGE, drawStops[i].isPassenger);
+          pe1 = new ChartPoint(this, chartView.getPelsX(0), by, ChartPoint.EDGE, drawStops[i].isPassenger);
           leftName = new TrainNameLR(pe1, trainName, true);
           rightName = new TrainNameLR(pe0, trainName, false);
 
           //停车线
-          lines.add(new TrainLine(this, p0, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
+          lines.add(new TrainLine(this, p0, p1, TrainLine.STOP_LINE, drawStops[i].isPassenger));
           //行车线的上半段
-          lines.add(new TrainLine(this, p1, pe0, TrainLine.RUN_LINE, drawStops[i].isSchedular));
+          lines.add(new TrainLine(this, p1, pe0, TrainLine.RUN_LINE, drawStops[i].isPassenger));
 
           //行车线下半段的起始坐标
           lastPoint = pe1;
         }
         //一般停站(下一站不过边界)
         else {
-          lines.add(new TrainLine(this, p0, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
+          lines.add(new TrainLine(this, p0, p1, TrainLine.STOP_LINE, drawStops[i].isPassenger));
 
           lastPoint = p1;
         }

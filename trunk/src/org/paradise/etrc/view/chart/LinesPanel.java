@@ -9,11 +9,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.dialog.*;
+import org.paradise.etrc.slice.ChartSlice;
 import org.paradise.etrc.view.chart.traindrawing.TrainDrawing;
 import org.paradise.etrc.view.chart.traindrawing.TrainLine;
 import org.paradise.etrc.view.sheet.SheetTable;
+import org.paradise.etrc.wizard.Wizard;
+import org.paradise.etrc.wizard.addtrain.AddTrainWizard;
 
 /**
  * @author lguo@sina.com
@@ -132,7 +136,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
                     hasMouseDoubleClicked = false;
                     myTimer.cancel();
                 }
-            }, 175);
+            }, 250);
         }
         else if (e.getClickCount() == 2) {
             hasMouseDoubleClicked = true;
@@ -145,28 +149,41 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
        }
     }
     
-    //双击左键，选车
-	private void mouseClickedDoubleLeft(MouseEvent e) {
+    //单击左键，选车
+	private void mouseClickedOneLeft(MouseEvent e) {
 		selectTrain(e.getPoint());
 	}
 	
-	//双击右键，取消选择
-	private void mouseClickedDoubleRight(MouseEvent e) {
-		chartView.updateData();
-	}
-	
-	//单击左键
-	private void mouseClickedOneLeft(MouseEvent e) {
+	//单击右键，弹出菜单
+	private void mouseClickedOneRight(MouseEvent e) {
 		//如果有选中车次则
 		if(chartView.activeTrain != null) {
-			//如果是在选中车次的车次框上单击左键，则弹出编辑框
-			if(chartView.activeTrainDrawing.pointOnMyRect(e.getPoint())) {
-				editActiveTrain();
+			//如果是在选中车次的车次上单击右键，则弹出车次相关菜单
+			if(chartView.activeTrainDrawing.pointOnMe(e.getPoint()) || 
+			   chartView.activeTrainDrawing.pointOnMyRect(e.getPoint())) {
+				popupMenuOnActiveTrain(e.getPoint());
 			}
-			//其它区域单击左键，则设定到站时刻
+			//不是在选中车次上单击右键，弹出车次无关菜单
 			else {
-				setStationTime(e.getPoint(), true);
+				popupMenuNoTrain(e.getPoint());
 			}
+		}
+		//没有选中车次，弹出车次无关菜单
+		else {
+			popupMenuNoTrain(e.getPoint());
+		}
+	}
+	
+	//双击左键
+	private void mouseClickedDoubleLeft(MouseEvent e) {
+		//如果没有选中的车则先做一次选车
+		if(chartView.activeTrain == null)
+			selectTrain(e.getPoint());
+
+		//如果有选中车次则
+		if(chartView.activeTrain != null) {
+			//双击左键，设定到站时刻
+			setStationTime(e.getPoint(), true);
 		}
 		//没有选中车次则选择活跃车站
 		else {
@@ -174,22 +191,20 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 	}
 	
-	//单击右键
-	private void mouseClickedOneRight(MouseEvent e) {
+	//双击右键
+	private void mouseClickedDoubleRight(MouseEvent e) {
+		//如果没有选中的车则先做一次选车
+		if(chartView.activeTrain == null)
+			selectTrain(e.getPoint());
+		
 		//如果有选中车次则
 		if(chartView.activeTrain != null) {
-			//如果是在选中车次的车次框上单击右键，则弹出菜单
-			if(chartView.activeTrainDrawing.pointOnMyRect(e.getPoint())) {
-				new MessageBox(chartView.mainFrame, "TODO: 弹出菜单“改变颜色|编辑点单|删除本车次|保存为车次文件”").showMessage();
-			}
-			//其它区域单击右键，设定发车时刻
-			else {
-				setStationTime(e.getPoint(), false);
-			}
+			//双击右键，设定发车时刻
+			setStationTime(e.getPoint(), false);
 		}
-		//如果没有选中车次则弹出菜单
+		//如果没有选中车次，弹出车次无关菜单
 		else {
-			new MessageBox(chartView.mainFrame, "TODO: 弹出菜单“添加车次|载入运行图|保存运行图|另存为”").showMessage();
+			popupMenuNoTrain(e.getPoint());
 		}
 	}
 	
@@ -465,8 +480,12 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 		else {
 			Stop stop = new Stop(staName, theTime, theTime, false);
-			Stop prevStop = chartView.mainFrame.chart.findPrevStop(theTrain, stop);
-			theTrain.insertStopAfter(prevStop, stop);
+			chartView.mainFrame.chart.insertNewStopToTrain(theTrain, stop);
+//			Stop prevStop = chartView.mainFrame.chart.findPrevStop(theTrain, stop.stationName);
+//			if(prevStop == null)
+//				theTrain.appendStop(stop);
+//			else
+//				theTrain.insertStopAfter(prevStop, stop);
 		}
 
 //		((SheetModel) table.getModel()).fireTableDataChanged();
@@ -537,7 +556,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 //		repaint();
 //	}
 
-	private void editActiveTrain() {
+	private void doEditActiveTrain() {
 		TrainDialog dialog = new TrainDialog(chartView.mainFrame, chartView.activeTrain);
 
 		dialog.editTrain();
@@ -628,6 +647,169 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		JToolTip toolTip = new JToolTip();
 		toolTip.setFont(new Font("Dialog", 0, 12));
 		return toolTip;
+	}
+	
+	//无选中车次的时候弹出菜单
+	//new MessageBox(chartView.mainFrame, "TODO: 弹出菜单“输入新车|选择线路|导入车次|载入运行图|保存运行图|另存运行图”").showMessage();
+	private void popupMenuNoTrain(final Point p) {
+//		// 如果没有选中则返回
+//		if (chartView.activeTrain != null) {
+//			popupMenuOnActiveTrain(p);
+//			return;
+//		}
+		
+		//菜单项
+		MenuItem miNewTrain = new MenuItem("添加新车");
+		miNewTrain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doAddNewTrain();
+			}
+		});
+		MenuItem miSelectCircuit = new MenuItem("选择线路");
+		miSelectCircuit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				editActiveTrain();
+			}
+		});
+		MenuItem miGif = new MenuItem("保存为GIF");
+		miGif.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		MenuItem miFindTrains = new MenuItem("导入车次");
+		miFindTrains.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		MenuItem miLoad = new MenuItem("载入运行图");
+		miLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		MenuItem miSave = new MenuItem("保存运行图");
+		miSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		MenuItem miSaveAs = new MenuItem("另存为...");
+		miSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		// 弹出PopupMenu
+		PopupMenu pop = new PopupMenu();
+		pop.add(miNewTrain);
+		pop.add(miSelectCircuit);
+        pop.add(miFindTrains);
+		pop.addSeparator();
+		pop.add(miGif);
+		pop.add(miLoad);
+		pop.add(miSave);
+		pop.add(miSaveAs);
+		this.add(pop);
+		pop.show(this, p.x, p.y);
+	}
+
+    //在选中车次上弹出菜单“改变颜色|编辑点单|车次切片|删除本车次|保存为车次文件”").showMessage();
+	private void popupMenuOnActiveTrain(final Point p) {
+		// 如果没有选中则返回
+		if (chartView.activeTrain == null)
+			return;
+		
+		// 如果不在ActiveTrain上则返回
+		if (!chartView.activeTrainDrawing.pointOnMe(p) &&
+			!chartView.activeTrainDrawing.pointOnMyRect(p))
+			return;
+		
+		//菜单项
+		MenuItem miColor = new MenuItem("更改颜色");
+		miColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doSetColor();
+			}
+		});
+		MenuItem miEditTimes = new MenuItem("编辑点单");
+		miEditTimes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doEditActiveTrain();
+			}
+		});
+		MenuItem miTrainSlice = new MenuItem("车次切片");
+		miTrainSlice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ChartSlice(chartView.mainFrame.chart).makeTrainSlice(chartView.activeTrain);
+			}
+		});
+		MenuItem miDelTrain = new MenuItem("删除本车");
+		miDelTrain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO: 删除本车
+			}
+		});
+		MenuItem miSaveAs = new MenuItem("另存为...");
+		miSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO: 另存为
+			}
+		});
+		
+		// 弹出PopupMenu
+		PopupMenu pop = new PopupMenu();
+		pop.add(miColor);
+		pop.add(miEditTimes);
+        pop.add(miTrainSlice);
+		pop.addSeparator();
+		pop.add(miDelTrain);
+		pop.add(miSaveAs);
+		this.add(pop);
+		pop.show(this, p.x, p.y);
+	}
+
+	private void doAddNewTrain() {
+		AddTrainWizard wizard = new AddTrainWizard(this.chartView);
+		
+		if(wizard.doWizard() == Wizard.FINISHED) {
+			Train train = wizard.getTrain();
+			
+			if(train == null)
+				return;
+			
+			Chart chart = chartView.mainFrame.chart;
+			if(chart.containTrain(train)) {
+				if(new YesNoBox(chartView.mainFrame, train.getTrainName() + "次已经在图中，是否覆盖？").askForYes()) {
+					chartView.mainFrame.chart.delTrain(train);
+					chartView.addTrain(train);
+				}
+			}
+			else {
+				chartView.addTrain(train);
+			}
+		}
+	}
+	
+	private void doSetColor() {
+		final JColorChooser colorChooser = new JColorChooser();
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				chartView.activeTrainDrawing.train.color = colorChooser.getColor();
+				LinesPanel.this.repaint();
+			}
+		};
+
+		JDialog dialog = JColorChooser.createDialog(chartView.mainFrame,
+				"请选择行车线颜色", true, // modal
+				colorChooser, listener, // OK button handler
+				null); // no CANCEL button handler
+		colorChooser.setColor(chartView.activeTrainDrawing.train.color);
+		ETRC.setFont(dialog);
+
+		Dimension dlgSize = dialog.getPreferredSize();
+		Dimension frmSize = chartView.mainFrame.getSize();
+		Point loc = chartView.mainFrame.getLocation();
+		dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+				(frmSize.height - dlgSize.height) / 2 + loc.y);
+		dialog.setVisible(true);
 	}
 
 	//待优化：应该滚动到第一个段（可能分段显示）尽可能位于屏幕正中

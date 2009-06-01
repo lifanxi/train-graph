@@ -16,7 +16,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.paradise.etrc.data.Stop;
-import org.paradise.etrc.dialog.MessageBox;
+import org.paradise.etrc.data.Train;
+//import org.paradise.etrc.dialog.MessageBox;
+import org.paradise.etrc.slice.ChartSlice;
 
 public class SheetTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -109,13 +111,18 @@ public class SheetTable extends JTable {
 				table.editCellAt(row, col);
 				table.repaint();
 				header.repaint();
+				String trainName = SheetTable.this.getColumnName(col);
 
 				if(me.getClickCount() >= 2 && me.getButton() == MouseEvent.BUTTON1) {
-					new MessageBox(sheetView.mainFrame, "TODO: 给出"
-							   + SheetTable.this.getColumnName(col)
-							   + "次列车在 "
-							   + sheetView.mainFrame.chart.circuit.name
-							   + " 所有车站的停靠、通过（推算）时刻表。 ").showMessage();
+//					new MessageBox(sheetView.mainFrame, "TODO: 给出"
+//							   + trainName
+//							   + "次列车在 "
+//							   + sheetView.mainFrame.chart.circuit.name
+//							   + " 所有车站的停靠、通过（推算）时刻表。 ").showMessage();
+					
+					Train train = sheetView.mainFrame.chart.findTrain(trainName);
+
+					new ChartSlice(sheetView.mainFrame.chart).makeTrainSlice(train);
 				}
 			}
 		});

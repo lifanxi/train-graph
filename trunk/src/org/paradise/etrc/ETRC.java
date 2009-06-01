@@ -12,10 +12,23 @@ import javax.swing.border.*;
 
 public class ETRC {
   boolean packFrame = false;
+  
+  private static ETRC instance = null;
+  private MainFrame frame;
 
+  public static ETRC getInstance() {
+	  return instance;
+  }
+  
+  public MainFrame getMainFrame() {
+	  return frame;
+  }
+  
   //Construct the application
   public ETRC() {
-    MainFrame frame = new MainFrame();
+	instance = this;
+	
+    frame = new MainFrame();
     //Validate frames that have preset sizes
     //Pack frames that have useful preferred size info, e.g. from their layout
     if (packFrame) {

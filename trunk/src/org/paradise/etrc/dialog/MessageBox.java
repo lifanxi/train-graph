@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import org.paradise.etrc.ETRC;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -52,7 +54,7 @@ public class MessageBox extends JDialog implements ActionListener {
 	}
 
 	public MessageBox(String _msg) {
-		this(null, _msg, "消息");
+		this(ETRC.getInstance().getMainFrame(), _msg, "消息");
 	}
 
 	//Component initialization

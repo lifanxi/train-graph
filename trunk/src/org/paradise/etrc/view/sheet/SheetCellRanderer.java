@@ -33,7 +33,7 @@ public class SheetCellRanderer extends JLabel implements TableCellRenderer {
 		
 		//设置文字颜色
 		if(stop!=null)
-			if(!stop.isSchedular)
+			if(!stop.isPassenger)
 				setForeground(Color.red);
 			else
 				setForeground(Color.black);

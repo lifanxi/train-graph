@@ -36,6 +36,10 @@ public class Chart {
 	public Chart(File f) throws IOException {
 		loadFromFile(f);
 	}
+	
+	public Chart(Circuit cir) {
+		circuit = cir;
+	}
 
 	public void addTrain(Train loadingTrain) {
 		if (trainNum >= MAX_TRAIN_NUM)
@@ -76,13 +80,22 @@ public class Chart {
 //	    System.out.println(loadingTrain.getTrainName(circuit) + "次" + direction);
 	}
 	
-	public Train findTrain(Train train) {
-		for(int i=0; i<trains.length; i++) {
-			if(train.equals(trains[i]))
+	public Train findTrain(String trainName) {
+		for(int i=0; i<trainNum; i++) {
+			if(trains[i].getTrainName(circuit).equals(trainName))
 				return trains[i];
 		}
 		
 		return null;
+	}
+	
+	public boolean containTrain(Train train) {
+		for(int i=0; i<trainNum; i++) {
+			if(trains[i].equals(train))
+				return true;
+		}
+		
+		return false;
 	}
 
 	public void updateTrain(Train newTrain) {
@@ -372,88 +385,160 @@ public class Chart {
 		uNum = 0;
 	}
 
-	//查找theTrain在本线路上stop之前的一个停站
-	public Stop findPrevStop(Train theTrain, Stop stop) {
-		if(theTrain.isDownTrain(circuit) == Train.DOWN_TRAIN) {
-			return findPrevStopDown(theTrain, stop);
+	public void insertNewStopToTrain(Train theTrain, Stop stop) {
+		if (theTrain.isDownTrain(circuit) == Train.DOWN_TRAIN) {
+			insertNewStopToTrainDown(theTrain, stop);
+		} else
+			insertNewStopToTrainUp(theTrain, stop);
+	}
+
+	private void insertNewStopToTrainUp(Train theTrain, Stop stop) {
+		int newDist = this.circuit.getStationDist(stop.stationName);
+		
+		//不在本线 返回 null
+		if(newDist < 0)
+			return;
+		
+		//新站在theTrain在本线的第一个停靠站之前 插在第一个站之前
+		Station firstStop = this.circuit.getFirstStopOnMe(theTrain);
+		int firstDist = this.circuit.getStationDist(firstStop.name);
+		if(newDist > firstDist)
+			theTrain.insertStop(stop, theTrain.findStopIndex(firstStop.name));
+		
+		//新站在theTrain在本线的最后一个停靠站之后 append在最后一个站之后
+		Station lastStop = this.circuit.getLastStopOnMe(theTrain);
+		int lastDist = this.circuit.getStationDist(lastStop.name);
+		if(newDist < lastDist)
+			theTrain.appendStop(stop);
+		
+		//新站在theTrain的第一个停靠站和最后一个停靠站之间
+		//遍历theTrain的所有停站
+		for(int i=0; i<theTrain.stopNum-1; i++) {
+			int dist1 = circuit.getStationDist(theTrain.stops[i].stationName);
+			int dist2 = circuit.getStationDist(theTrain.stops[i+1].stationName);
+			
+			if(dist1 >= 0 && dist2 >=0)
+				//如果新站距离在两个站之间，则应当插在第一个站之后（返回第一个站）
+				if(dist1 > newDist  && newDist > dist2)
+					theTrain.insertStopAfter(theTrain.stops[i], stop);
 		}
-		else
-			return findPrevStopUp(theTrain, stop);
+	}
+
+	private void insertNewStopToTrainDown(Train theTrain, Stop stop) {
+		int newDist = this.circuit.getStationDist(stop.stationName);
+		
+		//不在本线 返回 null
+		if(newDist < 0)
+			return;
+		
+		//新站在theTrain在本线的第一个停靠站之前 插在第一个站之前
+		Station firstStop = this.circuit.getFirstStopOnMe(theTrain);
+		int firstDist = this.circuit.getStationDist(firstStop.name);
+		if(newDist < firstDist)
+			theTrain.insertStop(stop, theTrain.findStopIndex(firstStop.name));
+		
+		//新站在theTrain在本线的最后一个停靠站之后 append在最后一个站之后
+		Station lastStop = this.circuit.getLastStopOnMe(theTrain);
+		int lastDist = this.circuit.getStationDist(lastStop.name);
+		if(newDist > lastDist)
+			theTrain.appendStop(stop);
+		
+		//新站在theTrain的第一个停靠站和最后一个停靠站之间
+		//遍历theTrain的所有停站
+		for(int i=0; i<theTrain.stopNum-1; i++) {
+			int dist1 = circuit.getStationDist(theTrain.stops[i].stationName);
+			int dist2 = circuit.getStationDist(theTrain.stops[i+1].stationName);
+			
+			if(dist1 >= 0 && dist2 >=0)
+				//如果新站距离在两个站之间，则应当插在第一个站之后（返回第一个站）
+				if(dist1 < newDist  && newDist < dist2)
+					theTrain.insertStopAfter(theTrain.stops[i], stop);
+		}
 	}
 	
-	private Stop findPrevStopUp(Train theTrain, Stop stop) {
-		int newDist = circuit.getStationDist(stop.stationName);
-
-		//新增车站不在本线，不知如何操作，返回null
-		if(newDist < 0)
-			return null;
-		
-		//遍历theTrain的所有停站
-		for(int i=0; i<theTrain.stopNum-1; i++) {
-			int dist1 = circuit.getStationDist(theTrain.stops[i].stationName);
-			int dist2 = circuit.getStationDist(theTrain.stops[i+1].stationName);
-			
-			//两个站都不在本线，继续查找
-			if(dist1 < 0 && dist2 < 0)
-				continue;
-			
-			//第一个站不在本线，第二个站在本线（入线）
-			if(dist1 < 0 && dist2 >= 0)
-				//如果新站距离大于第二个站，则应当插在第一个站之后（返回第一个站）
-				if(newDist > dist2)
-					return theTrain.stops[i];
-			
-			//两个站都在本线
-			if(dist1 >= 0 && dist2 >=0)
-				//如果新站距离在两个站之间，则应当插在第一个站之后（返回第一个站）
-				if(newDist < dist1 && newDist > dist2)
-					return theTrain.stops[i];
-			
-			//第一个站在本线，第二个站不在本线（出线）
-			if(dist1 >=0 && dist2 < 0)
-				//如果新站距离小于第一个站，则应当插在第一个站之后（返回第一个站）
-				if(newDist < dist1)
-					return theTrain.stops[i];
-		}
-		
-		return null;
-	}
-
-	private Stop findPrevStopDown(Train theTrain, Stop stop) {
-		int newDist = circuit.getStationDist(stop.stationName);
-
-		//新增车站不在本线，不知如何操作，返回null
-		if(newDist < 0)
-			return null;
-		
-		//遍历theTrain的所有停站
-		for(int i=0; i<theTrain.stopNum-1; i++) {
-			int dist1 = circuit.getStationDist(theTrain.stops[i].stationName);
-			int dist2 = circuit.getStationDist(theTrain.stops[i+1].stationName);
-			
-			//两个站都不在本线，继续查找
-			if(dist1 < 0 && dist2 < 0)
-				continue;
-			
-			//第一个站不在本线，第二个站在本线（入线）
-			if(dist1 < 0 && dist2 >= 0)
-				//如果新站距离小于第二个站，则应当插在第一个站之后（返回第一个站）
-				if(newDist < dist2)
-					return theTrain.stops[i];
-			
-			//两个站都在本线
-			if(dist1 >= 0 && dist2 >=0)
-				//如果新站距离在两个站之间，则应当插在第一个站之后（返回第一个站）
-				if(newDist > dist1 && newDist < dist2)
-					return theTrain.stops[i];
-			
-			//第一个站在本线，第二个站不在本线（出线）
-			if(dist1 >=0 && dist2 < 0)
-				//如果新站距离大于第一个站，则应当插在第一个站之后（返回第一个站）
-				if(newDist > dist1)
-					return theTrain.stops[i];
-		}
-		
-		return null;
-	}
+//----算法有误
+//	//查找theTrain在本线路上stop之前的一个停站
+//	public Stop findPrevStop(Train theTrain, Stop stop) {
+//		if(theTrain.isDownTrain(circuit) == Train.DOWN_TRAIN) {
+//			return findPrevStopDown(theTrain, stop);
+//		}
+//		else
+//			return findPrevStopUp(theTrain, stop);
+//	}
+//	
+//	private Stop findPrevStopUp(Train theTrain, Stop stop) {
+//		int newDist = circuit.getStationDist(stop.stationName);
+//
+//		//新增车站不在本线，不知如何操作，返回null
+//		if(newDist < 0)
+//			return null;
+//		
+//		//遍历theTrain的所有停站
+//		for(int i=0; i<theTrain.stopNum-1; i++) {
+//			int dist1 = circuit.getStationDist(theTrain.stops[i].stationName);
+//			int dist2 = circuit.getStationDist(theTrain.stops[i+1].stationName);
+//			
+//			//两个站都不在本线，继续查找
+//			if(dist1 < 0 && dist2 < 0)
+//				continue;
+//			
+//			//第一个站不在本线，第二个站在本线（入图）
+//			if(dist1 < 0 && dist2 >= 0)
+//				//如果新站距离大于第二个站，则应当插在第一个站之后（返回第一个站）
+//				if(newDist > dist2)
+//					return theTrain.stops[i];
+//			
+//			//两个站都在本线
+//			if(dist1 >= 0 && dist2 >=0)
+//				//如果新站距离在两个站之间，则应当插在第一个站之后（返回第一个站）
+//				if(newDist < dist1 && newDist > dist2)
+//					return theTrain.stops[i];
+//			
+//			//第一个站在本线，第二个站不在本线（出图）
+//			if(dist1 >=0 && dist2 < 0)
+//				//如果新站距离小于第一个站，则应当插在第一个站之后（返回第一个站）
+//				if(newDist < dist1)
+//					return theTrain.stops[i];
+//		}
+//		
+//		return null;
+//	}
+//
+//	private Stop findPrevStopDown(Train theTrain, Stop stop) {
+//		int newDist = circuit.getStationDist(stop.stationName);
+//
+//		//新增车站不在本线，不知如何操作，返回null
+//		if(newDist < 0)
+//			return null;
+//		
+//		//遍历theTrain的所有停站
+//		for(int i=0; i<theTrain.stopNum-1; i++) {
+//			int dist1 = circuit.getStationDist(theTrain.stops[i].stationName);
+//			int dist2 = circuit.getStationDist(theTrain.stops[i+1].stationName);
+//			
+//			//两个站都不在本线，继续查找
+//			if(dist1 < 0 && dist2 < 0)
+//				continue;
+//			
+//			//第一个站不在本线，第二个站在本线（入线）
+//			if(dist1 < 0 && dist2 >= 0)
+//				//如果新站距离小于第二个站，则应当插在第一个站之后（返回第一个站）
+//				if(newDist < dist2)
+//					return theTrain.stops[i];
+//			
+//			//两个站都在本线
+//			if(dist1 >= 0 && dist2 >=0)
+//				//如果新站距离在两个站之间，则应当插在第一个站之后（返回第一个站）
+//				if(newDist > dist1 && newDist < dist2)
+//					return theTrain.stops[i];
+//			
+//			//第一个站在本线，第二个站不在本线（出线）
+//			if(dist1 >=0 && dist2 < 0)
+//				//如果新站距离大于第一个站，则应当插在第一个站之后（返回第一个站）
+//				if(newDist > dist1)
+//					return theTrain.stops[i];
+//		}
+//		
+//		return null;
+//	}
 }

@@ -55,6 +55,7 @@ public class ClockPanel extends JPanel {
 					if(Math.abs(h - Math.round(h)) < 16.0/chart.minuteScale/60.0) {
 						int theHour = (int) (Math.round(h) >= 24 ? Math.round(h) - 24 : Math.round(h));
 						chart.startHour = theHour;
+						chartView.scrollToLeft();
 						chartView.repaint();
 					}
 				}

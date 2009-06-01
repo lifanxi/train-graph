@@ -194,7 +194,7 @@ public class TrainsDialog extends JDialog {
 		if(!dialog.isCanceled) {
 			Train addingTrain = dialog.getTrain();
 			if(chart.isLoaded(addingTrain)) {
-				if(new YesNoBox(mainFrame, addingTrain.getTrainName()+"已经在运行图中，是否覆盖？").askYesNo())
+				if(new YesNoBox(mainFrame, addingTrain.getTrainName()+"已经在运行图中，是否覆盖？").askForYes())
 					chart.updateTrain(addingTrain);
 			}
 			else {
