@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import org.paradise.etrc.ETRC;
+import org.paradise.etrc.DETRC;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.dialog.*;
 
@@ -595,7 +595,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				colorChooser, listener, // OK button handler
 				null); // no CANCEL button handler
 		colorChooser.setColor(mainView.activeTrainDrawing.train.color);
-		ETRC.setFont(dialog);
+		DETRC.setFont(dialog);
 
 		Dimension dlgSize = dialog.getPreferredSize();
 		Dimension frmSize = mainView.mainFrame.getSize();

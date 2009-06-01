@@ -15,6 +15,7 @@ import javax.swing.border.*;
 
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.dialog.*;
+import org.paradise.etrc.dview.DynamicView;
 import org.paradise.etrc.filter.CSVFilter;
 import org.paradise.etrc.filter.TRCFilter;
 import org.paradise.etrc.filter.TRFFilter;
@@ -29,6 +30,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private static final long serialVersionUID = 1L;
 	
 	public MainView mainView;
+	public DynamicView dView;
 	public Chart chart;
 
 	public JLabel statusBarMain = new JLabel();
@@ -48,6 +50,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private static final int MAX_TRAIN_SELECT_HISTORY_RECORD = 12;
 	public Vector trainSelectHistory;
 	public JComboBox cbTrainSelectHistory;
+	public JSplitPane splitPane;
 	
 	//Construct the frame
 	public MainFrame() {
@@ -97,10 +100,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		this.setResizable(true);
 		this.setState(Frame.NORMAL);
 		this.setIconImage(new ImageIcon(org.paradise.etrc.MainFrame.class
-				.getResource("/pic/icon.gif")).getImage());
+				.getResource("/pic/icon.gif")).getImage());		
 		
-		mainView = new MainView(this);
-
 		JPanel contentPane;
 		contentPane = (JPanel) this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -119,7 +120,18 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 		contentPane.add(loadToolBar(), BorderLayout.NORTH);
 
-		contentPane.add(mainView, BorderLayout.CENTER);
+		dView = new DynamicView(this);
+		mainView = new MainView(this);
+		
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, dView, mainView);
+//		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(dView.getPreferredSize().height);
+//		Dimension chartSize = new Dimension(getWidth(), contentPane.getHeight()-dView.getPreferredSize().height-100);
+//		Dimension chartSize = new Dimension(getWidth(), 500);
+		dView.setMinimumSize(dView.getPreferredSize());
+//		mainView.setMinimumSize(mainView.getPreferredSize());
+
+		contentPane.add(splitPane, BorderLayout.CENTER);
 		this.setTitle();
 	}
 
@@ -183,6 +195,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private JToolBar loadToolBar() {
 		JToolBar jToolBar = new JToolBar();
 		
+		//test
+		JButton jbTest = createTBButton("findTrain", "Do Test", Test);
+		jToolBar.add(jbTest);
+		jToolBar.addSeparator();
+		
 		//文件操作
 		JButton jbOpenFile = createTBButton("openFile", "Open A Chart", File_Load_Chart);
 		JButton jbSaveFile = createTBButton("saveFile", "Save The Chart", File_Save_Chart);
@@ -211,71 +228,71 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		jToolBar.add(jbSetupV);
 		
 		//上下行显示选择
-		ImageIcon imageDown = new ImageIcon(org.paradise.etrc.MainFrame.class
-				.getResource("/pic/down.png"));
-		ImageIcon imageUp = new ImageIcon(org.paradise.etrc.MainFrame.class
-				.getResource("/pic/up.png"));
-		jtButtonDown = new JToggleButton(imageDown);
-		jtButtonUp = new JToggleButton(imageUp);
-		jtButtonDown.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainView.changeShowDown();
-			}
-		});
-		jtButtonUp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainView.changShownUp();
-			}
-		});
-		jtButtonUp.setToolTipText("Display Up-Going Trains");
-		jtButtonDown.setToolTipText("Display Down-Going Trains");
-		
-		//读配置文件设置上下行状态按钮
-		mainView.showUpDownState = MainView.SHOW_NONE;
-		if(prop.getProperty(Prop_Show_Down).equalsIgnoreCase("Y")) {
-			jtButtonDown.setSelected(true);
-			mainView.showUpDownState ^= MainView.SHOW_DOWN;
-		}
-		else
-			jtButtonDown.setSelected(false);
-		if(prop.getProperty(Prop_Show_UP).equalsIgnoreCase("Y")) {
-			jtButtonUp.setSelected(true);
-			mainView.showUpDownState ^= MainView.SHOW_UP;
-		}
-		else
-			jtButtonUp.setSelected(false);
-
-		jToolBar.addSeparator();
-		jToolBar.add(jtButtonDown);
-		jToolBar.add(jtButtonUp);
+//		ImageIcon imageDown = new ImageIcon(org.paradise.etrc.MainFrame.class
+//				.getResource("/pic/down.png"));
+//		ImageIcon imageUp = new ImageIcon(org.paradise.etrc.MainFrame.class
+//				.getResource("/pic/up.png"));
+//		jtButtonDown = new JToggleButton(imageDown);
+//		jtButtonUp = new JToggleButton(imageUp);
+//		jtButtonDown.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				dView.changeShowDown();
+//			}
+//		});
+//		jtButtonUp.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				dView.changShownUp();
+//			}
+//		});
+//		jtButtonUp.setToolTipText("Display Up-Going Trains");
+//		jtButtonDown.setToolTipText("Display Down-Going Trains");
+//		
+//		//读配置文件设置上下行状态按钮
+//		dView.showUpDownState = MainView.SHOW_NONE;
+//		if(prop.getProperty(Prop_Show_Down).equalsIgnoreCase("Y")) {
+//			jtButtonDown.setSelected(true);
+//			dView.showUpDownState ^= MainView.SHOW_DOWN;
+//		}
+//		else
+//			jtButtonDown.setSelected(false);
+//		if(prop.getProperty(Prop_Show_UP).equalsIgnoreCase("Y")) {
+//			jtButtonUp.setSelected(true);
+//			dView.showUpDownState ^= MainView.SHOW_UP;
+//		}
+//		else
+//			jtButtonUp.setSelected(false);
+//
+//		jToolBar.addSeparator();
+//		jToolBar.add(jtButtonDown);
+//		jToolBar.add(jtButtonUp);
 		
 		//历史记录
-		cbTrainSelectHistory.setFont(new Font("Dialog", Font.PLAIN, 12));
-		cbTrainSelectHistory.setMinimumSize(new Dimension(64, 20));
-		cbTrainSelectHistory.setMaximumSize(new Dimension(64, 20));
-		cbTrainSelectHistory.setEditable(true);
-		cbTrainSelectHistory.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent ae) {
-				//当用键盘输入的时候会触发两次Action
-				//一次是comboBoxChanged，另一次是comboBoxEdited
-				//我们只处理与下拉选择一样的那一次：comboBoxChanged
-				if(!ae.getActionCommand().equalsIgnoreCase("comboBoxChanged"))
-					return;
-				
-				String trainToFind = (String) cbTrainSelectHistory.getSelectedItem();
-
-				if(trainToFind == null)
-					return;
-
-				if(trainToFind.trim().equalsIgnoreCase(""))
-					return;
-				
-				if(!mainView.findAndMoveToTrain(trainToFind))
-					new MessageBox(MainFrame.this, "没有找到" + trainToFind + "次列车！").showMessage();
-			}
-		});
-		jToolBar.addSeparator();
-		jToolBar.add(cbTrainSelectHistory);
+//		cbTrainSelectHistory.setFont(new Font("Dialog", Font.PLAIN, 12));
+//		cbTrainSelectHistory.setMinimumSize(new Dimension(64, 20));
+//		cbTrainSelectHistory.setMaximumSize(new Dimension(64, 20));
+//		cbTrainSelectHistory.setEditable(true);
+//		cbTrainSelectHistory.addActionListener(new ActionListener(){
+//			public void actionPerformed(ActionEvent ae) {
+//				//当用键盘输入的时候会触发两次Action
+//				//一次是comboBoxChanged，另一次是comboBoxEdited
+//				//我们只处理与下拉选择一样的那一次：comboBoxChanged
+//				if(!ae.getActionCommand().equalsIgnoreCase("comboBoxChanged"))
+//					return;
+//				
+//				String trainToFind = (String) cbTrainSelectHistory.getSelectedItem();
+//
+//				if(trainToFind == null)
+//					return;
+//
+//				if(trainToFind.trim().equalsIgnoreCase(""))
+//					return;
+//				
+//				if(!dView.findAndMoveToTrain(trainToFind))
+//					new MessageBox(MainFrame.this, "没有找到" + trainToFind + "次列车！").showMessage();
+//			}
+//		});
+//		jToolBar.addSeparator();
+//		jToolBar.add(cbTrainSelectHistory);
 
 		return jToolBar;
 	}
@@ -293,6 +310,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		
 		return jbOnToolBar;
 	}
+	
+	private final String Test = "Test";
 
 	private final String File_Load_Chart = "File_Load_Chart";
 	private final String File_Save_Chart = "File_Save_Chart";
@@ -441,7 +460,14 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			this.doPrintChart();
 		} else if (command.equalsIgnoreCase(Help_About)) {
 			this.doHelpAbout();
+		} else if (command.equalsIgnoreCase(Test)) {
+			this.doTest();
 		}
+	}
+	
+	private void doTest() {
+		//this.dView.timeAdd(1);
+		this.splitPane.setDividerLocation(0);
 	}
 
 	private void doTrainTools() {
@@ -466,7 +492,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		new CircuitEditDialog(this, circuit).showDialog();
 		
 		this.setTitle();
-		mainView.repaint();
+		dView.repaint();
 		
 		this.isNewCircuit = true;
 	}
@@ -482,15 +508,15 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		dlg.pack();
 		dlg.setVisible(true);
 
-		mainView.repaint();
-		mainView.setTrainNum();
+		dView.repaint();
+		dView.setTrainNum();
 	}
 
 	private void doEditCircuit() {
 		new CircuitEditDialog(this, this.chart.circuit.copy()).showDialog();
 		
 		this.setTitle();
-		mainView.repaint();
+		dView.repaint();
 	}
 
 	/**
@@ -543,8 +569,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doClearChart() {
 		chart.clearTrains();
-		mainView.repaint();
-		mainView.setTrainNum();
+		dView.repaint();
+		dView.setTrainNum();
 	}
 
 	/**
@@ -637,7 +663,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doSaveChartAs() {
 		JFileChooser chooser = new JFileChooser();
-		ETRC.setFont(chooser);
+		DETRC.setFont(chooser);
 
 		chooser.setDialogTitle("保存运行图");
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -671,7 +697,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 */
 	private void doLoadChart() {
 		JFileChooser chooser = new JFileChooser();
-		ETRC.setFont(chooser);
+		DETRC.setFont(chooser);
 
 		chooser.setDialogTitle("载入运行图");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -686,8 +712,10 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 			try {
 				chart.loadFromFile(f);
-				mainView.repaint();
-				mainView.setTrainNum();
+//				dView.invalidate();
+				dView.refresh();
+				dView.repaint();
+//				dView.setTrainNum();
 				setTitle();
 				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
@@ -705,7 +733,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			return;
 
 		JFileChooser chooser = new JFileChooser();
-		ETRC.setFont(chooser);
+		DETRC.setFont(chooser);
 
 		chooser.setDialogTitle("载入车次");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -748,9 +776,9 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 			//System.out.println("1.Move to: "+loadingTrain.getTrainName());
 			//mainView.buildTrainDrawings();
-			mainView.repaint();
-			mainView.setTrainNum();
-			mainView.moveToTrain(loadingTrain);
+			dView.repaint();
+			dView.setTrainNum();
+//			dView.moveToTrain(loadingTrain);
 			//panelChart.panelLines.repaint();
 		}
 
@@ -831,7 +859,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			super.processWindowEvent(e);
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
 			super.processWindowEvent(e);
-			mainView.requestFocus();
+			dView.requestFocus();
 		}
 	}
 }

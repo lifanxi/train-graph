@@ -240,7 +240,7 @@ MainFrame mainFrame = null;
           chart.boldLevel = bold;
 
           mainFrame.validate();
-          mainFrame.mainView.repaint();
+          mainFrame.dView.repaint();
         }
         this.statusBar.setText(defaultStatus);
       }
