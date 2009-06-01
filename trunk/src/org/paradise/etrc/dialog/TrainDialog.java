@@ -52,7 +52,7 @@ public class TrainDialog extends JDialog {
 	}
 	
 	public Train getTrain() {
-		Train train = ((TrainTableModel)table.getModel()).train;
+		Train train = ((TrainTableModel)table.getModel()).myTrain;
 //		train.startStation = train.stops[0].stationName;
 //		train.terminalStation = train.stops[train.stopNum - 1].stationName;
 		train.trainNameDown = tfNameD.getText().trim();
@@ -75,11 +75,11 @@ public class TrainDialog extends JDialog {
 				Train loadingTrain = doLoadTrain();
 				if(loadingTrain != null) {
 					if(loadingTrain.color == null) {
-						Color c = ((TrainTableModel)table.getModel()).train.color;
+						Color c = ((TrainTableModel)table.getModel()).myTrain.color;
 						loadingTrain.color = c;
 					}
 					
-					((TrainTableModel)table.getModel()).train = loadingTrain;
+					((TrainTableModel)table.getModel()).myTrain = loadingTrain;
 					tfName.setText(loadingTrain.getTrainName());
 					tfNameD.setText(loadingTrain.trainNameDown);
 					tfNameU.setText(loadingTrain.trainNameUp);
@@ -94,7 +94,7 @@ public class TrainDialog extends JDialog {
 				if (table.getCellEditor() != null)
 					table.getCellEditor().stopCellEditing();
 
-				Train savingTrain = ((TrainTableModel)table.getModel()).train;
+				Train savingTrain = ((TrainTableModel)table.getModel()).myTrain;
 				savingTrain.trainNameDown = tfNameD.getText().trim();
 				savingTrain.trainNameUp = tfNameU.getText().trim();
 				savingTrain.trainNameFull = tfName.getText().trim();
@@ -110,7 +110,7 @@ public class TrainDialog extends JDialog {
 				if (table.getCellEditor() != null)
 					table.getCellEditor().stopCellEditing();
 
-				Train train = ((TrainTableModel)table.getModel()).train;
+				Train train = ((TrainTableModel)table.getModel()).myTrain;
 				train.trainNameDown = tfNameD.getText().trim();
 				train.trainNameUp = tfNameU.getText().trim();
 				train.trainNameFull = tfName.getText().trim();
@@ -152,7 +152,7 @@ public class TrainDialog extends JDialog {
 				if (table.getCellEditor() != null)
 					table.getCellEditor().stopCellEditing();
 
-				((TrainTableModel)table.getModel()).train.delStop(table.getSelectedRow());
+				((TrainTableModel)table.getModel()).myTrain.delStop(table.getSelectedRow());
 
 				table.revalidate();
 			}
@@ -166,7 +166,7 @@ public class TrainDialog extends JDialog {
 				String name = "站名";
 				String arrive = "00:00";
 				String leave = "00:00";
-				((TrainTableModel)table.getModel()).train.insertStop(new Stop(name, arrive, leave), 
+				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), 
 						table.getSelectedRow());
 
 				table.revalidate();
@@ -185,7 +185,7 @@ public class TrainDialog extends JDialog {
 				String name = "站名";
 				String arrive = "00:00";
 				String leave = "00:00";
-				((TrainTableModel)table.getModel()).train.insertStop(new Stop(name, arrive, leave), curIndex+1);
+				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), curIndex+1);
 
 				table.revalidate();
 			}
@@ -205,13 +205,13 @@ public class TrainDialog extends JDialog {
 		
 		tfNameU = new JTextField(4);
 		tfNameU.setFont(new Font("dialog", 0, 12));
-		tfNameU.setText(((TrainTableModel)table.getModel()).train.trainNameUp);
+		tfNameU.setText(((TrainTableModel)table.getModel()).myTrain.trainNameUp);
 		tfNameD = new JTextField(4);
 		tfNameD.setFont(new Font("dialog", 0, 12));
-		tfNameD.setText(((TrainTableModel)table.getModel()).train.trainNameDown);
+		tfNameD.setText(((TrainTableModel)table.getModel()).myTrain.trainNameDown);
 		tfName = new JTextField(12);
 		tfName.setFont(new Font("dialog", 0, 12));
-		tfName.setText(((TrainTableModel)table.getModel()).train.getTrainName());
+		tfName.setText(((TrainTableModel)table.getModel()).myTrain.getTrainName());
 				
 		JPanel namePanel = new JPanel();
 		namePanel.setBorder(new EmptyBorder(1,1,1,1));
@@ -293,16 +293,25 @@ public class TrainDialog extends JDialog {
 		return null;
 	}
 
+	public void editTrain() {
+		Dimension dlgSize = getPreferredSize();
+		Dimension frmSize = mainFrame.getSize();
+		Point loc = mainFrame.getLocation();
+		setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+				(frmSize.height - dlgSize.height) / 2 + loc.y);
+		setVisible(true);
+	}
+
 	public class TrainTableModel extends AbstractTableModel {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1014817974495127589L;
 		
-		Train train;
+		Train myTrain;
 
 		TrainTableModel(Train _train) {
-			train = _train.copy();
+			myTrain = _train.copy();
 		}
 
 		/**
@@ -311,7 +320,7 @@ public class TrainDialog extends JDialog {
 		 * @return int
 		 */
 		public int getColumnCount() {
-			return 3;
+			return 4;
 		}
 
 		/**
@@ -320,7 +329,7 @@ public class TrainDialog extends JDialog {
 		 * @return int
 		 */
 		public int getRowCount() {
-			return train.stopNum;
+			return myTrain.stopNum;
 		}
 
 		/**
@@ -331,7 +340,8 @@ public class TrainDialog extends JDialog {
 		 * @return boolean
 		 */
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return (columnIndex == 0) || (columnIndex == 1)	|| (columnIndex == 2);
+			return (columnIndex == 0) || (columnIndex == 1)	
+				|| (columnIndex == 2) || (columnIndex == 3);
 		}
 
 		/**
@@ -346,6 +356,8 @@ public class TrainDialog extends JDialog {
 			case 1:
 			case 2:
 				return String.class;
+			case 3:
+				return Boolean.class;
 			default:
 				return null;
 			}
@@ -361,11 +373,13 @@ public class TrainDialog extends JDialog {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return train.stops[rowIndex].stationName;
+				return myTrain.stops[rowIndex].stationName;
 			case 1:
-				return train.stops[rowIndex].arrive;
+				return myTrain.stops[rowIndex].arrive;
 			case 2:
-				return train.stops[rowIndex].leave;
+				return myTrain.stops[rowIndex].leave;
+			case 3:
+				return Boolean.valueOf(myTrain.stops[rowIndex].isSchedular);
 			default:
 				return null;
 			}
@@ -383,15 +397,18 @@ public class TrainDialog extends JDialog {
 //			try {
 				switch (columnIndex) {
 				case 0:
-					train.stops[rowIndex].stationName = (String) aValue;
+					myTrain.stops[rowIndex].stationName = (String) aValue;
 					break;
 				case 1:
 //					train.stops[rowIndex].arrive = df.parse((String) aValue);
-					train.stops[rowIndex].arrive = (String) aValue;
+					myTrain.stops[rowIndex].arrive = (String) aValue;
 					break;
 				case 2:
 //					train.stops[rowIndex].leave = df.parse((String) aValue);
-					train.stops[rowIndex].leave = (String) aValue;
+					myTrain.stops[rowIndex].leave = (String) aValue;
+					break;
+				case 3:
+					myTrain.stops[rowIndex].isSchedular = ((Boolean) aValue).booleanValue();
 					break;
 				default:
 				}
@@ -415,6 +432,8 @@ public class TrainDialog extends JDialog {
 				return "到点";
 			case 2:
 				return "发点";
+			case 3:
+				return "图定";
 			default:
 				return null;
 			}
@@ -458,14 +477,5 @@ public class TrainDialog extends JDialog {
 			//      return chart.trains[row].equals(chart.getActiveTrain());
 			return super.isRowSelected(row);
 		}
-	}
-
-	public void editTrain() {
-		Dimension dlgSize = getPreferredSize();
-		Dimension frmSize = mainFrame.getSize();
-		Point loc = mainFrame.getLocation();
-		setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-				(frmSize.height - dlgSize.height) / 2 + loc.y);
-		setVisible(true);
 	}
 }

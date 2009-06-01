@@ -8,8 +8,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.paradise.etrc.MainFrame;
-import org.paradise.etrc.data.ETRCSKB;
 import org.paradise.etrc.data.Train;
+import org.paradise.etrc.data.skb.ETRCSKB;
 
 /**
  * @author lguo@sina.com
@@ -106,7 +106,7 @@ public class FindTrainsDialog extends JDialog {
 			}
 			
 			mainFrame.chartView.repaint();
-			mainFrame.chartView.setTrainNum();
+			mainFrame.sheetView.updateData();
 	        mainFrame.runView.refresh();
 
 			progressPanel.gotoEnd();

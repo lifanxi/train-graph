@@ -6,6 +6,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.paradise.etrc.data.*;
+import org.paradise.etrc.data.skb.ETRCData;
+import org.paradise.etrc.data.skb.LCBStation;
 
 /**
  * 从achen1的里程表导入数据

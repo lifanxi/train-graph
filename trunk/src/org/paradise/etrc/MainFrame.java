@@ -17,15 +17,15 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import org.paradise.etrc.data.*;
+import org.paradise.etrc.data.skb.ETRCLCB;
+import org.paradise.etrc.data.skb.ETRCSKB;
 import org.paradise.etrc.dialog.*;
 import org.paradise.etrc.filter.CSVFilter;
 import org.paradise.etrc.filter.TRCFilter;
 import org.paradise.etrc.filter.TRFFilter;
 import org.paradise.etrc.view.chart.ChartView;
 import org.paradise.etrc.view.dynamic.DynamicView;
-
-//import com.sun.image.codec.jpeg.JPEGCodec;
-//import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import org.paradise.etrc.view.sheet.SheetView;
 
 /**
  * @author lguo@sina.com
@@ -35,9 +35,11 @@ import org.paradise.etrc.view.dynamic.DynamicView;
 public class MainFrame extends JFrame implements ActionListener, Printable {
 	private static final long serialVersionUID = 1L;
 	
+	public JPanel mainPanel;
 	public JSplitPane splitPane;
 	public ChartView chartView;
 	public DynamicView runView;
+	public SheetView sheetView;
 	
 	private boolean isShowRun = true;
 	
@@ -106,8 +108,72 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private void jbInit() throws Exception {
 		chartView = new ChartView(this);
 		runView = new DynamicView(this);
+		sheetView = new SheetView(this);
 		
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, runView, chartView);
+//		tbPane = new JTabbedPane();
+//		tbPane.setFont(new Font("Dialog", Font.PLAIN, 12));
+//		tbPane.add("点单1", sheetView);
+//		tbPane.add("动态图", runView);
+//		tbPane.setMinimumSize(tbPane.getPreferredSize());
+//		
+//		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, tbPane, chartView);
+//		splitPane.setDividerLocation(tbPane.getPreferredSize().height);
+//		splitPane.setDividerSize(5);
+		
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		
+		mainPanel.add(runView, BorderLayout.NORTH);
+		
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, chartView, sheetView);
+	    int dividerPos = Toolkit.getDefaultToolkit().getScreenSize().width - 253;
+		splitPane.setDividerLocation(dividerPos);
+		splitPane.setDividerSize(6);
+		splitPane.setOneTouchExpandable(true);
+		
+		mainPanel.add(splitPane, BorderLayout.CENTER);
+
+		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		this.setFont(new java.awt.Font("宋体", 0, 10));
+		this.setLocale(java.util.Locale.getDefault());
+		this.setResizable(true);
+		this.setState(Frame.NORMAL);
+		this.setIconImage(new ImageIcon(org.paradise.etrc.MainFrame.class
+				.getResource("/pic/icon.gif")).getImage());
+		
+		JPanel contentPane;
+		contentPane = (JPanel) this.getContentPane();
+		contentPane.setLayout(new BorderLayout());
+		contentPane.setBorder(null);
+		contentPane.setDebugGraphicsOptions(0);
+
+		this.setJMenuBar(loadMenu());
+
+		statusBarMain = loadStatusBar();
+		statusBarRight = loadStatusBar();
+		JPanel statusPanel = new JPanel();
+		statusPanel.setLayout(new BorderLayout());
+		statusPanel.add(statusBarMain, BorderLayout.CENTER);
+		statusPanel.add(statusBarRight, BorderLayout.EAST);
+
+		contentPane.add(statusPanel, BorderLayout.SOUTH);
+		contentPane.add(loadToolBar(), BorderLayout.NORTH);
+		contentPane.add(mainPanel, BorderLayout.CENTER);
+
+		this.setTitle();
+	}
+/*
+	private void jbInit() throws Exception {
+		chartView = new ChartView(this);
+		runView = new DynamicView(this);
+		sheetView = new SheetView(this);
+		
+		JTabbedPane tbPane = new JTabbedPane();
+		tbPane.setFont(new Font("Dialog", Font.PLAIN, 12));
+		tbPane.add("点单", sheetView);
+		tbPane.add("运行图", chartView);
+		
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, runView, tbPane);
 		splitPane.setDividerLocation(runView.getPreferredSize().height);
 		splitPane.setDividerSize(3);
 		runView.setMinimumSize(runView.getPreferredSize());
@@ -141,7 +207,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 		this.setTitle();
 	}
-
+*/
 	private static final String titlePrefix = "<[ LGuo的电子运行图 ]>";
 
 	private String activeTrainName = "";
@@ -525,7 +591,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		dlg.setVisible(true);
 
 		chartView.repaint();
-		chartView.setTrainNum();
+		sheetView.updateData();
 		runView.refresh();
 	}
 
@@ -588,7 +654,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private void doClearChart() {
 		chart.clearTrains();
 		chartView.repaint();
-		chartView.setTrainNum();
+		sheetView.updateData();
 		runView.refresh();
 	}
 
@@ -596,7 +662,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 * doPrint
 	 */
 	private void doPrintChart() {
-		new MessageBox(this, "JAVA的打印能力太弱，不想做这个功能了。").showMessage();
+		new MessageBox(this, "JAVA的打印能力太弱，不想做这个功能了。拟改图片输出，请查看 C:\\ETRC.gif。 ").showMessage();
 		
 		try {
 			BufferedImage image = chartView.getBufferedImage();
@@ -742,8 +808,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			try {
 				chart.loadFromFile(f);
 				chartView.repaint();
-				chartView.setTrainNum();
+				sheetView.updateData();
+				
 				runView.refresh();
+				sheetView.refresh();
+				
 				setTitle();
 				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
@@ -805,8 +874,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			//System.out.println("1.Move to: "+loadingTrain.getTrainName());
 			//mainView.buildTrainDrawings();
 			chartView.repaint();
-			chartView.setTrainNum();
-			chartView.moveToTrain(loadingTrain);
+			sheetView.updateData();
+			chartView.findAndMoveToTrain(loadingTrain.getTrainName(chart.circuit));
 			runView.refresh();
 			//panelChart.panelLines.repaint();
 		}
@@ -888,17 +957,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	private void updateShowRunState() {
 		jtButtonShowRun.setSelected(isShowRun);
-		if(isShowRun) {
-			splitPane.setDividerLocation(runView.getPreferredSize().height);
-			splitPane.setDividerSize(3);
-		}
-		else {
-			splitPane.setDividerLocation(0);
-			splitPane.setDividerSize(0);
-		}
+		runView.setRunState(isShowRun);
+		runView.setVisible(isShowRun);
 		prop.setProperty(Prop_Show_Run, isShowRun ? "Y" : "N");
 	}
-
+	
 	//Overridden so we can exit when window is closed
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {

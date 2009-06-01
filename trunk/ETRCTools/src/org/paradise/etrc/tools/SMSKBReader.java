@@ -11,9 +11,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 import org.paradise.etrc.data.Circuit;
-import org.paradise.etrc.data.ETRCData;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
+import org.paradise.etrc.data.skb.ETRCData;
 import org.paradise.etrc.tools.db.DBTrain;
 
 public class SMSKBReader {
@@ -355,7 +355,7 @@ public class SMSKBReader {
 //			if(leave == null)
 //				leave = arrive;
 			
-			train.appendStop(Stop.makeStop(tkName, str_arrive, str_leave));
+			train.appendStop(Stop.makeStop(tkName, str_arrive, str_leave, true));
 		}
 		
 //		train.startStation = train.stops[0].stationName;

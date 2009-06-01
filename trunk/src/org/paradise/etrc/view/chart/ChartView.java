@@ -106,7 +106,7 @@ public class ChartView extends JPanel implements KeyListener {
 	 *
 	 * @param loadingTrain Train
 	 */
-	public void moveToTrain(Train train) {
+	private void moveToTrain(Train train) {
 //		System.out.println("moveToTrain:" + train.getTrainName());
 //		
 		if (train == null)
@@ -335,13 +335,23 @@ public class ChartView extends JPanel implements KeyListener {
 		mainFrame.statusBarMain.setText(mainFrame.chart.circuit.getStationName(dist, true));
 	}
 
+	public String getDistString(Point p) {
+		int dist = (p.y - topMargin) / mainFrame.chart.distScale;
+		return getDistString(dist);
+	}
+	
+	public String getClockString(Point p) {
+		int minutes = (p.x - leftMargin) / mainFrame.chart.minuteScale;
+		return getClockString(minutes);
+	}
+
 	private String getDistString(int dist) {
 		if (distUpDownState == SHOW_DOWN)
 			return "" + dist;
 		else
 			return "" + (mainFrame.chart.circuit.length - dist);
 	}
-
+	
 	private String getClockString(int minutes) {
 		int hours = minutes < 0 ? -1 : minutes / 60;
 
@@ -373,7 +383,7 @@ public class ChartView extends JPanel implements KeyListener {
 	private JLabel cornerUpDown = new JLabel();
 
 //	private JLabel cornerTrainNum = new JLabel("D:0,U:0");
-	private TrainNumPanel cornerTrainNum;
+	private ControlPanel cornerControl;
 
 	void jbInit() throws Exception {
 		setLayout(new BorderLayout());
@@ -408,14 +418,14 @@ public class ChartView extends JPanel implements KeyListener {
 				changeShowUpDownState();
 			}
 		});
-
-		//在左下角显示上行车次数和下行车次数
-		cornerTrainNum = new TrainNumPanel(this);
-		spLines.setCorner(JScrollPane.LOWER_LEFT_CORNER, cornerTrainNum);
+		
+		//在左下角显示上行车次数和下行车次数－－放到sheetView的左上角去
+		//左下角改放快速缩放控制按钮
+		cornerControl = new ControlPanel(this);
+		spLines.setCorner(JScrollPane.LOWER_LEFT_CORNER, cornerControl);
 //		cornerTrainNum.setHorizontalAlignment(SwingConstants.CENTER);
 //		cornerTrainNum.setVerticalAlignment(SwingConstants.CENTER);
-		cornerTrainNum.setBorder(BorderFactory
-				.createLineBorder(Color.lightGray));
+//		cornerTrainNum.setBorder(BorderFactory.createLineBorder(Color.lightGray));
 
 		//永远显示横竖滚动条，以便右下角的“上下行”状态显示能出现
 		spLines.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -423,16 +433,9 @@ public class ChartView extends JPanel implements KeyListener {
 		
 		spLines.getVerticalScrollBar().setUnitIncrement(ScrollUnitIncrement);
 		spLines.getHorizontalScrollBar().setUnitIncrement(ScrollUnitIncrement);
-		setTrainNum();
 		
 		addKeyListener(this);
 	}
-
-	public void setTrainNum() {
-//		cornerTrainNum.setText("(D:" + mainFrame.chart.dNum + ",U:" + mainFrame.chart.uNum + ")");
-		cornerTrainNum.setText("(" + mainFrame.chart.dNum + "/" + mainFrame.chart.uNum + ")");
-	}
-
 
 	public Train getActiveTrain() {
 		return (activeTrainDrawing == null) ? null : activeTrainDrawing.train;
@@ -651,7 +654,7 @@ public class ChartView extends JPanel implements KeyListener {
 				//TrainDrawing.ChartPoint moving = activeTrain.movingPoint;
 				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
 				activeTrainDrawing.setMovingPoint(newx, y,
-						TrainDrawing.ChartPoint.STOP_ARRIVE);
+						TrainDrawing.ChartPoint.STOP_ARRIVE, false);
 				repaint();
 //			} catch (ParseException ex) {
 //				ex.printStackTrace();
@@ -694,7 +697,7 @@ public class ChartView extends JPanel implements KeyListener {
 				//TrainDrawing.ChartPoint moving = activeTrain.movingPoint;
 				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
 				activeTrainDrawing.setMovingPoint(newx, y,
-						TrainDrawing.ChartPoint.STOP_LEAVE);
+						TrainDrawing.ChartPoint.STOP_LEAVE, false);
 				repaint();
 //			} catch (ParseException ex) {
 //				ex.printStackTrace();
