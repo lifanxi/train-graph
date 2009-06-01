@@ -152,7 +152,7 @@ public class ETRCSKB {
 	}
 	
 	/**
-	 * 获取指定车次（可能重复，包括A B）
+	 * 获取指定车次（根据单车次查找，可能重复，包括A B）
 	 * @param trainName
 	 * @return
 	 */

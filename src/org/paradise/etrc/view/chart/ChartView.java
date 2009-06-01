@@ -192,6 +192,11 @@ public class ChartView extends JPanel {
 
 	//当水印色为null的时候不画反向车次(也作为反向车次是否能被选择的依据)
 	public Color underDrawingColor = DEFAULT_UNDER_COLOR;
+	
+	//普通图线的到发点是否画出
+	//在有详细点单数据的时候所有通过点都画出会影响图的美观。
+	//不管该选项是否开启，当前选中车次的到发点仍然会画出来。
+	public boolean isDrawNormalPoint = true;
 
 	/**
 	 * 从相对时间计算X坐标
@@ -554,5 +559,16 @@ public class ChartView extends JPanel {
 		activeTrain = null;
 		activeStation = null;
 		repaint();
+	}
+
+	public void scrollToLeft() {
+		spLines.getHorizontalScrollBar().setValue(0);
+	}
+
+	public void addTrain(Train train) {
+		mainFrame.chart.addTrain(train);
+		mainFrame.sheetView.updateData();
+		
+		this.setActiveTrain(train);
 	}
 }

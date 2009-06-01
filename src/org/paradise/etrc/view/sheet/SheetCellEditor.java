@@ -2,14 +2,12 @@ package org.paradise.etrc.view.sheet;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.table.*;
 
 import org.paradise.etrc.data.Stop;
+import org.paradise.etrc.data.Train;
 
 public class SheetCellEditor extends AbstractCellEditor implements TableCellEditor {
 	private static final long serialVersionUID = 1L;
@@ -25,19 +23,19 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 		
 		editor = new JTextField();
 		
-		//响应双击事件，左键双击改为图定，右键双击改为非图定
+		//响应双击事件，左键双击改为办客，右键双击改为非办客
 		editor.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if(me.getClickCount() >= 2 && me.getButton() == MouseEvent.BUTTON3) {
 					if(stop!=null) {
-						stop.isSchedular = false;
+						stop.isPassenger = false;
 						table.updateUI();
 						setEditorColor();
 					}
 				}
 				else if(me.getClickCount() >= 2 && me.getButton() == MouseEvent.BUTTON1){
 					if(stop!=null) {
-						stop.isSchedular = true;
+						stop.isPassenger = true;
 						table.updateUI();
 						setEditorColor();
 					}
@@ -47,7 +45,7 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 			private void setEditorColor() {
 				//设置文字颜色
 				if(stop!=null)
-					if(!stop.isSchedular) {
+					if(!stop.isPassenger) {
 						editor.setForeground(Color.red);
 						editor.setSelectedTextColor(Color.red);
 					}
@@ -81,7 +79,7 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 		
 		//设置文字颜色
 		if(stop!=null)
-			if(!stop.isSchedular) {
+			if(!stop.isPassenger) {
 				editor.setForeground(Color.red);
 				editor.setSelectedTextColor(Color.red);
 			}
@@ -103,7 +101,7 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 	}
 
 	public Object getCellEditorValue() {
-		String time = formatTime(editor.getText());
+		String time = Train.formatTime(oldTime, editor.getText());
 		
 		//判断原来是否有数据，既原来的stop是否为null
 		if(stop == null) {
@@ -129,36 +127,4 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 		
 		return stop;
 	}
-	
-	//格式化输入的时间，如果格式有误则用原来的时间
-	//时分间隔可以用空格（1个），全角或者半角的分号、句号
-	private String formatTime(String time) {
-		time = time.trim();
-		
-		//允许为空
-		if(time.equals(""))
-			return time;
-		
-		time = time.replace('：', ':');
-		time = time.replace('；', ':');
-		time = time.replace('。', ':');
-		time = time.replace(';', ':');
-		time = time.replace('.', ':');
-		time = time.replace(' ', ':');
-
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		
-		Date date = null;
-		try {
-			date = df.parse(time);
-		} catch (ParseException e) {
-		}
-		
-		//解析不成功则返回原来的时间，解析成功则返回标准格式的时间
-		if(date == null)
-			return oldTime;
-		else
-			return df.format(date);
-	}
-
 }

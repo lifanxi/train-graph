@@ -75,8 +75,10 @@ public class SheetModel extends AbstractTableModel {
 			//stop站名为空，表示原来没有这条数据，是CellEditor接收到输入后new出来的新的停站数据
 			else {
 				stop.stationName = staName;
-				Stop prevStop = chart.findPrevStop(theTrain, stop);
-				theTrain.insertStopAfter(prevStop, stop);
+//				Stop prevStop = chart.findPrevStop(theTrain, stop.stationName);
+//				theTrain.insertStopAfter(prevStop, stop);
+				
+				chart.insertNewStopToTrain(theTrain, stop);
 			}
 		}
 		else {

@@ -15,8 +15,8 @@ public class CircuitMake {
 		
 	}
 	
-	public Circuit readCircuit(String name) throws IOException {
-		File file = new File("c:\\trains\\" + name + ".csv");
+	public static Circuit readCircuit(String fileName, String name) throws IOException {
+		File file = new File(fileName);
 		
 		BufferedReader in = new BufferedReader(new FileReader(file));
 
@@ -33,13 +33,19 @@ public class CircuitMake {
 		
 		return cir;
 	}
+	
+	public static Circuit readCircuit(String name) throws IOException {
+		String fileName = "c:\\trains\\" + name + ".csv";
+	
+		return readCircuit(fileName, name);
+	}
 
-	private Station parseStationLine(String line) {
+	private static Station parseStationLine(String line) {
 //		System.out.println(line);
 		String str[] = line.split(",");
 		
-		String name = str[0].substring(0, str[0].length()-1);
-//		String name = str[0];
+//		String name = str[0].substring(0, str[0].length()-1); //有站字的情况
+		String name = str[0];
 		
 		int level = 6;
 		if(str[2].equalsIgnoreCase("特等站"))
@@ -67,7 +73,7 @@ public class CircuitMake {
 		try {
 			String name = "合九线";
 			
-			Circuit cir = new CircuitMake().readCircuit(name);
+			Circuit cir = CircuitMake.readCircuit(name);
 			System.out.println(cir);
 			
 			File file = new File("c:\\trains\\" + name + ".cir");

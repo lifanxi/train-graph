@@ -99,6 +99,9 @@ public class ChartPoint extends Point {
 	}
 
 	private void drawNormal(Graphics g) {
+		if (!trainDrawing.chartView.isDrawNormalPoint)
+			return;
+		
 		switch (type) {
 		case EDGE:
 		case PASS:

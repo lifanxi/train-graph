@@ -418,7 +418,7 @@ public class TrainDialog extends JDialog {
 			case 2:
 				return myTrain.stops[rowIndex].leave;
 			case 3:
-				return Boolean.valueOf(myTrain.stops[rowIndex].isSchedular);
+				return Boolean.valueOf(myTrain.stops[rowIndex].isPassenger);
 			default:
 				return null;
 			}
@@ -447,7 +447,7 @@ public class TrainDialog extends JDialog {
 					myTrain.stops[rowIndex].leave = (String) aValue;
 					break;
 				case 3:
-					myTrain.stops[rowIndex].isSchedular = ((Boolean) aValue).booleanValue();
+					myTrain.stops[rowIndex].isPassenger = ((Boolean) aValue).booleanValue();
 					break;
 				default:
 				}
@@ -472,7 +472,7 @@ public class TrainDialog extends JDialog {
 			case 2:
 				return "发点";
 			case 3:
-				return "图定";
+				return "办客";
 			default:
 				return null;
 			}

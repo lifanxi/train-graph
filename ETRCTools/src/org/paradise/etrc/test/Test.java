@@ -55,7 +55,7 @@ public class Test extends JFrame {
 	}
 
 	public static void main(String args[]) {
-		new Test().show();
-
+//		new Test().show();
+		System.out.println("\u5F90\u5DDE");
 	}
 }

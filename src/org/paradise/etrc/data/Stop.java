@@ -10,13 +10,13 @@ public class Stop {
 	public String leave;
 	
 	//20070224新增，是否图定
-	public boolean isSchedular;
+	public boolean isPassenger;
 
 	public Stop(String _name, String _arrive, String _leave, boolean _schedular) {
 		stationName = _name;
 		arrive = _arrive;
 		leave = _leave;
-		isSchedular = _schedular;
+		isPassenger = _schedular;
 	}
 
 //	public Stop(String _name, String _arrive, String _leave) {
@@ -24,7 +24,7 @@ public class Stop {
 //	}
 
 	public Stop copy() {
-		Stop st = new Stop(this.stationName, this.arrive, this.leave, this.isSchedular);
+		Stop st = new Stop(this.stationName, this.arrive, this.leave, this.isPassenger);
 		
 		return st;
 	}

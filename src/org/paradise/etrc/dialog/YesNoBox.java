@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import org.paradise.etrc.ETRC;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -52,7 +54,7 @@ public class YesNoBox extends JDialog implements ActionListener {
 	}
 
 	public YesNoBox(String _msg) {
-		this(null, _msg, "问题");
+		this(ETRC.getInstance().getMainFrame(), _msg, "问题");
 	}
 
 	//Component initialization
@@ -102,7 +104,7 @@ public class YesNoBox extends JDialog implements ActionListener {
 		super.processWindowEvent(e);
 	}
 
-	public boolean askYesNo() {
+	public boolean askForYes() {
 		Dimension dlgSize = this.getPreferredSize();
 		Dimension frmSize;
 		Point loc;

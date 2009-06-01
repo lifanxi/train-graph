@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Station;
-import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 
 public class RunningPanel extends JPanel {
@@ -158,10 +157,10 @@ public class RunningPanel extends JPanel {
 		//找出停靠中的车
 		atStationTrains = findTrainsAtStation(dView.getCurrentTime());
 //		System.out.println(atStationTrains.size());
-		//遍历一下，看看哪些车是运行中的，哪些车是停靠中的
+		//遍历一下，看看哪些车是运行中的
 		runningTrains.clear();
 		for(int i = 0; i < chart.trainNum; i++) {
-			int dist = getDistOfTrain(chart.trains[i], dView.getCurrentTime());
+			int dist = chart.circuit.getDistOfTrain(chart.trains[i], dView.getCurrentTime());
 			
 			if(dist >= 0) {
 				if(!atStationTrains.keySet().contains(chart.trains[i]))
@@ -216,7 +215,7 @@ public class RunningPanel extends JPanel {
 	private Hashtable findTrainsAtStation(int time) {
 		Hashtable trains = new Hashtable();
 		for(int i = 0; i < chart.trainNum; i++) {
-			String station = getStationNameAtTheTime(chart.trains[i], time);
+			String station = chart.circuit.getStationNameAtTheTime(chart.trains[i], time);
 			
 			if(!station.equalsIgnoreCase("")) {
 				trains.put(chart.trains[i], station);
@@ -324,108 +323,5 @@ public class RunningPanel extends JPanel {
 		g.drawString(trainName, x - w/2, y - 5);
 		
 		g.setFont(oldFont);
-	}
-
-	//查找在时刻time的时候列车train是否停靠在某站
-	//如果停靠于某站则返回站名，否则返回空字符串
-	private String getStationNameAtTheTime(Train train, int time) {
-		for(int i=0; i<train.stopNum; i++) {
-			int t1 = trainTimeToInt(train.stops[i].arrive);
-			int t2 = trainTimeToInt(train.stops[i].leave);
-
-			//跨越0点情况的处理
-			int myTime = time;
-			if(t2 < t1) {
-				t2 += 24 * 60;
-				if(myTime < 60)
-					myTime += 24 * 60;
-			}
-
-			//t1 == t2时通过或者始发、终到，不作为停靠处理
-			if(t1<= myTime && t2 >= myTime && t1 != t2) {
-				int d = chart.circuit.getStationDist(train.stops[i].stationName);
-//				System.out.println(train.getTrainName() + "^" + time + "~" + train.stops[i].stationName + 
-//						"~" + t1 + "~" + train.stops[i].arrive + 
-//						"~" + t2 + "~" + train.stops[i].leave +
-//						"~" + d);
-				if(d >= 0)
-					return train.stops[i].stationName;
-			}
-		}
-		
-		return "";
-	}
-	
-	//查找train在时刻time的时候本线位置的距离值，不在本线上则返回-1
-	private int getDistOfTrain(Train train, int time) {
-		//停站的情况
-		for(int i=0; i<train.stopNum; i++) {
-			int t1 = trainTimeToInt(train.stops[i].arrive);
-			int t2 = trainTimeToInt(train.stops[i].leave);
-			
-			//跨越0点情况的处理
-			int myTime = time;
-			if(t2 < t1) {
-				t2 += 24 * 60;
-				if(myTime < 60)
-					myTime += 24 * 60;
-			}
-
-			if(t1<= myTime && t2 >= myTime ) {
-//				System.out.println(train.getTrainName() + "^" + time + "~" + train.stops[i].stationName + 
-//						"~" + t1 + "~" + train.stops[i].arrive + 
-//						"~" + t2 + "~" + train.stops[i].leave);
-				int d = chart.circuit.getStationDist(train.stops[i].stationName);
-				
-				if(d >= 0)
-					return d;
-			}
-		}
-		
-		//运行中的情况
-		for(int i=0; i<train.stopNum-1; i++) {
-			Stop s1 = train.stops[i];
-			Stop s2 = train.stops[i+1];
-			
-			int d1 = chart.circuit.getStationDist(s1.stationName);
-			int d2 = chart.circuit.getStationDist(s2.stationName);
-			
-			int t1 = trainTimeToInt(s1.leave);
-			int t2 = trainTimeToInt(s2.arrive);
-			
-			//不在本线路上-继续找（可能下一天会在本线路上的）
-			if(d1<0 || d2<0)
-				continue;
-			
-			//跨越0点情况的处理
-			int myTime = time;
-			if(t2 < t1) {
-				t2 += 24 * 60;
-				if(myTime < 60)
-					myTime += 24 * 60;
-			}
-			
-			if(t1 <= myTime && t2 >= myTime) {
-				int dist = (d2-d1)*(myTime-t1)/(t2-t1) + d1;
-//				System.out.println(train.getTrainName() + "^" + myTime + "~" + train.stops[i].stationName + 
-//						"~" + t1 + "~" + train.stops[i].arrive + 
-//						"~" + t2 + "~" + train.stops[i].leave + "*****" 
-//						+ d1 + "~" + d2 + "~" + dist);
-				return dist;
-			}
-		}
-		
-		return -1;
-	}
-	
-	//工具方法
-	private int trainTimeToInt(String strTime) {
-		String strH = strTime.split(":")[0];
-		String strM = strTime.split(":")[1];
-		
-		int h = Integer.parseInt(strH);
-		int m = Integer.parseInt(strM);
-		
-		return h*60 + m;
 	}
 }

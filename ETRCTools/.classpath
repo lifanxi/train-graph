@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ETRC"/>
 	<classpathentry kind="lib" path="lib/classes12.jar"/>
+	<classpathentry kind="lib" path="C:/Borland/JBuilder2006/j2mewtk2.2/lib/midpapi20.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

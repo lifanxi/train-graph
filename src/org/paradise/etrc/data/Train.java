@@ -1,6 +1,8 @@
 package org.paradise.etrc.data;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.awt.*;
@@ -27,9 +29,11 @@ public class Train {
 	public String trainNameFull = null;
 
 //	改成getStartStation()方法，直接取stop[0]的站名
-//	public String startStation = "";
+//	再次添加，以便加入不全的点单，但采用set方法，不直接存取，get方法优先取本值
+	private String startStation = "";
 //	改成getTerminalStation()方法，直接取stop[stopNum-1]的站名
-//	public String terminalStation = "";
+//	再次添加，以便加入不全的点单，但采用set方法，不直接存取，get方法优先取本值
+	private String terminalStation = "";
 
 	public int stopNum = 0;
 
@@ -55,12 +59,30 @@ public class Train {
 		return tr;
 	}
 	
+	public void setStartStation(String sta) {
+		startStation = sta;
+	}
+	
+	public void setTerminalStation(String sta) {
+		terminalStation = sta;
+	}
+	
 	public String getStartStation() {
-		return stops[0].stationName;
+		if(!startStation.equalsIgnoreCase(""))
+			return startStation;
+		else if(stopNum > 0)
+			return stops[0].stationName;
+		else
+			return "";
 	}
 	
 	public String getTerminalStation() {
-		return stops[stopNum - 1].stationName;
+		if(!terminalStation.equalsIgnoreCase(""))
+			return terminalStation;
+		else if(stopNum > 0)
+			return stops[stopNum - 1].stationName;
+		else
+			return "";
 	}
 
 	/**
@@ -153,14 +175,14 @@ public class Train {
 
 		//始发站
 		if ((line = in.readLine()) != null) {
-			//this.startStation = line;
+			this.setStartStation(line);
 		} else {
 			throw new IOException("始发站读取错");
 		}
 
 		//终到站
 		if ((line = in.readLine()) != null) {
-			//this.terminalStation = line;
+			this.setTerminalStation(line);
 		} else {
 			throw new IOException("终到读取错");
 		}
@@ -208,7 +230,7 @@ public class Train {
 			out.write(stops[i].stationName + ","
 					+ stops[i].arrive + ","
 					+ stops[i].leave + ","
-					+ stops[i].isSchedular); //20070224新增，是否图定
+					+ stops[i].isPassenger); //20070224新增，是否图定
 			out.newLine();
 		}
 	}
@@ -219,10 +241,10 @@ public class Train {
 			paserTrainNameLine(line);
 			break;
 		case 1:
-			//startStation = line;
+			this.setStartStation(line);
 			break;
 		case 2:
-			//terminalStation = line;
+			this.setTerminalStation(line);
 			break;
 		default:
 			parseStopLine(line);
@@ -525,6 +547,7 @@ public class Train {
 	public static Color getTrainColorByName(String trainName) {
 		char type = trainName.toUpperCase().charAt(0);
 		switch(type) {
+		case 'D':
 		case 'Z':
 			return new Color(128, 0, 128);
 		case 'T':
@@ -544,14 +567,14 @@ public class Train {
 		return getTrainColorByName(getTrainName());
 	}
 
-	public static String makeFullName(Vector names) {
+	public static String makeFullName(String[] names) {
 		String name1 = "ZZZ";
 		String name2 = "ZZZ";
 		String name3 = "ZZZ";
 		String name4 = "ZZZ";
-		
-		for(int i=0; i<names.size(); i++) {
-			String theName = (String) names.get(i);
+
+		for(int i=0; i<names.length; i++) {
+			String theName = (String) names[i];
 			if(theName.compareTo(name1) < 0) {
 				name4 = name3;
 				name3 = name2;
@@ -581,6 +604,125 @@ public class Train {
 		
 		return name;
 	}
+	
+	public static String makeFullName(Vector names) {
+		return makeFullName((String[]) names.toArray());
+	}
+
+	//格式化输入的时间，如果格式有误则用原来的时间
+	//时分间隔可以用空格（任意多个），全角或者半角的分号、句号
+	//当输入3位或者4位纯数字时解析为后两位分钟，前一、两位小时
+	public static String formatTime(String oldTime, String input) {
+		input = input.trim();
+		
+		//允许为空
+		if(input.equals(""))
+			return input;
+
+		input = input.replaceAll(" ", "");
+		if(input.length() == 3 
+		   && input.charAt(0) >= '0' && input.charAt(0) <= '9'
+		   && input.charAt(1) >= '0' && input.charAt(1) <= '9'
+		   && input.charAt(2) >= '0' && input.charAt(2) <= '9') {
+			
+			input = "0" + input.charAt(0) + ":" 
+			       + input.charAt(1) + input.charAt(2);
+		}
+		else if(input.length() == 4 
+				   && input.charAt(0) >= '0' && input.charAt(0) <= '9'
+				   && input.charAt(1) >= '0' && input.charAt(1) <= '9'
+				   && input.charAt(2) >= '0' && input.charAt(2) <= '9'
+				   && input.charAt(3) >= '0' && input.charAt(3) <= '9') {
+					
+			input = "" + input.charAt(0) + input.charAt(1) + ":" 
+				      + input.charAt(2) + input.charAt(3);
+		}
+		else {
+			input = input.replace('：', ':');
+			input = input.replace('；', ':');
+			input = input.replace('，', ':');
+			input = input.replace('。', ':');
+			input = input.replace(';', ':');
+			input = input.replace(',', ':');
+			input = input.replace('.', ':');
+		}
+
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		
+		Date date = null;
+		try {
+			date = df.parse(input);
+		} catch (ParseException e) {
+		}
+		
+		//解析不成功则返回原来的时间，解析成功则返回标准格式的时间
+		if(date == null)
+			return oldTime;
+		else
+			return df.format(date);
+	}
+	
+	public static String[] formatName(String input) {
+		input = input.trim();
+
+		input = input.replace('\\', '/');
+
+		input = input.replace('、', '/');
+		
+		input = input.replace('，', '/');
+		input = input.replace(',', '/');
+		
+		input = input.replace('。', '/');			
+		input = input.replace('.', '/');
+
+		String[] names = input.split("/");
+		if(names.length > 4)
+			return null;
+		
+		String[] myNames = new String[names.length];
+		myNames[0] = names[0].toUpperCase();
+		for(int i=1; i<names.length; i++) {
+			if(names[i].length() <=2 && myNames[0].length() > names[i].length()) {
+				myNames[i] = (myNames[0].substring(0, myNames[0].length() - names[i].length()) + names[i]).toUpperCase();
+			}
+			else {
+				myNames[i] = names[i].toUpperCase();
+			}
+		}
+		
+		return myNames;
+	}
+
+	//工具方法
+	public static int trainTimeToInt(String strTime) {
+		String strH = strTime.split(":")[0];
+		String strM = strTime.split(":")[1];
+		
+		int h = Integer.parseInt(strH);
+		int m = Integer.parseInt(strM);
+		
+		return h*60 + m;
+	}
+
+	public static String intToTrainTime(int minutes) {
+		int hours = minutes < 0 ? -1 : minutes / 60;
+
+		int clockMinute = minutes - hours * 60;
+		if (clockMinute < 0)
+			clockMinute += 60;
+
+		String strMinute = clockMinute < 10 ? "0" + clockMinute : "" + clockMinute;
+
+		int clockHour = hours;
+		if (clockHour < 0)
+			clockHour += 24;
+		if (clockHour >= 24)
+			clockHour -= 24;
+
+		String strHour = clockHour < 10 ? "0" + clockHour : "" + clockHour;
+
+		return strHour + ":" + strMinute;
+	}
 
 	public boolean hasStop(String staName) {
 		for (int i = 0; i < stopNum; i++) {
@@ -590,4 +732,52 @@ public class Train {
 		
 		return false;
 	}
+	
+	public int findStopIndex(String staName) {
+		for (int i = 0; i < stopNum; i++) {
+			if (stops[i].stationName.equalsIgnoreCase(staName))
+				return i;
+		}
+		
+		return -1;
+	}
+
+	public Stop findStop(String staName) {
+		for (int i = 0; i < stopNum; i++) {
+			if (stops[i].stationName.equalsIgnoreCase(staName))
+				return stops[i];
+		}
+		
+		return null;
+	}
+
+	public void setTrainNames(String[] myNames) {
+		trainNameFull = makeFullName(myNames);
+		for(int i=0; i<myNames.length; i++) {
+			if(isDownName(myNames[i]))
+				trainNameDown = myNames[i];
+			else if(isUpName(myNames[i]))
+				trainNameUp = myNames[i];
+		}
+	}
+
+	public static int getDefaultVelocityByName(String trainName) {
+		char type = trainName.toUpperCase().charAt(0);
+		switch(type) {
+		case 'D':
+		case 'Z':
+			return 120;
+		case 'T':
+			return 100;
+		case 'K':
+		case 'N':
+			return 85;
+		case 'L':
+		case 'A':
+			return 60;
+		default:
+			return 70;
+		}
+	}
+
 }

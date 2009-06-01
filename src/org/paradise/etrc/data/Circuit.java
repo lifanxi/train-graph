@@ -126,6 +126,120 @@ public class Circuit {
 
 		return false;
 	}
+	
+	public Station getStationBetweenTheDists(int dist1, int dist2) {
+		if(dist1 == -1 || dist2 == -1)
+			return null;
+		
+		for (int i = 0; i < stationNum; i++) {
+			if ((dist1 < stations[i].dist && stations[i].dist <= dist2) ||
+				(dist2 <= stations[i].dist && stations[i].dist < dist1))
+				
+				return stations[i];
+		}
+
+		return null;
+	}
+
+	//查找在时刻time的时候列车train是否停靠在某站
+	//如果停靠于某站则返回站名，否则返回空字符串
+	public String getStationNameAtTheTime(Train train, int time) {
+		for(int i=0; i<train.stopNum; i++) {
+			int t1 = Train.trainTimeToInt(train.stops[i].arrive);
+			int t2 = Train.trainTimeToInt(train.stops[i].leave);
+
+			//跨越0点情况的处理
+			int myTime = time;
+			if(t2 < t1) {
+				t2 += 24 * 60;
+				if(myTime < 60)
+					myTime += 24 * 60;
+			}
+
+			//t1 == t2时通过或者始发、终到，不作为停靠处理
+			if(t1<= myTime && t2 >= myTime && t1 != t2) {
+				int d = getStationDist(train.stops[i].stationName);
+//				System.out.println(train.getTrainName() + "^" + time + "~" + train.stops[i].stationName + 
+//						"~" + t1 + "~" + train.stops[i].arrive + 
+//						"~" + t2 + "~" + train.stops[i].leave +
+//						"~" + d);
+				if(d >= 0)
+					return train.stops[i].stationName;
+			}
+		}
+		
+		return "";
+	}
+	
+//	private boolean isBetween(int myTime, int t1, int t2) {
+//		if(t1 < t2)
+//			return (t1<= myTime && t2 >= myTime);
+//		else
+//			return (t1<=myTime && myTime<=24*60) || 
+//			       (0<myTime && myTime<=t2);
+//	}
+	
+	//查找train在时刻time的时候本线位置的距离值，不在本线上则返回-1
+	public int getDistOfTrain(Train train, int time) {
+		//停站的情况
+		for(int i=0; i<train.stopNum; i++) {
+			int t1 = Train.trainTimeToInt(train.stops[i].arrive);
+			int t2 = Train.trainTimeToInt(train.stops[i].leave);
+			
+			//跨越0点情况的处理
+			int myTime = time;
+			if(t2 < t1) {
+				t2 += 24 * 60;
+				if(myTime < 60)
+					myTime += 24 * 60;
+			}
+
+			if(t1<= myTime && t2 >= myTime ) {
+//				System.out.println(train.getTrainName() + "^" + time + "~" + train.stops[i].stationName + 
+//						"~" + t1 + "~" + train.stops[i].arrive + 
+//						"~" + t2 + "~" + train.stops[i].leave);
+				int d = getStationDist(train.stops[i].stationName);
+				
+				if(d >= 0)
+					return d;
+			}
+		}
+		
+		//运行中的情况
+		for(int i=0; i<train.stopNum-1; i++) {
+			Stop s1 = train.stops[i];
+			Stop s2 = train.stops[i+1];
+			
+			int d1 = getStationDist(s1.stationName);
+			int d2 = getStationDist(s2.stationName);
+			
+			int t1 = Train.trainTimeToInt(s1.leave);
+			int t2 = Train.trainTimeToInt(s2.arrive);
+			
+			//不在本线路上-继续找（可能下一天会在本线路上的）
+			if(d1<0 || d2<0)
+				continue;
+			
+			//跨越0点情况的处理
+			int myTime = time;
+			if(t2 < t1) {
+				t2 += 24 * 60;
+				if(myTime < 60)
+					myTime += 24 * 60;
+			}
+			
+			if(t1 <= myTime && t2 >= myTime) {
+				int dist = (d2-d1)*(myTime-t1)/(t2-t1) + d1;
+//				System.out.println(train.getTrainName() + "^" + myTime + "~" + train.stops[i].stationName + 
+//						"~" + t1 + "~" + train.stops[i].arrive + 
+//						"~" + t2 + "~" + train.stops[i].leave + "*****" 
+//						+ d1 + "~" + d2 + "~" + dist);
+				return dist;
+			}
+		}
+		
+		return -1;
+	}
 
 	public void loadFromFile(String file) throws IOException {
 		BufferedReader in = new BufferedReader(new FileReader(file));
@@ -169,6 +283,13 @@ public class Circuit {
 			if (stations[i].name.equalsIgnoreCase(stationName))
 				return stations[i].dist;
 		return -1;
+	}
+
+	public Station getStation(String stationName) {
+		for (int i = 0; i < stationNum; i++)
+			if (stations[i].name.equalsIgnoreCase(stationName))
+				return stations[i];
+		return null;
 	}
 
 	/*
@@ -232,6 +353,7 @@ public class Circuit {
 		return -1;
 	}
 
+	//查找距离dist最近的station的Index
 	public int getStationIndex(int dist) {
 		int gap[] = new int[stationNum];
 		// 计算给定距离值与各站距离值之间的差
@@ -254,6 +376,7 @@ public class Circuit {
 		return minIndex;
 	}
 
+	//查找距离dist最近的station
 	public String getStationName(int dist, boolean addSuffix) {
 		int gap[] = new int[stationNum];
 		// 计算给定距离值与各站距离值之间的差
@@ -390,5 +513,39 @@ public class Circuit {
 		} catch (IOException ex) {
 			System.out.println("Error:" + ex.getMessage());
 		}
+	}
+	
+	public boolean isStartInsideMe(Train train) {
+		if(train == null)
+			return false;
+		
+		return null != getStation(train.getStartStation()); 
+	}
+	
+	public boolean isEndInsideMe(Train train) {
+		if(train == null)
+			return false;
+		
+		return null != getStation(train.getTerminalStation());
+	}
+
+	public Station getFirstStopOnMe(Train train) {
+		for(int i=0; i<train.stopNum; i++) {
+			Station sta = getStation(train.stops[i].stationName);
+			if(sta != null)
+				return sta;
+		}
+		
+		return null;
+	}
+	
+	public Station getLastStopOnMe(Train train) {
+		for(int i=train.stopNum - 1; i>=0; i--) {
+			Station sta = getStation(train.stops[i].stationName);
+			if(sta != null)
+				return sta;
+		}
+		
+		return null;
 	}
 }
