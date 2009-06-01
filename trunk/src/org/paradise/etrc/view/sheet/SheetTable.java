@@ -7,6 +7,9 @@ import java.awt.event.*;
 
 import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -21,8 +24,13 @@ public class SheetTable extends JTable {
 	private SheetView sheetView;
 	public SheetTable(SheetView _sheetView) {
 		sheetView = _sheetView;
-		
+
 		initTable();
+	}
+	
+	public void editingStopped(ChangeEvent e) {
+		super.editingStopped(e);
+		sheetView.mainFrame.chartView.repaint();
 	}
 	
 	private void initTable() {
@@ -50,8 +58,19 @@ public class SheetTable extends JTable {
 					int rowIndex = SheetTable.this.rowAtPoint(p);
 					int columnIndex = SheetTable.this.columnAtPoint(p);
 					SheetTable.this.editCellAt(rowIndex, columnIndex);
-					SheetTable.this.getEditorComponent().requestFocus();
+//					SheetTable.this.getEditorComponent().requestFocus();
 				}
+			}
+		});
+		
+		//响应行选择变化事件
+		this.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				int row = SheetTable.this.getSelectedRow();
+				SheetTable.this.getRowHeader().setSelectedIndex(row);
+				SheetTable.this.getRowHeader().repaint();
+				SheetTable.this.editCellAt(row, SheetTable.this.getSelectedColumn());
+//				SheetTable.this.getEditorComponent().requestFocus();
 			}
 		});
 		
@@ -60,6 +79,16 @@ public class SheetTable extends JTable {
 
 		//设置列宽
 		setupColumnWidth();
+	}
+	
+	public boolean editCellAt(int row, int col) {
+		boolean rt = super.editCellAt(row, col);
+		
+		if(rt)
+			if(getEditorComponent()!=null)
+				getEditorComponent().requestFocus();
+		
+		return rt;
 	}
 
 	//－－－－表头设置－－－－//

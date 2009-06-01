@@ -20,11 +20,11 @@ public class CircuitPanel extends JPanel {
 	int myLeftMargin = 5;
 
 	private Chart chart;
-	private ChartView mainView;
+	private ChartView chartView;
 
 	public CircuitPanel(Chart _chart, ChartView _mainView) {
 		chart = _chart;
-		mainView = _mainView;
+		chartView = _mainView;
 
 		try {
 			jbInit();
@@ -38,8 +38,10 @@ public class CircuitPanel extends JPanel {
 		this.setLayout(borderLayout1);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (e.getPoint().x > mainView.circuitPanelWidth - 25)
-					mainView.changeDistUpDownState();
+				if (e.getPoint().x > ChartView.circuitPanelWidth - 25)
+					chartView.changeDistUpDownState();
+				else
+					chartView.setActiveSation(e.getPoint().y + 12);
 			}
 		});
 	}
@@ -61,11 +63,11 @@ public class CircuitPanel extends JPanel {
 			return new Dimension(640, 480);
 
 		if (chart.circuit == null)
-			return new Dimension(mainView.circuitPanelWidth, 480);
+			return new Dimension(ChartView.circuitPanelWidth, 480);
 
-		int w = mainView.circuitPanelWidth;
-		int h = chart.circuit.length * chart.distScale + mainView.topMargin
-				+ mainView.bottomMargin;
+		int w = ChartView.circuitPanelWidth;
+		int h = chart.circuit.length * chart.distScale + chartView.topMargin
+				+ chartView.bottomMargin;
 		return new Dimension(w, h);
 	}
 
@@ -73,17 +75,21 @@ public class CircuitPanel extends JPanel {
 		if (station.hide)
 			return;
 
-		int y = station.dist * chart.distScale + mainView.topMargin;
+		int y = station.dist * chart.distScale + chartView.topMargin;
 
 		if (station.level <= chart.displayLevel) {
 			//设置坐标线颜色
 			Color oldColor = g.getColor();
-			g.setColor(mainView.gridColor);
+			
+			if(station.equals(chartView.activeStation))
+				g.setColor(chartView.activeGridColor);
+			else
+				g.setColor(chartView.gridColor);
 
 			//画坐标线
-			g.drawLine(myLeftMargin, y, mainView.circuitPanelWidth, y);
+			g.drawLine(myLeftMargin, y, ChartView.circuitPanelWidth, y);
 			if (station.level <= chart.boldLevel) {
-				g.drawLine(myLeftMargin, y + 1, mainView.circuitPanelWidth,
+				g.drawLine(myLeftMargin, y + 1, ChartView.circuitPanelWidth,
 						y + 1);
 			}
 
@@ -102,18 +108,18 @@ public class CircuitPanel extends JPanel {
 		Color oldColor = g.getColor();
 		String stDist;
 		//下行里程
-		if (mainView.distUpDownState == ChartView.SHOW_DOWN) {
+		if (chartView.distUpDownState == ChartView.SHOW_DOWN) {
 			stDist = station.dist == 0 ? "0km" : "" + station.dist;
-			g.setColor(mainView.downDistColor);
+			g.setColor(chartView.downDistColor);
 		}
 		//上行里程
 		else {
 			stDist = station.dist == chart.circuit.length ? "0km" : "" + (chart.circuit.length - station.dist);
-			g.setColor(mainView.upDistColor);
+			g.setColor(chartView.upDistColor);
 		}
 		Font oldFont = g.getFont();
 		g.setFont(new Font("Dialog", 0, 10));
-		int x = mainView.circuitPanelWidth
+		int x = ChartView.circuitPanelWidth
 				- g.getFontMetrics().stringWidth(stDist);
 		g.drawString(stDist, x, y - 2);
 		g.setFont(oldFont);

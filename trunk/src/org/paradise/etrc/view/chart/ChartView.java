@@ -10,12 +10,13 @@ import javax.swing.*;
 
 import org.paradise.etrc.*;
 import org.paradise.etrc.data.*;
+import org.paradise.etrc.view.chart.traindrawing.TrainDrawing;
 
 /**
  * @author lguo@sina.com
  * @version 1.0
  */
-public class ChartView extends JPanel implements KeyListener {
+public class ChartView extends JPanel {
 	/*
 	 * X轴（时间轴）
 	 * 名称        类型   单位
@@ -40,34 +41,36 @@ public class ChartView extends JPanel implements KeyListener {
 	public int topMargin = DEFAULT_TOP_MARGIN;
 	public int bottomMargin = DEFAULT_BOTTOM_MARGIN;
 
-	public int trainNameRecMargin = 1;
-	public int trainNameRecHeight = 54;
-	public int circuitPanelWidth = 80;
-	public int clockPanelHeight = 16;
+	public static int trainNameRecMargin = 1;
+	public static int trainNameRecHeight = 54;
+	public static int circuitPanelWidth = 80;
+	public static int clockPanelHeight = 16;
 
 	public static final int ScrollUnitIncrement = 16;
 
-	public Vector trainDrawings = new Vector();
-	public Vector underDrawings = new Vector();
-
 	public TrainDrawing activeTrainDrawing;
+	Vector normalDrawings = new Vector();
+	Vector underDrawings  = new Vector();
 
-	private CircuitPanel panelCircuit;
-	private LinesPanel panelLines;
-	private ClockPanel panelClock;
+	public CircuitPanel panelCircuit;
+	public LinesPanel panelLines;
+	public ClockPanel panelClock;
 
 	private JScrollPane spLines = new JScrollPane();
 
-//	public Color gridColor = Color.darkGray;
 	public Color gridColor = Color.GRAY;
-
+	public Color activeGridColor = Color.DARK_GRAY;
+	
+	public Train activeTrain;
+	public Station activeStation;
+	
 	public MainFrame mainFrame;
 
 	public ChartView(MainFrame _mainFrame) {
 		mainFrame = _mainFrame;
 		panelCircuit = new CircuitPanel(mainFrame.chart, this);
 		panelClock = new ClockPanel(mainFrame.chart, this);
-		panelLines = new LinesPanel(mainFrame.chart, this);
+		panelLines = new LinesPanel(this);
 		
 		try {
 			jbInit();
@@ -80,7 +83,7 @@ public class ChartView extends JPanel implements KeyListener {
 //		System.out.println("findAndMoveToTrain:" + trainName);
 //		
 		boolean found = false;
-	    for(Enumeration e = trainDrawings.elements(); e.hasMoreElements(); ) {
+	    for(Enumeration e = normalDrawings.elements(); e.hasMoreElements(); ) {
 	      TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 	      if((trainDrawing.train.trainNameDown.equalsIgnoreCase(trainName))
 	        ||(trainDrawing.train.trainNameUp.equalsIgnoreCase(trainName))) {
@@ -112,52 +115,74 @@ public class ChartView extends JPanel implements KeyListener {
 		if (train == null)
 			return;
 		
-		for (Enumeration e = trainDrawings.elements(); e.hasMoreElements();) {
+		for (Enumeration e = normalDrawings.elements(); e.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
-			if (trainDrawing.isSameTrain(train)) {
+			if (trainDrawing.train.equals(train)) {
 				panelLines.moveToTrainDrawing(trainDrawing);
 			}
 		}
 
 		for (Enumeration e = underDrawings.elements(); e.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
-			if (trainDrawing.isSameTrain(train)) {
+			if (trainDrawing.train.equals(train)) {
 				panelLines.moveToTrainDrawing(trainDrawing);
 			}
 		}
 	}
+	
+	public void setActiveTrain(Train train) {
+		activeTrain = train;
+		
+		// 设置MainFrame的标题和ToolTip
+		if (activeTrain != null) {
+			mainFrame.setActiceTrainName(activeTrain.getTrainName(mainFrame.chart.circuit));
+			//ADD For SheetView
+			mainFrame.sheetView.selectTrain(activeTrain);
+			//打开ToolTip
+			panelLines.setToolTipText("");
+		} else {
+			mainFrame.setActiceTrainName("");
+			//关闭ToolTip
+			panelLines.setToolTipText(null);
+		}
+
+		// 重绘
+		repaint();
+	}
 
 	public void buildTrainDrawings() {
-		//清空正常，水印显示列表
-		trainDrawings.removeAllElements();
+		//重建当前选中车次的图线
+		activeTrainDrawing = (activeTrain == null) ? null : new TrainDrawing(this, activeTrain, true, false);
+
+		//清空正常、水印显示车次列表
+		normalDrawings.removeAllElements();
 		underDrawings.removeAllElements();
 
 		Chart chart = mainFrame.chart;
 		for (int i = 0; i < chart.trainNum; i++) {
 			int isDown = chart.trains[i].isDownTrain(chart.circuit);
-			TrainDrawing trainDrawing = new TrainDrawing(mainFrame.chart, this, chart.trains[i]);
 			switch (showUpDownState) {
 			//全不显示
 			case ChartView.SHOW_NONE:
-				underDrawings.add(trainDrawing);
+				underDrawings.add(new TrainDrawing(this, chart.trains[i], false, true));
 				break;
 			//显示下行列车
 			case ChartView.SHOW_DOWN:
 				if (isDown == Train.DOWN_TRAIN)
-					trainDrawings.add(trainDrawing);
+					normalDrawings.add(new TrainDrawing(this, chart.trains[i], false, false));
 				else
-					underDrawings.add(trainDrawing);
+					underDrawings.add(new TrainDrawing(this, chart.trains[i], false, true));
 				break;
 			//显示上行列车
 			case ChartView.SHOW_UP:
 				if (isDown == Train.UP_TRAIN)
-					trainDrawings.add(trainDrawing);
+					normalDrawings.add(new TrainDrawing(this, chart.trains[i], false, false));
 				else
-					underDrawings.add(trainDrawing);
+					underDrawings.add(new TrainDrawing(this, chart.trains[i], false, true));
 				break;
 			//缺省为全部显示
 			default:
-				trainDrawings.add(trainDrawing);
+				normalDrawings.add(new TrainDrawing(this, chart.trains[i], false, false));
 			}
 		}
 	}
@@ -165,6 +190,7 @@ public class ChartView extends JPanel implements KeyListener {
 	//水印颜色
 	public final static Color DEFAULT_UNDER_COLOR = new Color(220, 220, 220);
 
+	//当水印色为null的时候不画反向车次(也作为反向车次是否能被选择的依据)
 	public Color underDrawingColor = DEFAULT_UNDER_COLOR;
 
 	/**
@@ -379,10 +405,7 @@ public class ChartView extends JPanel implements KeyListener {
 	}
 
 	private JLabel cornerCoordinate = new JLabel("(0,0:00)");
-
 	private JLabel cornerUpDown = new JLabel();
-
-//	private JLabel cornerTrainNum = new JLabel("D:0,U:0");
 	private ControlPanel cornerControl;
 
 	void jbInit() throws Exception {
@@ -423,9 +446,6 @@ public class ChartView extends JPanel implements KeyListener {
 		//左下角改放快速缩放控制按钮
 		cornerControl = new ControlPanel(this);
 		spLines.setCorner(JScrollPane.LOWER_LEFT_CORNER, cornerControl);
-//		cornerTrainNum.setHorizontalAlignment(SwingConstants.CENTER);
-//		cornerTrainNum.setVerticalAlignment(SwingConstants.CENTER);
-//		cornerTrainNum.setBorder(BorderFactory.createLineBorder(Color.lightGray));
 
 		//永远显示横竖滚动条，以便右下角的“上下行”状态显示能出现
 		spLines.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -433,18 +453,10 @@ public class ChartView extends JPanel implements KeyListener {
 		
 		spLines.getVerticalScrollBar().setUnitIncrement(ScrollUnitIncrement);
 		spLines.getHorizontalScrollBar().setUnitIncrement(ScrollUnitIncrement);
-		
-		addKeyListener(this);
-	}
-
-	public Train getActiveTrain() {
-		return (activeTrainDrawing == null) ? null : activeTrainDrawing.train;
 	}
 
 	/**
 	 * 取在图chart上画的停站
-	 * @param chart ChartPanel
-	 * @return Stop[]
 	 */
 	public Stop[] getDrawStops(Train train) {
 		Circuit circuit = mainFrame.chart.circuit;
@@ -477,256 +489,7 @@ public class ChartView extends JPanel implements KeyListener {
 		return -1;
 	}
 
-	/**
-	 * keyPressed
-	 *
-	 * @param e KeyEvent
-	 */
-	public void keyPressed(KeyEvent e) {
-		int state = panelLines.getState();
-		switch (state) {
-		case LinesPanel.STATE_ADD_STOP:
-			keyPressedAddStop(e);
-			break;
-		case LinesPanel.STATE_CHANGE_ARRIVE:
-			keyPressedChangeArrive(e);
-			break;
-		case LinesPanel.STATE_CHANGE_LEAVE:
-			keyPressedChangeLeave(e);
-			break;
-		default:
-			keyPressedNormal(e);
-		}
-	}
-
-	private void keyPressedNormal(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_D:
-			changeShowDown();
-			break;
-		case KeyEvent.VK_U:
-			changShownUp();
-			break;
-		case KeyEvent.VK_UP:
-			int oldV = spLines.getVerticalScrollBar().getValue();
-			spLines.getVerticalScrollBar().setValue(oldV - ScrollUnitIncrement);
-			break;
-		case KeyEvent.VK_DOWN:
-			oldV = spLines.getVerticalScrollBar().getValue();
-			spLines.getVerticalScrollBar().setValue(oldV + ScrollUnitIncrement);
-			break;
-		case KeyEvent.VK_LEFT:
-			int oldH = spLines.getHorizontalScrollBar().getValue();
-			spLines.getHorizontalScrollBar().setValue(
-					oldH - ScrollUnitIncrement);
-			break;
-		case KeyEvent.VK_RIGHT:
-			oldH = spLines.getHorizontalScrollBar().getValue();
-			spLines.getHorizontalScrollBar().setValue(
-					oldH + ScrollUnitIncrement);
-			break;
-		}
-	}
-
-	private void keyPressedAddStop(KeyEvent e) {
-		if (activeTrainDrawing == null)
-			return;
-		if (activeTrainDrawing.movingPoint == null)
-			return;
-
-		Circuit circuit = mainFrame.chart.circuit;
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_UP:
-			//上行向上移动，取NextStation
-			if (activeTrainDrawing.train.isDownTrain(circuit) == Train.UP_TRAIN) {
-				String oldStation = activeTrainDrawing.movingPoint.getStationName();
-				int oldMovingIndex = circuit.getStationIndex(oldStation);
-				int newMovingIndex = circuit.getNextStationIndex(
-						activeTrainDrawing.train, oldMovingIndex);
-				int nextStopIndex = circuit.getStationIndex(activeTrainDrawing.train
-						.getNextStopName(activeTrainDrawing.movingPoint
-								.getStationName()));
-				if (newMovingIndex <= nextStopIndex)
-					return;
-				String newStation = circuit.stations[newMovingIndex].name;
-				Train train = activeTrainDrawing.train;
-				train.replaceStop(oldStation, newStation);
-				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
-
-				activeTrainDrawing.setMovingPoint(newStation,
-						TrainDrawing.ChartPoint.STOP_ARRIVE);
-				repaint();
-			}
-			//上行向下移动，取PrevStation
-			else {
-				String oldStation = activeTrainDrawing.movingPoint.getStationName();
-				int oldMovingIndex = circuit.getStationIndex(oldStation);
-				int newMovingIndex = circuit.getPrevStationIndex(
-						activeTrainDrawing.train, oldMovingIndex);
-				int prevStopIndex = circuit.getStationIndex(activeTrainDrawing.train
-						.getPrevStopName(activeTrainDrawing.movingPoint
-								.getStationName()));
-				if (newMovingIndex <= prevStopIndex)
-					return;
-				String newStation = circuit.stations[newMovingIndex].name;
-				Train train = activeTrainDrawing.train;
-				train.replaceStop(oldStation, newStation);
-				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
-
-				activeTrainDrawing.setMovingPoint(newStation,
-						TrainDrawing.ChartPoint.STOP_ARRIVE);
-				repaint();
-			}
-			break;
-		case KeyEvent.VK_DOWN:
-			//下行向下移动，取NextStation
-			if (activeTrainDrawing.train.isDownTrain(circuit) == Train.DOWN_TRAIN) {
-				String oldStation = activeTrainDrawing.movingPoint.getStationName();
-				int oldMovingIndex = circuit.getStationIndex(oldStation);
-				int newMovingIndex = circuit.getNextStationIndex(
-						activeTrainDrawing.train, oldMovingIndex);
-				int nextStopIndex = circuit.getStationIndex(activeTrainDrawing.train
-						.getNextStopName(activeTrainDrawing.movingPoint
-								.getStationName()));
-				if (newMovingIndex >= nextStopIndex)
-					return;
-				String newStation = circuit.stations[newMovingIndex].name;
-				Train train = activeTrainDrawing.train;
-				train.replaceStop(oldStation, newStation);
-				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
-
-				activeTrainDrawing.setMovingPoint(newStation,
-						TrainDrawing.ChartPoint.STOP_ARRIVE);
-				repaint();
-			}
-			//上行向上移动，取PrevStation
-			else {
-				String oldStation = activeTrainDrawing.movingPoint.getStationName();
-				int oldMovingIndex = circuit.getStationIndex(oldStation);
-				int nextMovingIndex = circuit.getPrevStationIndex(
-						activeTrainDrawing.train, oldMovingIndex);
-				int prevStopIndex = circuit.getStationIndex(activeTrainDrawing.train
-						.getPrevStopName(activeTrainDrawing.movingPoint
-								.getStationName()));
-				if (nextMovingIndex >= prevStopIndex)
-					return;
-				String newStation = circuit.stations[nextMovingIndex].name;
-				Train train = activeTrainDrawing.train;
-				train.replaceStop(oldStation, newStation);
-				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
-
-				activeTrainDrawing.setMovingPoint(newStation,
-						TrainDrawing.ChartPoint.STOP_ARRIVE);
-				repaint();
-			}
-			break;
-		case KeyEvent.VK_ENTER:
-			panelLines.setState(LinesPanel.STATE_CHANGE_ARRIVE);
-		}
-	}
-
-	private void keyPressedChangeArrive(KeyEvent e) {
-		if (activeTrainDrawing == null)
-			return;
-		if (activeTrainDrawing.movingPoint == null)
-			return;
-
-		String movingStation = activeTrainDrawing.movingPoint.getStationName();
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-		case KeyEvent.VK_RIGHT:
-			int newx = 0;
-
-			if (e.getKeyCode() == KeyEvent.VK_LEFT)
-				newx = activeTrainDrawing.movingPoint.x - mainFrame.chart.minuteScale;
-			else
-				newx = activeTrainDrawing.movingPoint.x + mainFrame.chart.minuteScale;
-
-			int y = activeTrainDrawing.movingPoint.y;
-			String newTime = getTime(newx);
-//			SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-//			try {
-//				Date newArrive = df.parse(newTime);
-//				String newArrive = newTime;
-				Train train = activeTrainDrawing.train;
-				train.setArrive(movingStation, newTime);
-
-				//TrainDrawing.ChartPoint moving = activeTrain.movingPoint;
-				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
-				activeTrainDrawing.setMovingPoint(newx, y,
-						TrainDrawing.ChartPoint.STOP_ARRIVE, false);
-				repaint();
-//			} catch (ParseException ex) {
-//				ex.printStackTrace();
-//			}
-			break;
-		case KeyEvent.VK_ENTER:
-			panelLines.setState(LinesPanel.STATE_CHANGE_LEAVE);
-			activeTrainDrawing.setMovingPoint(movingStation,
-					TrainDrawing.ChartPoint.STOP_LEAVE);
-			repaint();
-		}
-	}
-
-	private void keyPressedChangeLeave(KeyEvent e) {
-		if (activeTrainDrawing == null)
-			return;
-		if (activeTrainDrawing.movingPoint == null)
-			return;
-
-		String movingStation = activeTrainDrawing.movingPoint.getStationName();
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-		case KeyEvent.VK_RIGHT:
-			int newx = 0;
-
-			if (e.getKeyCode() == KeyEvent.VK_LEFT)
-				newx = activeTrainDrawing.movingPoint.x - mainFrame.chart.minuteScale;
-			else
-				newx = activeTrainDrawing.movingPoint.x + mainFrame.chart.minuteScale;
-
-			int y = activeTrainDrawing.movingPoint.y;
-
-			String newTime = getTime(newx);
-//			SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-//			try {
-//				Date newLeave = df.parse(newTime);
-				Train train = activeTrainDrawing.train;
-				train.setLeave(movingStation, newTime);
-
-				//TrainDrawing.ChartPoint moving = activeTrain.movingPoint;
-				activeTrainDrawing = new TrainDrawing(mainFrame.chart, this, train);
-				activeTrainDrawing.setMovingPoint(newx, y,
-						TrainDrawing.ChartPoint.STOP_LEAVE, false);
-				repaint();
-//			} catch (ParseException ex) {
-//				ex.printStackTrace();
-//			}
-			break;
-		case KeyEvent.VK_ENTER:
-			panelLines.setState(LinesPanel.STATE_NORMAL);
-			activeTrainDrawing.movingPoint = null;
-			repaint();
-		}
-	}
-
-	/**
-	 * keyReleased
-	 *
-	 * @param e KeyEvent
-	 */
-	public void keyReleased(KeyEvent e) {
-	}
-
-	/**
-	 * keyTyped
-	 *
-	 * @param e KeyEvent
-	 */
-	public void keyTyped(KeyEvent e) {
-	}
-
-	public void refresh() {
+	public void resetSize() {
 		panelCircuit.setSize(panelCircuit.getPreferredSize());
 		panelClock.setSize(panelClock.getPreferredSize());
 		panelLines.setSize(panelLines.getPreferredSize());
@@ -773,5 +536,23 @@ public class ChartView extends JPanel implements KeyListener {
 		panel.paint(bufImage.getGraphics());
 		
 		return bufImage;
+	}
+
+	public void setActiveSation(int y) {
+		int dist = this.getDist(y);
+		int index = mainFrame.chart.circuit.getStationIndex(dist);
+		setActiveStation(mainFrame.chart.circuit.stations[index]);
+	}
+	
+	public void setActiveStation(Station station) {
+		activeStation = station;
+		repaint();
+		mainFrame.sheetView.selectStation(station);
+	}
+
+	public void updateData() {
+		activeTrain = null;
+		activeStation = null;
+		repaint();
 	}
 }

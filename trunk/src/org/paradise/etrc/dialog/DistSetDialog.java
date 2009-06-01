@@ -68,10 +68,6 @@ MainFrame mainFrame = null;
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-
-
-
-
     lbDisplay.setText("每公里像素数：");
     lbDisplay.setFont(new java.awt.Font("宋体", 0, 12));
     lbDisplay.setPreferredSize(new Dimension(8, 15));
@@ -240,7 +236,7 @@ MainFrame mainFrame = null;
           chart.boldLevel = bold;
 
           mainFrame.validate();
-          mainFrame.chartView.repaint();
+          mainFrame.chartView.resetSize();
           mainFrame.runView.refresh();
         }
         this.statusBar.setText(defaultStatus);

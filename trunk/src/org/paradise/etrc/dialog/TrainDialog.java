@@ -64,6 +64,17 @@ public class TrainDialog extends JDialog {
 	private void jbInit() throws Exception {
 		table.setFont(new Font("Dialog", 0, 12));
 		table.getTableHeader().setFont(new Font("Dialog", 0, 12));
+		
+		JButton btColor = new JButton("颜 色"); 
+		btColor.setFont(new Font("dialog", 0, 12));
+		btColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getCellEditor() != null)
+					table.getCellEditor().stopCellEditing();
+				
+				doSetColor(getTrain());
+			}
+		});
 
 		JButton btLoad = new JButton("读 取");
 		btLoad.setFont(new Font("dialog", 0, 12));
@@ -116,7 +127,8 @@ public class TrainDialog extends JDialog {
 				train.trainNameFull = tfName.getText().trim();
 
 				isCanceled = false;
-				TrainDialog.this.setVisible(false);
+//				TrainDialog.this.setVisible(false);
+				TrainDialog.this.dispose();
 			}
 		});
 
@@ -125,12 +137,14 @@ public class TrainDialog extends JDialog {
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				isCanceled = true;
-				TrainDialog.this.setVisible(false);
+//				TrainDialog.this.setVisible(false);
+				TrainDialog.this.dispose();
 			}
 		});
 
 
 		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(btColor);
 		buttonPanel.add(btLoad);
 		buttonPanel.add(btSave);
 		buttonPanel.add(btOK);
@@ -291,6 +305,31 @@ public class TrainDialog extends JDialog {
 		}
 
 		return null;
+	}
+
+	private void doSetColor(final Train train) {
+		final JColorChooser colorChooser = new JColorChooser();
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				train.color = colorChooser.getColor();
+				mainFrame.chartView.panelLines.repaint();
+			}
+		};
+
+		JDialog dialog = JColorChooser.createDialog(mainFrame,
+				"请选择行车线颜色", true, // modal
+				colorChooser, listener, // OK button handler
+				null); // no CANCEL button handler
+		ETRC.setFont(dialog);
+		
+		colorChooser.setColor(train.color);
+
+		Dimension dlgSize = dialog.getPreferredSize();
+		Dimension frmSize = mainFrame.getSize();
+		Point loc = mainFrame.getLocation();
+		dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+				(frmSize.height - dlgSize.height) / 2 + loc.y);
+		dialog.setVisible(true);
 	}
 
 	public void editTrain() {
@@ -467,8 +506,7 @@ public class TrainDialog extends JDialog {
 		}
 
 		public Dimension getPreferredScrollableViewportSize() {
-			int r = this.getRowCount();
-			int h = this.getRowHeight() * Math.min(r, 15);
+			int h = this.getRowHeight() * 12;
 			int w = super.getPreferredScrollableViewportSize().width;
 			return new Dimension(w, h);
 		}

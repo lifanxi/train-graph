@@ -74,7 +74,7 @@ public class TrainNumPanel extends JPanel {
 			return;
 		}
 
-		chartView.refresh();
+		chartView.resetSize();
 	}
 
 	public void setText(String str) {

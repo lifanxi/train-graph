@@ -104,7 +104,7 @@ public class ClockPanel extends JPanel {
 		}
 		
 		chartView.mainFrame.chart.timeInterval = minuteGrids[chartView.mainFrame.chart.minuteScale-1];
-		chartView.refresh();
+		chartView.resetSize();
 	}
 
 	public void paint(Graphics g) {
@@ -129,7 +129,7 @@ public class ClockPanel extends JPanel {
 	public Dimension getPreferredSize() {
 		int w, h;
 		w = 60 * 24 * chart.minuteScale + chartView.leftMargin + chartView.rightMargin;
-		h = chartView.clockPanelHeight;
+		h = ChartView.clockPanelHeight;
 		return new Dimension(w, h);
 	}
 
@@ -143,13 +143,13 @@ public class ClockPanel extends JPanel {
 
 		int startPos = coordinate * 60 * chart.minuteScale + chartView.leftMargin - 12;
 		String stClock = clock + ":00";
-		g.drawString(stClock, startPos, chartView.clockPanelHeight - 2);
+		g.drawString(stClock, startPos, ChartView.clockPanelHeight - 2);
 	}
 
 	private void DrawEndHour(Graphics g, int clock) {
 		int start = 24 * 60 * chart.minuteScale + chartView.leftMargin - 12;
 		String stClock = clock + ":00";
-		g.drawString(stClock, start, chartView.clockPanelHeight - 2);
+		g.drawString(stClock, start, ChartView.clockPanelHeight - 2);
 	}
 
 	private int getCoordinate(int clock) {

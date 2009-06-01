@@ -75,6 +75,15 @@ public class Chart {
 //	    }
 //	    System.out.println(loadingTrain.getTrainName(circuit) + "次" + direction);
 	}
+	
+	public Train findTrain(Train train) {
+		for(int i=0; i<trains.length; i++) {
+			if(train.equals(trains[i]))
+				return trains[i];
+		}
+		
+		return null;
+	}
 
 	public void updateTrain(Train newTrain) {
 		for (int i = 0; i < trains.length; i++) {

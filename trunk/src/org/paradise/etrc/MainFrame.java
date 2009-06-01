@@ -807,11 +807,13 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 			try {
 				chart.loadFromFile(f);
-				chartView.repaint();
+				chartView.updateData();
+				chartView.resetSize();
+
 				sheetView.updateData();
+				sheetView.refresh();
 				
 				runView.refresh();
-				sheetView.refresh();
 				
 				setTitle();
 				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());

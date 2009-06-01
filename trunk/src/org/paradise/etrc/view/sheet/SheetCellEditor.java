@@ -62,12 +62,19 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 			}
 		});
 		
-		editor.selectAll();
+		editor.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent arg0) {
+				editor.selectAll();
+			}
+			public void focusLost(FocusEvent arg0) {
+			}
+		});
+
 		table.changeSelection(row, column, false, false);
 		table.repaint();
 		table.getTableHeader().repaint();
-		((SheetTable) table).getRowHeader().setSelectedIndex(row);
-		((SheetTable) table).getRowHeader().repaint();
+//		((SheetTable) table).getRowHeader().setSelectedIndex(row);
+//		((SheetTable) table).getRowHeader().repaint();
 		
 		editor.setBorder(BorderFactory.createEmptyBorder());
 		editor.setHorizontalAlignment(SwingConstants.CENTER);
