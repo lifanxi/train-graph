@@ -248,7 +248,7 @@ public class RunningPanel extends JPanel {
 
 		//当前选中的车次
 		try {
-			if(train.equals(dView.mainFrame.chartView.activeTrainDrawing.train)) {
+			if(train.equals(dView.mainFrame.chartView.activeTrain)) {
 				g.drawRect(x-7, y-4, 14, 8);
 				g.drawLine(x, 0, x, getHeight());
 			}

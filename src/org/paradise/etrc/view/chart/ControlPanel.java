@@ -9,6 +9,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.paradise.etrc.dialog.ChartSetDialog;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -67,11 +69,11 @@ public class ControlPanel extends JPanel {
 			}
 		});
 
-		//默认
+		//设置
 		JButton btmd = createButton("hvDefault");
 		btmd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				setDefault();
+				setup();
 			}
 		});
 		
@@ -107,7 +109,7 @@ public class ControlPanel extends JPanel {
 		}
 		
 		chartView.mainFrame.chart.timeInterval = minuteGrids[chartView.mainFrame.chart.minuteScale-1];
-		chartView.refresh();
+		chartView.resetSize();
 	}
 
 	private void increaseDistGap(int i) {
@@ -123,25 +125,18 @@ public class ControlPanel extends JPanel {
 			return;
 		}
 
-		chartView.refresh();
+		chartView.resetSize();
 	}
 	
-	private void setDefault() {
-		//横坐标，默认值
-		chartView.mainFrame.chart.minuteScale = 2;
-		chartView.mainFrame.chart.timeInterval = minuteGrids[chartView.mainFrame.chart.minuteScale-1];
-
-		//纵坐标，默认值
-		chartView.mainFrame.chart.distScale = 3;
-		
-		chartView.refresh();
+	private void setup() {
+		ChartSetDialog dlg = new ChartSetDialog(chartView.mainFrame);
+		dlg.editSettings();
 	}
-
 
 	public Dimension getPreferredSize() {
 		int w, h;
-		w = chartView.circuitPanelWidth;
-		h = chartView.clockPanelHeight;
+		w = ChartView.circuitPanelWidth;
+		h = ChartView.clockPanelHeight;
 		return new Dimension(w, h);
 	}
 }

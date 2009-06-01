@@ -9,10 +9,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.dialog.*;
-import org.paradise.etrc.view.sheet.SheetModel;
+import org.paradise.etrc.view.chart.traindrawing.TrainDrawing;
+import org.paradise.etrc.view.chart.traindrawing.TrainLine;
 import org.paradise.etrc.view.sheet.SheetTable;
 
 /**
@@ -38,51 +38,11 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 
 	private static final long serialVersionUID = 6196666089237432404L;
 
-	private Chart chart;
 	private ChartView chartView;
 
-	public static final int STATE_NORMAL = 0;
-
-	public static final int STATE_ADD_STOP = 1;
-
-	public static final int STATE_CHANGE_ARRIVE = 2;
-
-	public static final int STATE_CHANGE_LEAVE = 3;
-
-	private int state = STATE_NORMAL;
-
-	public void setState(int _state) {
-		state = _state;
-		String state_msg;
-		switch (state) {
-		case STATE_ADD_STOP:
-			new MessageBox(chartView.mainFrame, "用上下键选择新增的停站，回车键确定。")
-					.showMessage();
-			state_msg = "新增停站";
-			break;
-		case STATE_CHANGE_ARRIVE:
-			new MessageBox(chartView.mainFrame, "用左右键调整到站时间（每次一分钟），回车键确定。")
-					.showMessage();
-			state_msg = "调整到站时间";
-			break;
-		case STATE_CHANGE_LEAVE:
-			new MessageBox(chartView.mainFrame, "用左右键调整发车时间（每次一分钟），回车键确定。")
-					.showMessage();
-			state_msg = "调整发车时间";
-			break;
-		default:
-			state_msg = "正常";
-		}
-		chartView.mainFrame.statusBarRight.setText("状态：" + state_msg + " <lguo@sina.com>");
-	}
-
-	public int getState() {
-		return state;
-	}
-
-	public LinesPanel(Chart _chart, ChartView _mainView) {
-		chart = _chart;
+	public LinesPanel(ChartView _mainView) {
 		chartView = _mainView;
+		
 		try {
 			jbInit();
 		} catch (Exception ex) {
@@ -90,6 +50,149 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 	}
 
+//	private Timer mouseTimerLeft;
+//	private Timer mouseTimerRight;
+//	public void mouseClicked(final MouseEvent e) {
+//		System.out.println(e.getWhen());
+//		if(e.getButton() == MouseEvent.BUTTON1) {
+//			if (e.getClickCount() == 1) {
+//				mouseTimerLeft = new Timer(200, new ActionListener() {
+//					public void actionPerformed(ActionEvent evt) {
+//						mouseTimerLeft.stop();
+//						System.out.println("L Single");
+//						mouseClickedOneLeft(e);
+//					}
+//				});
+//				mouseTimerLeft.restart();
+//			} else if (e.getClickCount() == 2 && mouseTimerLeft.isRunning()) {
+//				mouseTimerLeft.stop();
+//				System.out.println("L Double");
+//				mouseClickedDoubleLeft(e);
+//			}
+//		}
+//		else if(e.getButton() == MouseEvent.BUTTON3) {
+//			if (e.getClickCount() == 1) {
+//				mouseTimerRight = new Timer(200, new ActionListener() {
+//					public void actionPerformed(ActionEvent evt) {
+//						mouseTimerRight.stop();
+//						System.out.println("R Single");
+//						mouseClickedOneRight(e);
+//					}
+//				});
+//				mouseTimerRight.restart();
+//			} else if (e.getClickCount() == 2 && mouseTimerRight.isRunning()) {
+//				mouseTimerRight.stop();
+//				System.out.println("R Double");
+//				mouseClickedDoubleRight(e);
+//			}
+//		}
+//	}
+	
+//	private Timer mouseTimer;
+//	public void mouseClicked(final MouseEvent e) {
+//		if (e.getClickCount() == 1) {
+//			mouseTimer = new Timer(200, new ActionListener() {
+//				public void actionPerformed(ActionEvent evt) {
+//					mouseTimer.stop();
+//					System.out.println("Single");
+//					
+//					if(e.getButton() == MouseEvent.BUTTON1)
+//						mouseClickedOneLeft(e);
+//					else
+//						mouseClickedOneRight(e);
+//				}
+//			});
+//			mouseTimer.restart();
+//		} else if (e.getClickCount() == 2 && mouseTimer.isRunning()) {
+//			mouseTimer.stop();
+//			System.out.println("Double");
+//			
+//			if(e.getButton() == MouseEvent.BUTTON3)
+//				mouseClickedDoubleLeft(e);
+//			else
+//				mouseClickedDoubleRight(e);
+//		}
+//	}
+
+	private java.util.Timer myTimer;
+	private boolean hasMouseDoubleClicked;
+    public void mouseClicked(final MouseEvent e) {
+        if (e.getClickCount() == 1) {
+            myTimer = new java.util.Timer();
+            myTimer.schedule(new TimerTask() {
+                public void run() {
+                    if (!hasMouseDoubleClicked) {     
+    					System.out.println("Single");
+	    				if (e.getButton() == MouseEvent.BUTTON1)
+							mouseClickedOneLeft(e);
+						else
+							mouseClickedOneRight(e);
+                    }
+                    
+                    hasMouseDoubleClicked = false;
+                    myTimer.cancel();
+                }
+            }, 175);
+        }
+        else if (e.getClickCount() == 2) {
+            hasMouseDoubleClicked = true;
+            
+			System.out.println("Double");
+			if(e.getButton() == MouseEvent.BUTTON1)
+				mouseClickedDoubleLeft(e);
+			else
+				mouseClickedDoubleRight(e);
+       }
+    }
+    
+    //双击左键，选车
+	private void mouseClickedDoubleLeft(MouseEvent e) {
+		selectTrain(e.getPoint());
+	}
+	
+	//双击右键，取消选择
+	private void mouseClickedDoubleRight(MouseEvent e) {
+		chartView.updateData();
+	}
+	
+	//单击左键
+	private void mouseClickedOneLeft(MouseEvent e) {
+		//如果有选中车次则
+		if(chartView.activeTrain != null) {
+			//如果是在选中车次的车次框上单击左键，则弹出编辑框
+			if(chartView.activeTrainDrawing.pointOnMyRect(e.getPoint())) {
+				editActiveTrain();
+			}
+			//其它区域单击左键，则设定到站时刻
+			else {
+				setStationTime(e.getPoint(), true);
+			}
+		}
+		//没有选中车次则选择活跃车站
+		else {
+			chartView.setActiveSation(e.getPoint().y);
+		}
+	}
+	
+	//单击右键
+	private void mouseClickedOneRight(MouseEvent e) {
+		//如果有选中车次则
+		if(chartView.activeTrain != null) {
+			//如果是在选中车次的车次框上单击右键，则弹出菜单
+			if(chartView.activeTrainDrawing.pointOnMyRect(e.getPoint())) {
+				new MessageBox(chartView.mainFrame, "TODO: 弹出菜单“改变颜色|编辑点单|删除本车次|保存为车次文件”").showMessage();
+			}
+			//其它区域单击右键，设定发车时刻
+			else {
+				setStationTime(e.getPoint(), false);
+			}
+		}
+		//如果没有选中车次则弹出菜单
+		else {
+			new MessageBox(chartView.mainFrame, "TODO: 弹出菜单“添加车次|载入运行图|保存运行图|另存为”").showMessage();
+		}
+	}
+	
 	void jbInit() throws Exception {
 		this.setBackground(Color.white);
 		this.setFont(new java.awt.Font("宋体", 0, 12));
@@ -106,6 +209,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 			drawClockLine(g, i);
 		}
 
+		Chart chart = chartView.mainFrame.chart;
 		if (chart.circuit != null) {
 			for (int i = 0; i < chart.circuit.stationNum; i++) {
 				drawStationLine(g, chart.circuit.stations[i], chart.distScale);
@@ -132,20 +236,20 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				TrainDrawing trainDrawing = ((TrainDrawing) obj);
 				// 当前选中的车次放在最后画，确保在最上面
 				if (!(trainDrawing.equals(chartView.activeTrainDrawing))) {
-					trainDrawing.drawUnder(g);
+					trainDrawing.draw(g);
 				}
 			}
 		}
 
 		// 再画非选中部分
-		for (Enumeration e = chartView.trainDrawings.elements(); e
+		for (Enumeration e = chartView.normalDrawings.elements(); e
 				.hasMoreElements();) {
 			Object obj = e.nextElement();
 			if (obj instanceof TrainDrawing) {
 				TrainDrawing trainDrawing = ((TrainDrawing) obj);
 				// 当前选中的车次放在最后画，确保在最上面
 				if (!(trainDrawing.equals(chartView.activeTrainDrawing))) {
-					trainDrawing.drawInactive(g);
+					trainDrawing.draw(g);
 				}
 				// 把选中车次删掉再添加，以便在最后比较容易选择TrainLine
 				else {
@@ -159,18 +263,25 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		if (chartView.activeTrainDrawing != null) {
 			// &&(mainFrame.chart.trainDrawings.contains(mainFrame.chart.activeTrain))) {
 			// System.out.println("Ac " + activeTrain.getTrainName());
-			chartView.activeTrainDrawing.drawActive(g);
+			chartView.activeTrainDrawing.draw(g);
 		}
 	}
 
 	public Dimension getPreferredSize() {
+		Chart chart = chartView.mainFrame.chart;
 		int w, h;
-		w = 60 * 24 * chart.minuteScale + chartView.leftMargin + chartView.rightMargin;
+		
+		w = 60 * 24 * chart.minuteScale 
+		  + chartView.leftMargin 
+		  + chartView.rightMargin;
+		
 		if (chart.circuit != null)
-			h = chart.circuit.length * chart.distScale + chartView.topMargin
-					+ chartView.bottomMargin;
+			h = chart.circuit.length * chart.distScale 
+			  + chartView.topMargin
+			  + chartView.bottomMargin;
 		else
 			h = 480;
+		
 		return new Dimension(w, h);
 	}
 
@@ -185,26 +296,32 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		Color oldColor = g.getColor();
 		g.setColor(chartView.gridColor);
 
+		Chart chart = chartView.mainFrame.chart;
 		int start = clock * 60 * chart.minuteScale + chartView.leftMargin;
 		int h = chart.circuit.length * chart.distScale;
+		
 		// 0～23点整点竖线
-		g.drawLine(start, 0, start, h + chartView.topMargin + chartView.bottomMargin);
-		g.drawLine(start + 1, 0, start + 1, h + chartView.topMargin
-				+ chartView.bottomMargin);
+		g.drawLine(start, 0, 
+				   start, h + chartView.topMargin + chartView.bottomMargin);
+		g.drawLine(start + 1, 0, 
+				   start + 1, h + chartView.topMargin + chartView.bottomMargin);
+		
 		// 整点之间的timeInterval分钟间隔竖线
 		for (int i = 1; i < 60 / chart.timeInterval; i++) {
 			int x = start + chart.timeInterval * chart.minuteScale * i;
 			int y1 = chartView.topMargin;
 			int y2 = y1 + h;
 			g.drawLine(x, y1, x, y2);
-			// System.out.print(i+".");
 		}
+
 		// 24点整点竖线
 		if (clock == 23) {
 			int end = 24 * 60 * chart.minuteScale + chartView.leftMargin;
-			g.drawLine(end, 0, end, h + chartView.topMargin + chartView.bottomMargin);
-			g.drawLine(end + 1, 0, end + 1, h + chartView.topMargin
-					+ chartView.bottomMargin);
+			
+			g.drawLine(end, 0, 
+					   end, h + chartView.topMargin + chartView.bottomMargin);
+			g.drawLine(end + 1, 0, 
+					   end + 1, h + chartView.topMargin + chartView.bottomMargin);
 		}
 
 		// 恢复原色
@@ -215,13 +332,20 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		if (st.hide)
 			return;
 
+		Chart chart = chartView.mainFrame.chart;
+
 		// 设置坐标线颜色
 		Color oldColor = g.getColor();
-		g.setColor(chartView.gridColor);
+		
+		if(st.equals(chartView.activeStation))
+			g.setColor(chartView.activeGridColor);
+		else
+			g.setColor(chartView.gridColor);
 
 		// 画坐标线
 		int y = st.dist * scale + chartView.topMargin;
-		int w = 60 * 24 * chart.minuteScale + chartView.leftMargin
+		int w = 60 * 24 * chart.minuteScale 
+		        + chartView.leftMargin
 				+ chartView.rightMargin;
 
 		if (st.level <= chart.displayLevel) {
@@ -258,13 +382,17 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		if(img != null) {
 
+		if(img != null) {
 			Toolkit tk = Toolkit.getDefaultToolkit();
 			Graphics g = img.getGraphics();
-			g.setFont(new Font("Dialog", Font.PLAIN, 11));
+			g.setFont(new Font("Dialog", Font.PLAIN, 10));
 			g.setColor(Color.black);
-			g.drawString(chartView.getClockString(e.getPoint()), 6, 30);
+			g.fillRect(2,10,30,11);
+			g.setColor(Color.white);
+			g.fillRect(3,11,28,9);
+			g.setColor(Color.black);
+			g.drawString(chartView.getClockString(e.getPoint()), 4, 19);
 
 			Cursor cursor = tk.createCustomCursor(img, new Point(0,0),"Name");
 			this.setCursor(cursor);
@@ -274,9 +402,9 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		chartView.setCoordinateCorner(p);
 		Train nearTrain[] = findTrains(p);
 		for (int i = 0; i < nearTrain.length; i++)
-			chartView.mainFrame.statusBarMain.setText(nearTrain[i]
-					.getTrainName(chart.circuit)
-					+ "次 " + chartView.mainFrame.statusBarMain.getText());
+			chartView.mainFrame.statusBarMain.setText(
+					nearTrain[i].getTrainName(chartView.mainFrame.chart.circuit) + "次 " 
+					+ chartView.mainFrame.statusBarMain.getText());
 	}
 
 	/**
@@ -289,7 +417,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	private Train[] findTrains(Point p) {
 		Vector trainsFound = new Vector();
 		// 正常部分
-		for (Enumeration e = chartView.trainDrawings.elements(); e
+		for (Enumeration e = chartView.normalDrawings.elements(); e
 				.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.pointOnMe(p)) {
@@ -314,48 +442,45 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		for (Enumeration e = trainsFound.elements(); e.hasMoreElements();) {
 			array[i++] = (Train) e.nextElement();
 		}
+		
 		return array;
 	}
 
-	/**
-	 * mouseClicked
-	 * 
-	 * @param e
-	 *            MouseEvent
-	 */
-	public void mouseClicked(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			if(e.getClickCount() == 1)
-				selectTrain(e.getPoint());
-			else
-				modifyTrain(e.getPoint());
-		} else if (e.getButton() == MouseEvent.BUTTON2) {
-			// System.out.println("Click Button2");
-		} else if (e.getButton() == MouseEvent.BUTTON3) {
-			// System.out.println("Click Button3");
-			popupMenu(e.getPoint());
-		}
-	}
-	
-	private void modifyTrain(Point p) {
-		//先按照单击选中车次
-		selectTrain(p);
+	private void setStationTime(Point p, boolean isArrive) {
+		chartView.setActiveSation(p.y);
 		
-		//如果没有选中车次则不做啥
-		if(chartView.activeTrainDrawing == null)
-			return;
+		SheetTable table = chartView.mainFrame.sheetView.table;
+		if(table.getCellEditor() != null)
+			table.getCellEditor().stopCellEditing();
 
-		editActiveTrain();
+		String theTime = chartView.getTime(p.x);
+		Train theTrain = chartView.activeTrain;
+		String staName = chartView.activeStation.name;
+
+		if(theTrain.hasStop(staName)) {
+			if(isArrive)
+				theTrain.setArrive(staName, theTime);
+			else
+				theTrain.setLeave(staName, theTime);
+		}
+		else {
+			Stop stop = new Stop(staName, theTime, theTime, false);
+			Stop prevStop = chartView.mainFrame.chart.findPrevStop(theTrain, stop);
+			theTrain.insertStopAfter(prevStop, stop);
+		}
+
+//		((SheetModel) table.getModel()).fireTableDataChanged();
+		repaint();
 	}
 
 	/**
-	 * 选择p点附近的TrainDrawing作为ActiveTrain 若p点不靠近任何一个车次则ActiveTrain设为null
+	 * 选择p点附近的Train作为ActiveTrain 若p点不靠近任何一个车次则ActiveTrain设为null
 	 * 
 	 * @param p
 	 *            Point
 	 */
 	private void selectTrain(Point p) {
-		TrainDrawing selectedTrain = null;
+		TrainDrawing selectedTrainDrawing = null;
 
 		// 先查水印部分的
 		// 如果“水印显示反向车次”未选中则不给选水印车次
@@ -364,309 +489,74 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 				if (trainDrawing.pointOnMyRect(p) || trainDrawing.pointOnMe(p)) {
 					// System.out.println(trainDrawing.getTrainName()+ " A");
-					selectedTrain = trainDrawing;
+					selectedTrainDrawing = trainDrawing;
 				}
 			}
 		}
 
 		// 后查正常部分的，这样正常部分比较容易选中
-		for (Enumeration e = chartView.trainDrawings.elements(); e
+		for (Enumeration e = chartView.normalDrawings.elements(); e
 				.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.pointOnMyRect(p) || trainDrawing.pointOnMe(p)) {
 				// System.out.println(trainDrawing.getTrainName()+ " A");
-				selectedTrain = trainDrawing;
+				selectedTrainDrawing = trainDrawing;
 			}
 		}
 
-		if (selectedTrain != null) {
-			TrainDrawing.TrainLine line = selectedTrain.findNearTrainLine(p);
-			selectedTrain.selectedTrainLine = line;
-		}
-
-		selectTrain(selectedTrain);
-	}
-
-	public void selectTrain(TrainDrawing trainDrawing) {
-		chartView.activeTrainDrawing = trainDrawing;
-		// 设置MainFrame的标题和ToolTip
-		if (chartView.activeTrainDrawing != null) {
-			//ADD For SheetView
-			chartView.mainFrame.sheetView.selectTrain(trainDrawing.train);
-			
-			chartView.mainFrame
-					.setActiceTrainName(chartView.activeTrainDrawing.getTrainName());
-
-			TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
-			if (line != null)
-				setToolTipText(line.getInfo());
-			else
-				setToolTipText(trainDrawing.getInfo());
-		} else {
-			chartView.mainFrame.setActiceTrainName("");
-			setToolTipText(null);
-		}
-
-		// 重绘
-		repaint();
-	}
-
-	private void popupMenu(Point p) {
-		final Point _p = p;
-		
-		// 选择ActiveTrain，如果没有选中则返回
-		if (chartView.activeTrainDrawing == null)
-			return;
-		
-		// 如果不在ActiveTrain上则返回
-		if (!chartView.activeTrainDrawing.pointOnMe(p) &&
-			!chartView.activeTrainDrawing.pointOnMyRect(p))
-			return;
-		
-		// 弹出PopupMenu
-		PopupMenu pop = new PopupMenu();
-		MenuItem miColor = new MenuItem("更改颜色");
-		miColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// mainFrame.chart.mainFrame.doColorSet();
-				setColor();
-			}
-		});
-		MenuItem miEditTimes = new MenuItem("编辑点单");
-		miEditTimes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-//				editTimes(_p);
-				editActiveTrain();
-			}
-		});
-		MenuItem miAddPass = new MenuItem("添加通过");
-		miAddPass.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		MenuItem miAddStop = new MenuItem("添加停站");
-		miAddStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addStop(_p);
-			}
-		});
-		MenuItem miDelStop = new MenuItem("删除停站");
-		miDelStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				delStop(_p);
-			}
-		});
-		MenuItem miChangeTime = new MenuItem("调整到发点");
-		miChangeTime.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeTime();
-			}
-		});
-		pop.add(miColor);
-		pop.add(miEditTimes);
-		pop.addSeparator();
-		// pop.add(miAddPass);
-		pop.add(miChangeTime);
-		pop.add(miAddStop);
-		pop.add(miDelStop);
-		this.add(pop);
-		pop.show(this, p.x, p.y);
-	}
-
-	private void changeTime() {
-		if (chartView.activeTrainDrawing == null)
-			return;
-
-		TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
-		if (line == null)
-			return;
-
-		if (line.lineType != TrainDrawing.TrainLine.STOP_LINE) {
-			Frame frame = chartView.mainFrame;
-			MessageBox dlg = new MessageBox(frame, "行车线不能调整到发时间，请选择停车线！");
-			dlg.showMessage();
-			return;
-		}
-
-		// 跨边界停车线不允许调整
-		if ((line.p1.type == TrainDrawing.ChartPoint.EDGE)
-				|| (line.p2.type == TrainDrawing.ChartPoint.EDGE)) {
-			MessageBox dlg = new MessageBox(chartView.mainFrame,
-					"跨界停车线不能调整到发时间，请调整时间轴！");
-			dlg.showMessage();
-			return;
-		}
-
-		// line.p1
-		chartView.activeTrainDrawing.setMovingPoint(line.p1.getStationName(),
-				TrainDrawing.ChartPoint.STOP_ARRIVE);
-		setState(STATE_CHANGE_ARRIVE);
-		repaint();
-	}
-
-	private void delStop(Point p) {
-		if (chartView.activeTrainDrawing == null)
-			return;
-
-		TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
-		if (line == null)
-			return;
-
-		if (line.lineType != TrainDrawing.TrainLine.STOP_LINE) {
-			Frame frame = chartView.mainFrame;
-			MessageBox dlg = new MessageBox(frame, "行车线不能删除停站，请选择停车线！");
-			dlg.showMessage();
-			return;
-		}
-
-		// 跨边界停车线不允许调整
-		if ((line.p1.type == TrainDrawing.ChartPoint.EDGE)
-				|| (line.p2.type == TrainDrawing.ChartPoint.EDGE)) {
-			MessageBox dlg = new MessageBox(chartView.mainFrame,
-					"跨界停车线不能删除，请调整时间轴！");
-			dlg.showMessage();
-			return;
-		}
-
-		String stationName = line.p1.getStationName();
-		Train newTrain = chartView.activeTrainDrawing.train.copy();
-		newTrain.delStop(stationName);
-		chart.updateTrain(newTrain);
-
-		chartView.activeTrainDrawing = new TrainDrawing(chart, chartView, newTrain);
-		chartView.repaint();
-	}
-
-	private void addStop(Point p) {
-		if (chartView.activeTrainDrawing == null)
-			return;
-
-		TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
-		if (line == null)
-			return;
-
-		if (line.lineType == TrainDrawing.TrainLine.STOP_LINE) {
-			MessageBox dlg = new MessageBox(chartView.mainFrame,
-					"停车线不能添加停站，请选择行车线！");
-			dlg.showMessage();
-			return;
-		}
-
-		// 跨边界行车线不允许添加
-		if ((line.p1.type == TrainDrawing.ChartPoint.EDGE)
-				|| (line.p2.type == TrainDrawing.ChartPoint.EDGE)) {
-			MessageBox dlg = new MessageBox(chartView.mainFrame,
-					"跨界行车线不能添加停战，请调整时间轴！");
-			dlg.showMessage();
-			return;
-		}
-
-		// if(line.p1.getStationName())
-		int stopIndex1 = chart.circuit
-				.getStationIndex(line.p1.getStationName());
-		int stopIndex2 = chart.circuit
-				.getStationIndex(line.p2.getStationName());
-		if ((stopIndex1 == -1) || (stopIndex2 == -1))
-			return;
-
-		// if(stopIndex2 <= addIndex)
-		// return;
-
-		Train train = chartView.activeTrainDrawing.train;
-		int addIndex = chart.circuit.getNextStationIndex(train, stopIndex1);
-		if (((train.isDownTrain(chart.circuit) == Train.DOWN_TRAIN) && (addIndex >= stopIndex2))
-				|| ((train.isDownTrain(chart.circuit) == Train.UP_TRAIN) && (addIndex <= stopIndex2)))
-			return;
-
-		Stop afterStop = chartView.getDrawStops(train)[line.p1.getDrawStopIndex()];
-		String arriveTime = chartView.getTime((line.p2.x - line.p1.x) / 2
-				+ line.p1.x);
-//		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-//		try {
-//			Date arrive = df.parse(arriveTime);
-//			Date leave = arrive;
-			String newStationName = chart.circuit.stations[addIndex].name;
-			train.insertStopAfter(afterStop, newStationName, arriveTime, arriveTime, false); 
-
-			setState(STATE_ADD_STOP);
-			chartView.activeTrainDrawing = new TrainDrawing(chart, chartView, train);
-			chartView.activeTrainDrawing.setMovingPoint(newStationName,
-					TrainDrawing.ChartPoint.STOP_ARRIVE);
-
-			repaint();
-
-			System.out.println("line:" + line.getInfo() + "\r\nAfter: "
-					+ afterStop.stationName
-					// +"p1:"+line.p1.getStationName()
-					// +"p2:"+line.p2.getStationName()
-					+ ", NewStation: " + chart.circuit.stations[addIndex].name
-					// +",leave1:"+m1
-					// +",arrive2:"+m2
-					+ ", newTime: " + arriveTime);
-//		} catch (ParseException ex) {
-//			ex.printStackTrace();
+//		if (selectedTrainDrawing != null) {
+//			TrainDrawing.TrainLine line = selectedTrainDrawing.findNearTrainLine(p);
+//			selectedTrainDrawing.selectedTrainLine = line;
 //		}
+
+		chartView.setActiveTrain((selectedTrainDrawing == null) ? null: selectedTrainDrawing.train);
 	}
 
-	private void setColor() {
-		final JColorChooser colorChooser = new JColorChooser();
-		ActionListener listener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				chartView.activeTrainDrawing.train.color = colorChooser.getColor();
-				LinesPanel.this.repaint();
-			}
-		};
-
-		JDialog dialog = JColorChooser.createDialog(chartView.mainFrame,
-				"请选择行车线颜色", true, // modal
-				colorChooser, listener, // OK button handler
-				null); // no CANCEL button handler
-		colorChooser.setColor(chartView.activeTrainDrawing.train.color);
-		ETRC.setFont(dialog);
-
-		Dimension dlgSize = dialog.getPreferredSize();
-		Dimension frmSize = chartView.mainFrame.getSize();
-		Point loc = chartView.mainFrame.getLocation();
-		dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-				(frmSize.height - dlgSize.height) / 2 + loc.y);
-		dialog.setVisible(true);
-	}
-
-	// private boolean showToolTip = false;
-//	private void editTimes(Point p) {
-//		if (mainView.activeTrainDrawing == null)
-//			return;
+//	public void selectTrain(TrainDrawing trainDrawing) {
+//		chartView.activeTrain = (trainDrawing == null) ? null: trainDrawing.train;
+////		chartView.activeTrainDrawing = trainDrawing;
+//		
+//		// 设置MainFrame的标题和ToolTip
+//		if (chartView.activeTrain != null) {
+//			//ADD For SheetView
+//			chartView.mainFrame.sheetView.selectTrain(chartView.activeTrain);
+//			
+//			chartView.mainFrame.setActiceTrainName(chartView.activeTrain.getTrainName());
 //
-//		JDialog dialog = new TimeSheetEditDialog(chart, 
-//				mainView, mainView.activeTrainDrawing.train);
+////			TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
+////			if (line != null)
+////				setToolTipText(line.getInfo());
+////			else
+////				setToolTipText(trainDrawing.getInfo());
+//		} else {
+//			chartView.mainFrame.setActiceTrainName("");
+//			setToolTipText(null);
+//		}
 //
-//		Dimension dlgSize = dialog.getPreferredSize();
-//		Dimension frmSize = mainView.mainFrame.getSize();
-//		Point loc = mainView.mainFrame.getLocation();
-//		dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-//				(frmSize.height - dlgSize.height) / 2 + loc.y);
-//		dialog.setVisible(true);
+//		// 重绘
+//		repaint();
 //	}
-	
+
 	private void editActiveTrain() {
-		TrainDialog dialog = new TrainDialog(chartView.mainFrame, chartView.activeTrainDrawing.train);
+		TrainDialog dialog = new TrainDialog(chartView.mainFrame, chartView.activeTrain);
 
 		dialog.editTrain();
 		
 		if(!dialog.isCanceled) {
 			Train editedTrain = dialog.getTrain();
+			Chart chart = chartView.mainFrame.chart;
 			//没有改车次的情况，更新
 			if(chart.isLoaded(editedTrain)) {
 				chart.updateTrain(editedTrain);
 			}
 			//改了车次的情况，删掉原来的，增加新的
 			else {
-				chart.delTrain(chartView.activeTrainDrawing.train);
+				chart.delTrain(chartView.activeTrain);
 				chart.addTrain(editedTrain);
 			}
 			
-			chartView.activeTrainDrawing = new TrainDrawing(chart, chartView, editedTrain);
-			//mainView.repaint();
+			chartView.activeTrain = editedTrain;
+//			repaint();
 		}
 	}
 
@@ -695,20 +585,20 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	 *            MouseEvent
 	 */
 	public void mousePressed(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON3 && e.getClickCount() >= 2) {
-			String time = chartView.getClockString(e.getPoint());
-			SheetTable table = chartView.mainFrame.sheetView.table;
-			int row = table.getEditingRow();
-			int col = table.getEditingColumn();
-			JTextField editor = ((JTextField) table.getEditorComponent());
-			if(editor != null) {
-				editor.setText(time);
-				table.getCellEditor().stopCellEditing();
-				((SheetModel) table.getModel()).fireTableCellUpdated(row, col);
-				repaint();
-//				chartView.refresh();
-			}
-		}
+		//TODO: 待完善
+//		if(e.getButton() == MouseEvent.BUTTON3 && e.getClickCount() >= 2) {
+//			String time = chartView.getClockString(e.getPoint());
+//			SheetTable table = chartView.mainFrame.sheetView.table;
+//			int row = table.getEditingRow();
+//			int col = table.getEditingColumn();
+//			JTextField editor = ((JTextField) table.getEditorComponent());
+//			if(editor != null) {
+//				editor.setText(time);
+//				table.getCellEditor().stopCellEditing();
+//				((SheetModel) table.getModel()).fireTableCellUpdated(row, col);
+//				repaint();
+//			}
+//		}
 	}
 
 	/**
@@ -724,8 +614,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		Point p = event.getPoint();
 
 		if (chartView.activeTrainDrawing != null) {
-			TrainDrawing.TrainLine line = chartView.activeTrainDrawing
-					.findNearTrainLine(p);
+			TrainLine line = chartView.activeTrainDrawing.findNearTrainLine(p);
 			if (line != null)
 				return line.getInfo();
 			else if (chartView.activeTrainDrawing.pointOnMyRect(p))
@@ -741,12 +630,15 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		return toolTip;
 	}
 
+	//待优化：应该滚动到第一个段（可能分段显示）尽可能位于屏幕正中
 	public void moveToTrainDrawing(TrainDrawing trainDrawing) {
-		Rectangle bounds = trainDrawing.getBounds();
+		Rectangle bounds = trainDrawing.getPreferredBounds();
 		bounds.y = 0;
 		bounds.height = this.getHeight();
 //		Rectangle bounds = trainDrawing.firstRect.getBounds();
 		scrollRectToVisible(bounds);
-		selectTrain(trainDrawing);
+//		selectTrain(trainDrawing);
+//		chartView.setActiveTrain(trainDrawing.train);
+		chartView.setActiveTrain((trainDrawing == null) ? null: trainDrawing.train);	
 	}
 }

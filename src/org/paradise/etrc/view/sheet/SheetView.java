@@ -9,6 +9,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.paradise.etrc.MainFrame;
+import org.paradise.etrc.data.Circuit;
+import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.dialog.MessageBox;
 
@@ -105,6 +107,14 @@ public class SheetView extends JPanel {
         return rowHeader;
 	}
 
+	public void selectStation(Station station) {
+		Circuit circuit = mainFrame.chart.circuit;
+		for(int i=0; i<circuit.stationNum; i++) {
+			if(station.equals(circuit.stations[i]))
+				rowHeader.setSelectedIndex(i*2);
+		}
+	}
+	
 	public void selectTrain(Train train) {
 		for(int i=0; i<table.getColumnCount(); i++) {
 			if(table.getColumnName(i).equals(train.getTrainName(mainFrame.chart.circuit))) {

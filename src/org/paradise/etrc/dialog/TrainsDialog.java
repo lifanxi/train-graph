@@ -67,6 +67,8 @@ public class TrainsDialog extends JDialog {
 					mainFrame.chartView.underDrawingColor = ChartView.DEFAULT_UNDER_COLOR;
 				else
 					mainFrame.chartView.underDrawingColor = null;
+				
+				mainFrame.chartView.repaint();
 			}
 		});
 

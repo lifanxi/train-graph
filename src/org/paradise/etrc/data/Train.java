@@ -526,7 +526,7 @@ public class Train {
 		char type = trainName.toUpperCase().charAt(0);
 		switch(type) {
 		case 'Z':
-			return Color.MAGENTA;
+			return new Color(128, 0, 128);
 		case 'T':
 			return Color.BLUE;
 		case 'K':
@@ -580,5 +580,14 @@ public class Train {
 			name += "/" + name4;
 		
 		return name;
+	}
+
+	public boolean hasStop(String staName) {
+		for (int i = 0; i < stopNum; i++) {
+			if (stops[i].stationName.equalsIgnoreCase(staName))
+				return true;
+		}
+		
+		return false;
 	}
 }

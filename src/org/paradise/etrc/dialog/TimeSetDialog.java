@@ -248,7 +248,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
           chart.timeInterval = interval;
 
           mainFrame.validate();
-          mainFrame.chartView.repaint();
+          mainFrame.chartView.resetSize();
         }
         this.statusBar.setText(defaultStatus);
       }
