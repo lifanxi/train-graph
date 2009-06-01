@@ -207,7 +207,8 @@ public class Train {
 		for (int i = 0; i < stopNum; i++) {
 			out.write(stops[i].stationName + ","
 					+ stops[i].arrive + ","
-					+ stops[i].leave);
+					+ stops[i].leave + ","
+					+ stops[i].isSchedular); //20070224新增，是否图定
 			out.newLine();
 		}
 	}
@@ -234,6 +235,12 @@ public class Train {
 		String stStop[] = line.split(",");
 		if (stStop.length < 3)
 			throw new IOException("第" + (stopNum + 1) + "站数据有误=>" + line);
+		
+		//20070224增加是否图定
+		boolean isSchedular = true;
+		if (stStop.length >= 4) {
+			isSchedular = Boolean.valueOf(stStop[3]).booleanValue();
+		}
 
 		//站名
 		String stName = stStop[0];
@@ -257,7 +264,7 @@ public class Train {
 //			throw new IOException(stName + "站发点读取错");
 //		}
 
-		Stop stop = new Stop(stName, stArrive, stLeave);
+		Stop stop = new Stop(stName, stArrive, stLeave, isSchedular);
 		stops[stopNum] = stop;
 		stopNum++;
 	}
@@ -342,10 +349,17 @@ public class Train {
 			return getTrainName();
 		}
 	}
+	
+	public void insertStopAfter(Stop afterStop, String newStopName,	String arrive, String leave, boolean isSchedular) {
+		Stop newStop = new Stop(newStopName, arrive, leave, isSchedular);
+		
+		insertStopAfter(afterStop, newStop);
+	}
 
-	public void insertStopAfter(Stop afterStop, String newStopName,
-			String arrive, String leave) {
-		Stop newStop = new Stop(newStopName, arrive, leave);
+	public void insertStopAfter(Stop afterStop, Stop newStop) {
+		if(afterStop == null)
+			insertStopAtFirst(newStop);
+		
 		Stop newStops[] = new Stop[MAX_STOP_NUM];
 		int newStopNum = 0;
 		for (int i = 0; i < stopNum; i++) {
@@ -356,6 +370,21 @@ public class Train {
 				newStops[newStopNum] = newStop;
 				newStopNum++;
 			}
+		}
+
+		stops = newStops;
+		stopNum = newStopNum;
+	}
+
+	private void insertStopAtFirst(Stop newStop) {
+		Stop newStops[] = new Stop[MAX_STOP_NUM];
+		int newStopNum = 0;
+		
+		newStops[0] = newStop;
+		newStopNum++;
+		for (int i = 0; i < stopNum; i++) {
+			newStops[newStopNum] = stops[i];
+			newStopNum++;
 		}
 
 		stops = newStops;
@@ -493,8 +522,8 @@ public class Train {
 			return null;
 	}
 	
-	public Color getDefaultColor() {
-		char type = getTrainName().toUpperCase().charAt(0);
+	public static Color getTrainColorByName(String trainName) {
+		char type = trainName.toUpperCase().charAt(0);
 		switch(type) {
 		case 'Z':
 			return Color.MAGENTA;
@@ -509,6 +538,10 @@ public class Train {
 		default:
 			return new Color(0, 128, 0);
 		}
+	}
+	
+	public Color getDefaultColor() {
+		return getTrainColorByName(getTrainName());
 	}
 
 	public static String makeFullName(Vector names) {

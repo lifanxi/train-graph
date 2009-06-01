@@ -4,11 +4,16 @@ import java.util.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.dialog.*;
+import org.paradise.etrc.view.sheet.SheetModel;
+import org.paradise.etrc.view.sheet.SheetTable;
 
 /**
  * @author lguo@sina.com
@@ -34,7 +39,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	private static final long serialVersionUID = 6196666089237432404L;
 
 	private Chart chart;
-	private ChartView mainView;
+	private ChartView chartView;
 
 	public static final int STATE_NORMAL = 0;
 
@@ -51,24 +56,24 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		String state_msg;
 		switch (state) {
 		case STATE_ADD_STOP:
-			new MessageBox(mainView.mainFrame, "用上下键选择新增的停站，回车键确定。")
+			new MessageBox(chartView.mainFrame, "用上下键选择新增的停站，回车键确定。")
 					.showMessage();
 			state_msg = "新增停站";
 			break;
 		case STATE_CHANGE_ARRIVE:
-			new MessageBox(mainView.mainFrame, "用左右键调整到站时间（每次一分钟），回车键确定。")
+			new MessageBox(chartView.mainFrame, "用左右键调整到站时间（每次一分钟），回车键确定。")
 					.showMessage();
 			state_msg = "调整到站时间";
 			break;
 		case STATE_CHANGE_LEAVE:
-			new MessageBox(mainView.mainFrame, "用左右键调整发车时间（每次一分钟），回车键确定。")
+			new MessageBox(chartView.mainFrame, "用左右键调整发车时间（每次一分钟），回车键确定。")
 					.showMessage();
 			state_msg = "调整发车时间";
 			break;
 		default:
 			state_msg = "正常";
 		}
-		mainView.mainFrame.statusBarRight.setText("状态：" + state_msg + " <lguo@sina.com>");
+		chartView.mainFrame.statusBarRight.setText("状态：" + state_msg + " <lguo@sina.com>");
 	}
 
 	public int getState() {
@@ -77,7 +82,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 
 	public LinesPanel(Chart _chart, ChartView _mainView) {
 		chart = _chart;
-		mainView = _mainView;
+		chartView = _mainView;
 		try {
 			jbInit();
 		} catch (Exception ex) {
@@ -117,29 +122,29 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	 *            Graphics
 	 */
 	private void drawTrains(Graphics g) {
-		mainView.buildTrainDrawings();
+		chartView.buildTrainDrawings();
 
 		// 先画水印部分
-		for (Enumeration e = mainView.underDrawings.elements(); e
+		for (Enumeration e = chartView.underDrawings.elements(); e
 				.hasMoreElements();) {
 			Object obj = e.nextElement();
 			if (obj instanceof TrainDrawing) {
 				TrainDrawing trainDrawing = ((TrainDrawing) obj);
 				// 当前选中的车次放在最后画，确保在最上面
-				if (!(trainDrawing.equals(mainView.activeTrainDrawing))) {
+				if (!(trainDrawing.equals(chartView.activeTrainDrawing))) {
 					trainDrawing.drawUnder(g);
 				}
 			}
 		}
 
 		// 再画非选中部分
-		for (Enumeration e = mainView.trainDrawings.elements(); e
+		for (Enumeration e = chartView.trainDrawings.elements(); e
 				.hasMoreElements();) {
 			Object obj = e.nextElement();
 			if (obj instanceof TrainDrawing) {
 				TrainDrawing trainDrawing = ((TrainDrawing) obj);
 				// 当前选中的车次放在最后画，确保在最上面
-				if (!(trainDrawing.equals(mainView.activeTrainDrawing))) {
+				if (!(trainDrawing.equals(chartView.activeTrainDrawing))) {
 					trainDrawing.drawInactive(g);
 				}
 				// 把选中车次删掉再添加，以便在最后比较容易选择TrainLine
@@ -151,19 +156,19 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 
 		// 最后画当前选中的车次
-		if (mainView.activeTrainDrawing != null) {
+		if (chartView.activeTrainDrawing != null) {
 			// &&(mainFrame.chart.trainDrawings.contains(mainFrame.chart.activeTrain))) {
 			// System.out.println("Ac " + activeTrain.getTrainName());
-			mainView.activeTrainDrawing.drawActive(g);
+			chartView.activeTrainDrawing.drawActive(g);
 		}
 	}
 
 	public Dimension getPreferredSize() {
 		int w, h;
-		w = 60 * 24 * chart.minuteScale + mainView.leftMargin + mainView.rightMargin;
+		w = 60 * 24 * chart.minuteScale + chartView.leftMargin + chartView.rightMargin;
 		if (chart.circuit != null)
-			h = chart.circuit.length * chart.distScale + mainView.topMargin
-					+ mainView.bottomMargin;
+			h = chart.circuit.length * chart.distScale + chartView.topMargin
+					+ chartView.bottomMargin;
 		else
 			h = 480;
 		return new Dimension(w, h);
@@ -178,28 +183,28 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	private void drawClockLine(Graphics g, int clock) {
 		// 设置坐标线颜色
 		Color oldColor = g.getColor();
-		g.setColor(mainView.gridColor);
+		g.setColor(chartView.gridColor);
 
-		int start = clock * 60 * chart.minuteScale + mainView.leftMargin;
+		int start = clock * 60 * chart.minuteScale + chartView.leftMargin;
 		int h = chart.circuit.length * chart.distScale;
 		// 0～23点整点竖线
-		g.drawLine(start, 0, start, h + mainView.topMargin + mainView.bottomMargin);
-		g.drawLine(start + 1, 0, start + 1, h + mainView.topMargin
-				+ mainView.bottomMargin);
+		g.drawLine(start, 0, start, h + chartView.topMargin + chartView.bottomMargin);
+		g.drawLine(start + 1, 0, start + 1, h + chartView.topMargin
+				+ chartView.bottomMargin);
 		// 整点之间的timeInterval分钟间隔竖线
 		for (int i = 1; i < 60 / chart.timeInterval; i++) {
 			int x = start + chart.timeInterval * chart.minuteScale * i;
-			int y1 = mainView.topMargin;
+			int y1 = chartView.topMargin;
 			int y2 = y1 + h;
 			g.drawLine(x, y1, x, y2);
 			// System.out.print(i+".");
 		}
 		// 24点整点竖线
 		if (clock == 23) {
-			int end = 24 * 60 * chart.minuteScale + mainView.leftMargin;
-			g.drawLine(end, 0, end, h + mainView.topMargin + mainView.bottomMargin);
-			g.drawLine(end + 1, 0, end + 1, h + mainView.topMargin
-					+ mainView.bottomMargin);
+			int end = 24 * 60 * chart.minuteScale + chartView.leftMargin;
+			g.drawLine(end, 0, end, h + chartView.topMargin + chartView.bottomMargin);
+			g.drawLine(end + 1, 0, end + 1, h + chartView.topMargin
+					+ chartView.bottomMargin);
 		}
 
 		// 恢复原色
@@ -212,12 +217,12 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 
 		// 设置坐标线颜色
 		Color oldColor = g.getColor();
-		g.setColor(mainView.gridColor);
+		g.setColor(chartView.gridColor);
 
 		// 画坐标线
-		int y = st.dist * scale + mainView.topMargin;
-		int w = 60 * 24 * chart.minuteScale + mainView.leftMargin
-				+ mainView.rightMargin;
+		int y = st.dist * scale + chartView.topMargin;
+		int w = 60 * 24 * chart.minuteScale + chartView.leftMargin
+				+ chartView.rightMargin;
 
 		if (st.level <= chart.displayLevel) {
 			g.drawLine(0, y, w, y);
@@ -246,13 +251,32 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	 *            MouseEvent
 	 */
 	public void mouseMoved(MouseEvent e) {
+		//设置跟随坐标
+		Image img = null;	
+		try {
+			img = ImageIO.read(ChartView.class.getResource("/pic/cursor.gif"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		if(img != null) {
+
+			Toolkit tk = Toolkit.getDefaultToolkit();
+			Graphics g = img.getGraphics();
+			g.setFont(new Font("Dialog", Font.PLAIN, 11));
+			g.setColor(Color.black);
+			g.drawString(chartView.getClockString(e.getPoint()), 6, 30);
+
+			Cursor cursor = tk.createCustomCursor(img, new Point(0,0),"Name");
+			this.setCursor(cursor);
+		}
+		
 		Point p = e.getPoint();
-		mainView.setCoordinateCorner(p);
+		chartView.setCoordinateCorner(p);
 		Train nearTrain[] = findTrains(p);
 		for (int i = 0; i < nearTrain.length; i++)
-			mainView.mainFrame.statusBarMain.setText(nearTrain[i]
+			chartView.mainFrame.statusBarMain.setText(nearTrain[i]
 					.getTrainName(chart.circuit)
-					+ "次 " + mainView.mainFrame.statusBarMain.getText());
+					+ "次 " + chartView.mainFrame.statusBarMain.getText());
 	}
 
 	/**
@@ -265,7 +289,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	private Train[] findTrains(Point p) {
 		Vector trainsFound = new Vector();
 		// 正常部分
-		for (Enumeration e = mainView.trainDrawings.elements(); e
+		for (Enumeration e = chartView.trainDrawings.elements(); e
 				.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.pointOnMe(p)) {
@@ -275,8 +299,8 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		
 		// 水印部分
 		// 如果“水印显示反向车次”未选中则不给选水印车次
-		if(mainView.underDrawingColor != null) {
-			for (Enumeration e = mainView.underDrawings.elements(); e
+		if(chartView.underDrawingColor != null) {
+			for (Enumeration e = chartView.underDrawings.elements(); e
 					.hasMoreElements();) {
 				TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 				if (trainDrawing.pointOnMe(p)) {
@@ -318,7 +342,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		selectTrain(p);
 		
 		//如果没有选中车次则不做啥
-		if(mainView.activeTrainDrawing == null)
+		if(chartView.activeTrainDrawing == null)
 			return;
 
 		editActiveTrain();
@@ -335,8 +359,8 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 
 		// 先查水印部分的
 		// 如果“水印显示反向车次”未选中则不给选水印车次
-		if(mainView.underDrawingColor != null) {
-			for (Enumeration e = mainView.underDrawings.elements(); e.hasMoreElements();) {
+		if(chartView.underDrawingColor != null) {
+			for (Enumeration e = chartView.underDrawings.elements(); e.hasMoreElements();) {
 				TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 				if (trainDrawing.pointOnMyRect(p) || trainDrawing.pointOnMe(p)) {
 					// System.out.println(trainDrawing.getTrainName()+ " A");
@@ -346,7 +370,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 
 		// 后查正常部分的，这样正常部分比较容易选中
-		for (Enumeration e = mainView.trainDrawings.elements(); e
+		for (Enumeration e = chartView.trainDrawings.elements(); e
 				.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.pointOnMyRect(p) || trainDrawing.pointOnMe(p)) {
@@ -364,19 +388,22 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	}
 
 	public void selectTrain(TrainDrawing trainDrawing) {
-		mainView.activeTrainDrawing = trainDrawing;
+		chartView.activeTrainDrawing = trainDrawing;
 		// 设置MainFrame的标题和ToolTip
-		if (mainView.activeTrainDrawing != null) {
-			mainView.mainFrame
-					.setActiceTrainName(mainView.activeTrainDrawing.getTrainName());
+		if (chartView.activeTrainDrawing != null) {
+			//ADD For SheetView
+			chartView.mainFrame.sheetView.selectTrain(trainDrawing.train);
+			
+			chartView.mainFrame
+					.setActiceTrainName(chartView.activeTrainDrawing.getTrainName());
 
-			TrainDrawing.TrainLine line = mainView.activeTrainDrawing.selectedTrainLine;
+			TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
 			if (line != null)
 				setToolTipText(line.getInfo());
 			else
 				setToolTipText(trainDrawing.getInfo());
 		} else {
-			mainView.mainFrame.setActiceTrainName("");
+			chartView.mainFrame.setActiceTrainName("");
 			setToolTipText(null);
 		}
 
@@ -388,12 +415,12 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		final Point _p = p;
 		
 		// 选择ActiveTrain，如果没有选中则返回
-		if (mainView.activeTrainDrawing == null)
+		if (chartView.activeTrainDrawing == null)
 			return;
 		
 		// 如果不在ActiveTrain上则返回
-		if (!mainView.activeTrainDrawing.pointOnMe(p) &&
-			!mainView.activeTrainDrawing.pointOnMyRect(p))
+		if (!chartView.activeTrainDrawing.pointOnMe(p) &&
+			!chartView.activeTrainDrawing.pointOnMyRect(p))
 			return;
 		
 		// 弹出PopupMenu
@@ -447,15 +474,15 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	}
 
 	private void changeTime() {
-		if (mainView.activeTrainDrawing == null)
+		if (chartView.activeTrainDrawing == null)
 			return;
 
-		TrainDrawing.TrainLine line = mainView.activeTrainDrawing.selectedTrainLine;
+		TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
 		if (line == null)
 			return;
 
 		if (line.lineType != TrainDrawing.TrainLine.STOP_LINE) {
-			Frame frame = mainView.mainFrame;
+			Frame frame = chartView.mainFrame;
 			MessageBox dlg = new MessageBox(frame, "行车线不能调整到发时间，请选择停车线！");
 			dlg.showMessage();
 			return;
@@ -464,29 +491,29 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		// 跨边界停车线不允许调整
 		if ((line.p1.type == TrainDrawing.ChartPoint.EDGE)
 				|| (line.p2.type == TrainDrawing.ChartPoint.EDGE)) {
-			MessageBox dlg = new MessageBox(mainView.mainFrame,
+			MessageBox dlg = new MessageBox(chartView.mainFrame,
 					"跨界停车线不能调整到发时间，请调整时间轴！");
 			dlg.showMessage();
 			return;
 		}
 
 		// line.p1
-		mainView.activeTrainDrawing.setMovingPoint(line.p1.getStationName(),
+		chartView.activeTrainDrawing.setMovingPoint(line.p1.getStationName(),
 				TrainDrawing.ChartPoint.STOP_ARRIVE);
 		setState(STATE_CHANGE_ARRIVE);
 		repaint();
 	}
 
 	private void delStop(Point p) {
-		if (mainView.activeTrainDrawing == null)
+		if (chartView.activeTrainDrawing == null)
 			return;
 
-		TrainDrawing.TrainLine line = mainView.activeTrainDrawing.selectedTrainLine;
+		TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
 		if (line == null)
 			return;
 
 		if (line.lineType != TrainDrawing.TrainLine.STOP_LINE) {
-			Frame frame = mainView.mainFrame;
+			Frame frame = chartView.mainFrame;
 			MessageBox dlg = new MessageBox(frame, "行车线不能删除停站，请选择停车线！");
 			dlg.showMessage();
 			return;
@@ -495,31 +522,31 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		// 跨边界停车线不允许调整
 		if ((line.p1.type == TrainDrawing.ChartPoint.EDGE)
 				|| (line.p2.type == TrainDrawing.ChartPoint.EDGE)) {
-			MessageBox dlg = new MessageBox(mainView.mainFrame,
+			MessageBox dlg = new MessageBox(chartView.mainFrame,
 					"跨界停车线不能删除，请调整时间轴！");
 			dlg.showMessage();
 			return;
 		}
 
 		String stationName = line.p1.getStationName();
-		Train newTrain = mainView.activeTrainDrawing.train.copy();
+		Train newTrain = chartView.activeTrainDrawing.train.copy();
 		newTrain.delStop(stationName);
 		chart.updateTrain(newTrain);
 
-		mainView.activeTrainDrawing = new TrainDrawing(chart, mainView, newTrain);
-		mainView.repaint();
+		chartView.activeTrainDrawing = new TrainDrawing(chart, chartView, newTrain);
+		chartView.repaint();
 	}
 
 	private void addStop(Point p) {
-		if (mainView.activeTrainDrawing == null)
+		if (chartView.activeTrainDrawing == null)
 			return;
 
-		TrainDrawing.TrainLine line = mainView.activeTrainDrawing.selectedTrainLine;
+		TrainDrawing.TrainLine line = chartView.activeTrainDrawing.selectedTrainLine;
 		if (line == null)
 			return;
 
 		if (line.lineType == TrainDrawing.TrainLine.STOP_LINE) {
-			MessageBox dlg = new MessageBox(mainView.mainFrame,
+			MessageBox dlg = new MessageBox(chartView.mainFrame,
 					"停车线不能添加停站，请选择行车线！");
 			dlg.showMessage();
 			return;
@@ -528,7 +555,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		// 跨边界行车线不允许添加
 		if ((line.p1.type == TrainDrawing.ChartPoint.EDGE)
 				|| (line.p2.type == TrainDrawing.ChartPoint.EDGE)) {
-			MessageBox dlg = new MessageBox(mainView.mainFrame,
+			MessageBox dlg = new MessageBox(chartView.mainFrame,
 					"跨界行车线不能添加停战，请调整时间轴！");
 			dlg.showMessage();
 			return;
@@ -545,25 +572,25 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		// if(stopIndex2 <= addIndex)
 		// return;
 
-		Train train = mainView.activeTrainDrawing.train;
+		Train train = chartView.activeTrainDrawing.train;
 		int addIndex = chart.circuit.getNextStationIndex(train, stopIndex1);
 		if (((train.isDownTrain(chart.circuit) == Train.DOWN_TRAIN) && (addIndex >= stopIndex2))
 				|| ((train.isDownTrain(chart.circuit) == Train.UP_TRAIN) && (addIndex <= stopIndex2)))
 			return;
 
-		Stop afterStop = mainView.getDrawStops(train)[line.p1.getDrawStopIndex()];
-		String arriveTime = mainView.getTime((line.p2.x - line.p1.x) / 2
+		Stop afterStop = chartView.getDrawStops(train)[line.p1.getDrawStopIndex()];
+		String arriveTime = chartView.getTime((line.p2.x - line.p1.x) / 2
 				+ line.p1.x);
 //		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 //		try {
 //			Date arrive = df.parse(arriveTime);
 //			Date leave = arrive;
 			String newStationName = chart.circuit.stations[addIndex].name;
-			train.insertStopAfter(afterStop, newStationName, arriveTime, arriveTime);
+			train.insertStopAfter(afterStop, newStationName, arriveTime, arriveTime, false); 
 
 			setState(STATE_ADD_STOP);
-			mainView.activeTrainDrawing = new TrainDrawing(chart, mainView, train);
-			mainView.activeTrainDrawing.setMovingPoint(newStationName,
+			chartView.activeTrainDrawing = new TrainDrawing(chart, chartView, train);
+			chartView.activeTrainDrawing.setMovingPoint(newStationName,
 					TrainDrawing.ChartPoint.STOP_ARRIVE);
 
 			repaint();
@@ -585,21 +612,21 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		final JColorChooser colorChooser = new JColorChooser();
 		ActionListener listener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainView.activeTrainDrawing.train.color = colorChooser.getColor();
+				chartView.activeTrainDrawing.train.color = colorChooser.getColor();
 				LinesPanel.this.repaint();
 			}
 		};
 
-		JDialog dialog = JColorChooser.createDialog(mainView.mainFrame,
+		JDialog dialog = JColorChooser.createDialog(chartView.mainFrame,
 				"请选择行车线颜色", true, // modal
 				colorChooser, listener, // OK button handler
 				null); // no CANCEL button handler
-		colorChooser.setColor(mainView.activeTrainDrawing.train.color);
+		colorChooser.setColor(chartView.activeTrainDrawing.train.color);
 		ETRC.setFont(dialog);
 
 		Dimension dlgSize = dialog.getPreferredSize();
-		Dimension frmSize = mainView.mainFrame.getSize();
-		Point loc = mainView.mainFrame.getLocation();
+		Dimension frmSize = chartView.mainFrame.getSize();
+		Point loc = chartView.mainFrame.getLocation();
 		dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
 				(frmSize.height - dlgSize.height) / 2 + loc.y);
 		dialog.setVisible(true);
@@ -622,7 +649,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 //	}
 	
 	private void editActiveTrain() {
-		TrainDialog dialog = new TrainDialog(mainView.mainFrame, mainView.activeTrainDrawing.train);
+		TrainDialog dialog = new TrainDialog(chartView.mainFrame, chartView.activeTrainDrawing.train);
 
 		dialog.editTrain();
 		
@@ -634,11 +661,11 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 			}
 			//改了车次的情况，删掉原来的，增加新的
 			else {
-				chart.delTrain(mainView.activeTrainDrawing.train);
+				chart.delTrain(chartView.activeTrainDrawing.train);
 				chart.addTrain(editedTrain);
 			}
 			
-			mainView.activeTrainDrawing = new TrainDrawing(chart, mainView, editedTrain);
+			chartView.activeTrainDrawing = new TrainDrawing(chart, chartView, editedTrain);
 			//mainView.repaint();
 		}
 	}
@@ -668,6 +695,20 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	 *            MouseEvent
 	 */
 	public void mousePressed(MouseEvent e) {
+		if(e.getButton() == MouseEvent.BUTTON3 && e.getClickCount() >= 2) {
+			String time = chartView.getClockString(e.getPoint());
+			SheetTable table = chartView.mainFrame.sheetView.table;
+			int row = table.getEditingRow();
+			int col = table.getEditingColumn();
+			JTextField editor = ((JTextField) table.getEditorComponent());
+			if(editor != null) {
+				editor.setText(time);
+				table.getCellEditor().stopCellEditing();
+				((SheetModel) table.getModel()).fireTableCellUpdated(row, col);
+				repaint();
+//				chartView.refresh();
+			}
+		}
 	}
 
 	/**
@@ -682,13 +723,13 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	public String getToolTipText(MouseEvent event) {
 		Point p = event.getPoint();
 
-		if (mainView.activeTrainDrawing != null) {
-			TrainDrawing.TrainLine line = mainView.activeTrainDrawing
+		if (chartView.activeTrainDrawing != null) {
+			TrainDrawing.TrainLine line = chartView.activeTrainDrawing
 					.findNearTrainLine(p);
 			if (line != null)
 				return line.getInfo();
-			else if (mainView.activeTrainDrawing.pointOnMyRect(p))
-				return mainView.activeTrainDrawing.getInfo();
+			else if (chartView.activeTrainDrawing.pointOnMyRect(p))
+				return chartView.activeTrainDrawing.getInfo();
 		}
 
 		return null;

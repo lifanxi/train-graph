@@ -46,7 +46,7 @@ public class NetTest {
 					case 5:
 						System.out.println(content + ")");
 						stLeave = content;
-						train.appendStop(Stop.makeStop(stName, stArrive, stLeave));
+						train.appendStop(Stop.makeStop(stName, stArrive, stLeave, true));
 						break;
 					}
 

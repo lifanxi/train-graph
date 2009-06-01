@@ -8,23 +8,23 @@ public class Stop {
 	public String stationName;
 	public String arrive;
 	public String leave;
-//	public String trainName;
-//	public int dist;
+	
+	//20070224新增，是否图定
+	public boolean isSchedular;
 
-	public Stop(String _name, String _arrive, String _leave) {
+	public Stop(String _name, String _arrive, String _leave, boolean _schedular) {
 		stationName = _name;
 		arrive = _arrive;
 		leave = _leave;
-		
-//		trainName = "";
-//		dist = 0;
+		isSchedular = _schedular;
 	}
 
+//	public Stop(String _name, String _arrive, String _leave) {
+//		this(_name, _arrive, _leave, true); //默认是图定的，向下兼容 -- 取消，所有使用的地方显示指定true
+//	}
+
 	public Stop copy() {
-		Stop st = new Stop(this.stationName, this.arrive, this.leave);
-		
-//		st.trainName = this.trainName;
-//		st.dist = this.dist;
+		Stop st = new Stop(this.stationName, this.arrive, this.leave, this.isSchedular);
 		
 		return st;
 	}
@@ -39,7 +39,7 @@ public class Stop {
 		return ((Stop) obj).stationName.equalsIgnoreCase(this.stationName);
 	}
 	
-	public static Stop makeStop(String theName, String strArrive, String strLeave) {
+	public static Stop makeStop(String theName, String strArrive, String strLeave, boolean isSchedular) {
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		Date theArrive = null;
 		Date theLeave = null;
@@ -70,6 +70,6 @@ public class Stop {
 		else
 			myLeave = df.format(theLeave);
 		
-		return new Stop(theName, myArrive, myLeave);
+		return new Stop(theName, myArrive, myLeave, isSchedular);
 	}
 }

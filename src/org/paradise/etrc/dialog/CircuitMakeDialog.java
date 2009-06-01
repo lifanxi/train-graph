@@ -17,8 +17,8 @@ import javax.swing.JScrollPane;
 
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Circuit;
-import org.paradise.etrc.data.ETRCLCB;
 import org.paradise.etrc.data.Station;
+import org.paradise.etrc.data.skb.ETRCLCB;
 
 import com.borland.jbcl.layout.VerticalFlowLayout;
 

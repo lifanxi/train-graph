@@ -178,10 +178,13 @@ public class TrainsDialog extends JDialog {
 	
 	protected void doNewTrain() {
 		Train newTrain = new Train();
-		newTrain.trainNameDown = "0000";
-		newTrain.stopNum = 2;
-		newTrain.stops[0] = new Stop("起点", "00:00", "00:00");
-		newTrain.stops[1] = new Stop("终点", "00:00", "00:00");
+		newTrain.trainNameFull = "XXXX/YYYY";
+		newTrain.trainNameDown = "DDDD";
+		newTrain.trainNameUp   = "UUUU";
+		newTrain.stopNum = 3;
+		newTrain.stops[0] = new Stop("起点", "00:00", "00:00", false);
+		newTrain.stops[1] = new Stop("中间站", "00:00", "00:00", false);
+		newTrain.stops[2] = new Stop("终点", "00:00", "00:00", false);
 		TrainDialog dialog = new TrainDialog(mainFrame, newTrain);
 
 		dialog.editTrain();

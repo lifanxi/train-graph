@@ -22,7 +22,7 @@ import org.paradise.etrc.data.Train;
  * 从www.sronline.com.cn网站获取信息
  */
 public class NetInfoShenTie {
-	private final String URL_getTrainInfo = "http://www.sronline.com.cn/smart40/ShowStopTimeTrain?fromTrainno=";
+//	private final String URL_getTrainInfo = "http://www.sronline.com.cn/smart40/ShowStopTimeTrain?fromTrainno=";
 	private final String URL_getPriceInfo1 = "http://www.sronline.com.cn/smart40/ShowTicketPrice?trainStationDate=2007-01-29&fromStationName=";
 	private final String URL_getPriceInfo2 = "&toStationName=";
 	
@@ -159,7 +159,7 @@ public class NetInfoShenTie {
 			case 7:
 				strType = data;
 
-				Stop stop = Stop.makeStop(stationName, strArrive, strLeave);
+				Stop stop = Stop.makeStop(stationName, strArrive, strLeave, true);
 				theTrain.appendStop(stop);
 				db.insertStop2(trainID, trainNameCurrent, stationName, stop.arrive, stop.leave, dist);
 			break;

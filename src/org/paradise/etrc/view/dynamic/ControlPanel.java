@@ -34,7 +34,9 @@ public class ControlPanel extends JPanel {
 	void jbInit() throws Exception {
 		this.setLayout(new GridLayout(1, 5));
 
-		setBorder(BorderFactory.createLineBorder(Color.lightGray));
+		setBorder(BorderFactory.createCompoundBorder(
+   				BorderFactory.createLineBorder(Color.lightGray), 
+				BorderFactory.createEmptyBorder(2, 0, 0, 0)));
 		
 		imStart = new ImageIcon(this.getClass().getResource("/pic/start.gif"));
 		imPause = new ImageIcon(this.getClass().getResource("/pic/pause.gif"));

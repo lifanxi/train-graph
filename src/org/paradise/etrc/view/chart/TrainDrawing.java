@@ -19,7 +19,7 @@ public class TrainDrawing {
 
   public Train train;
   public Chart chart;
-  public ChartView mainView;
+  public ChartView chartView;
   public Vector lines = new Vector();
   public TrainLine selectedTrainLine = null;
   public ChartPoint movingPoint = null;
@@ -34,10 +34,11 @@ public class TrainDrawing {
   //public boolean isActive = false;
 
   public static final Color selectedColor = Color.black;
+  public static final Color notSchedularColor = new Color(192, 192, 0);
 
   public TrainDrawing(Chart _c, ChartView _m, Train _t) {
     chart = _c;
-    mainView = _m;
+    chartView = _m;
     train = _t;
     //train.color = _color;
     //isActive = _active;
@@ -50,25 +51,25 @@ public class TrainDrawing {
     String trainName = getTrainName();
 
     //首先计算要画的停站
-    drawStops = mainView.getDrawStops(train);
+    drawStops = chartView.getDrawStops(train);
     //少于两个停站的车次不画
     if(drawStops.length < 2)
       drawMe = false;
 
     //int lastX = -1;
     //int lastY = -1;
-    ChartPoint lastPoint = new ChartPoint(-1, -1, ChartPoint.UNKOW);
+    ChartPoint lastPoint = new ChartPoint(-1, -1, ChartPoint.UNKOW, true);
     for (int i = 0; i < drawStops.length; i++) {
       String arriveClock = drawStops[i].arrive;
-      int x0 = mainView.getPelsX(arriveClock);
+      int x0 = chartView.getPelsX(arriveClock);
       String leaveClock = drawStops[i].leave;
-      int x1 = mainView.getPelsX(leaveClock);
+      int x1 = chartView.getPelsX(leaveClock);
 
-      int y0 = mainView.getPelsY(drawStops[i].stationName);
-      int y1 = mainView.getPelsY(drawStops[i].stationName);
+      int y0 = chartView.getPelsY(drawStops[i].stationName);
+      int y1 = chartView.getPelsY(drawStops[i].stationName);
 
-      ChartPoint p0 = new ChartPoint(x0, y0, ChartPoint.STOP_ARRIVE);
-      ChartPoint p1 = new ChartPoint(x1, y1, ChartPoint.STOP_LEAVE);
+      ChartPoint p0 = new ChartPoint(x0, y0, ChartPoint.STOP_ARRIVE, drawStops[i].isSchedular);
+      ChartPoint p1 = new ChartPoint(x1, y1, ChartPoint.STOP_LEAVE, drawStops[i].isSchedular);
 
       //第一个停站的到达点，判断p0是入图还是始发
       if (i == 0) {
@@ -101,51 +102,51 @@ public class TrainDrawing {
       ChartPoint pe0, pe1;
       //先画与上一点的连线
       if (lastPoint.type != ChartPoint.UNKOW) {
-        lines.add(new TrainLine(lastPoint, p0, TrainLine.RUN_LINE));
+        lines.add(new TrainLine(lastPoint, p0, TrainLine.RUN_LINE, true));
       }
 
       //在停车过程中过边界：停车线分两段画
       if (x1 < x0) {
-        pe0 = new ChartPoint(mainView.getPelsX(24 * 60), y0, ChartPoint.EDGE);
-        pe1 = new ChartPoint(mainView.getPelsX(0), y0, ChartPoint.EDGE);
-        lines.add(new TrainLine(p0, pe0, TrainLine.STOP_LINE));
-        lines.add(new TrainLine(pe1, p1, TrainLine.STOP_LINE));
+        pe0 = new ChartPoint(chartView.getPelsX(24 * 60), y0, ChartPoint.EDGE, drawStops[i].isSchedular);
+        pe1 = new ChartPoint(chartView.getPelsX(0), y0, ChartPoint.EDGE, drawStops[i].isSchedular);
+        lines.add(new TrainLine(p0, pe0, TrainLine.STOP_LINE, drawStops[i].isSchedular));
+        lines.add(new TrainLine(pe1, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
         leftName = new TrainNameLR(pe1, trainName, true);
         rightName = new TrainNameLR(pe0, trainName, false);
         lastPoint = p1;
       }
       //最后一站（不需要判断下站过界问题）
       else if (i == drawStops.length - 1) {
-        lines.add(new TrainLine(p0, p1, TrainLine.STOP_LINE));
+        lines.add(new TrainLine(p0, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
 
         lastPoint = p1;
       }
       else {
         //下一到站将过边界：停车线正常，但下段的行车线要先画一半到边界
-        if (mainView.getPelsX(drawStops[i + 1].arrive) < x1) {
-          int x2 = mainView.getPelsX(drawStops[i + 1].arrive) +
+        if (chartView.getPelsX(drawStops[i + 1].arrive) < x1) {
+          int x2 = chartView.getPelsX(drawStops[i + 1].arrive) +
               24 * 60 * chart.minuteScale;
-          int y2 = mainView.getPelsY(drawStops[i + 1].stationName);
+          int y2 = chartView.getPelsY(drawStops[i + 1].stationName);
 
           //计算右边界点坐标
-          int bx = mainView.getPelsX(24 * 60);
+          int bx = chartView.getPelsX(24 * 60);
           int by = y1 + (bx - x1) * (y2 - y1) / (x2 - x1);
-          pe0 = new ChartPoint(bx, by, ChartPoint.EDGE);
-          pe1 = new ChartPoint(mainView.getPelsX(0), by, ChartPoint.EDGE);
+          pe0 = new ChartPoint(bx, by, ChartPoint.EDGE, drawStops[i].isSchedular);
+          pe1 = new ChartPoint(chartView.getPelsX(0), by, ChartPoint.EDGE, drawStops[i].isSchedular);
           leftName = new TrainNameLR(pe1, trainName, true);
           rightName = new TrainNameLR(pe0, trainName, false);
 
           //停车线
-          lines.add(new TrainLine(p0, p1, TrainLine.STOP_LINE));
+          lines.add(new TrainLine(p0, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
           //行车线的上半段
-          lines.add(new TrainLine(p1, pe0, TrainLine.RUN_LINE));
+          lines.add(new TrainLine(p1, pe0, TrainLine.RUN_LINE, drawStops[i].isSchedular));
 
           //行车线下半段的起始坐标
           lastPoint = pe1;
         }
         //一般停站(下一站不过边界)
         else {
-          lines.add(new TrainLine(p0, p1, TrainLine.STOP_LINE));
+          lines.add(new TrainLine(p0, p1, TrainLine.STOP_LINE, drawStops[i].isSchedular));
 
           lastPoint = p1;
         }
@@ -157,11 +158,11 @@ public class TrainDrawing {
     if(!drawMe)
       return;
 
-    if(mainView.underDrawingColor == null)
+    if(chartView.underDrawingColor == null)
       return;
 
     Color oldColor = g.getColor();
-    g.setColor(mainView.underDrawingColor);
+    g.setColor(chartView.underDrawingColor);
     //System.out.println(train.getTrainName(chart.circuit) + color.toString());
 
     for (Enumeration e = lines.elements(); e.hasMoreElements(); ) {
@@ -276,8 +277,8 @@ public class TrainDrawing {
     }
   }
 
-  public void setMovingPoint(int x, int y, int pointType) {
-    this.movingPoint = new ChartPoint(x, y, pointType);
+  public void setMovingPoint(int x, int y, int pointType, boolean isSchedular) {
+    this.movingPoint = new ChartPoint(x, y, pointType, isSchedular);
   }
 
   /**
@@ -347,7 +348,7 @@ public class TrainDrawing {
    * getInfo
    */
   public String getInfo() {
-    Stop stop[] = mainView.getDrawStops(train);
+    Stop stop[] = chartView.getDrawStops(train);
 	SimpleDateFormat df = new SimpleDateFormat("HH:mm");
     
 	long min = 0;
@@ -382,61 +383,91 @@ public class TrainDrawing {
     public int lineType;
 
     public ChartPoint p1,p2;
-    public TrainLine(ChartPoint _p1, ChartPoint _p2, int _type) {
+    
+    //是否图定
+    public boolean isSchedular = true;
+
+    public TrainLine(ChartPoint _p1, ChartPoint _p2, int _type, boolean _isSchedular) {
       p1 = _p1;
       p2 = _p2;
       lineType = _type;
+      isSchedular = _isSchedular;
     }
 
     public void draw(Graphics g) {
-      g.drawLine(p1.x, p1.y, p2.x, p2.y);
-      if(lineType == STOP_LINE) {
-        //终到站的stop线（0长度）不画arrive点
-        if(p2.type != ChartPoint.TERMINAL)
-          p1.draw(g);
-        //始发站的stop线（0长度）不画leave点
-        if(p1.type != ChartPoint.START)
-          p2.draw(g);
-      }
+    	Color oldColor = g.getColor();
+    	
+    	if(!isSchedular && !oldColor.equals(chartView.underDrawingColor))
+    		g.setColor(notSchedularColor);
+
+    	g.drawLine(p1.x, p1.y, p2.x, p2.y);
+    	
+    	p1.draw(g);
+    	p2.draw(g);
+//    	if(lineType == STOP_LINE) {
+//	        //终到站的stop线（0长度）不画arrive点
+//	        if(p2.type != ChartPoint.TERMINAL)
+//	        	p1.draw(g);
+//	        //始发站的stop线（0长度）不画leave点
+//	        if(p1.type != ChartPoint.START)
+//	        	p2.draw(g);
+//    	}
+    	
+    	g.setColor(oldColor);
     }
 
     public void drawActive(Graphics g) {
-      g.drawLine(p1.x, p1.y, p2.x, p2.y);
-      //画差1个像素的线加重
-      if(lineType == STOP_LINE)
-        g.drawLine(p1.x, p1.y+1, p2.x, p2.y+1);
-      else
-        g.drawLine(p1.x+1, p1.y, p2.x+1, p2.y);
+    	Color oldColor = g.getColor();
+    	
+    	if(!isSchedular)
+    		g.setColor(notSchedularColor);
 
-      //如果是停车线则画arrive点和leave点
-      if(lineType == STOP_LINE) {
-        //终到站的stop线（0长度）不画arrive点
-        if(p2.type != ChartPoint.TERMINAL)
-          p1.drawActive(g);
-        //始发站的stop线（0长度）不画leave点
-        if(p1.type != ChartPoint.START)
-          p2.drawActive(g);
-      }
+    	g.drawLine(p1.x, p1.y, p2.x, p2.y);
+    	//画差1个像素的线加重
+    	if(lineType == STOP_LINE)
+    		g.drawLine(p1.x, p1.y+1, p2.x, p2.y+1);
+    	else
+    		g.drawLine(p1.x+1, p1.y, p2.x+1, p2.y);
+
+    	p1.drawActive(g);
+    	p2.drawActive(g);
+//      //如果是停车线则画arrive点和leave点
+//      if(lineType == STOP_LINE) {
+//        //终到站的stop线（0长度）不画arrive点
+//        if(p2.type != ChartPoint.TERMINAL)
+//          p1.drawActive(g);
+//        //始发站的stop线（0长度）不画leave点
+//        if(p1.type != ChartPoint.START)
+//          p2.drawActive(g);
+//      }
+    	g.setColor(oldColor);
     }
 
     public void drawSelected(Graphics g) {
-      g.drawLine(p1.x, p1.y, p2.x, p2.y);
+    	Color oldColor = g.getColor();
+    	
+    	if(!isSchedular)
+    		g.setColor(notSchedularColor);
 
-      //以特殊颜色画差1个像素的线
-      Color oldColor = g.getColor();
-      g.setColor(selectedColor);
-      if(lineType == STOP_LINE) {
-        g.drawLine(p1.x, p1.y - 1, p2.x, p2.y - 1);
-        g.drawLine(p1.x, p1.y + 1, p2.x, p2.y + 1);
-      }
-      else {
-        g.drawLine(p1.x - 1, p1.y, p2.x - 1, p2.y);
-        g.drawLine(p1.x + 1, p1.y, p2.x + 1, p2.y);
-      }
-      g.setColor(oldColor);
+    	g.drawLine(p1.x, p1.y, p2.x, p2.y);
 
-      p1.drawSelected(g);
-      p2.drawSelected(g);
+    	//以特殊颜色画差1个像素的线
+    	Color drawingColor = g.getColor();
+    	g.setColor(selectedColor);
+    	if(lineType == STOP_LINE) {
+    		g.drawLine(p1.x, p1.y - 1, p2.x, p2.y - 1);
+    		g.drawLine(p1.x, p1.y + 1, p2.x, p2.y + 1);
+    	}
+    	else {
+    		g.drawLine(p1.x - 1, p1.y, p2.x - 1, p2.y);
+    		g.drawLine(p1.x + 1, p1.y, p2.x + 1, p2.y);
+    	}
+    	g.setColor(drawingColor);
+
+    	p1.drawSelected(g);
+    	p2.drawSelected(g);
+    	
+    	g.setColor(oldColor);
     }
 
     public boolean pointOnMe(Point p) {
@@ -461,22 +492,22 @@ public class TrainDrawing {
 
     public String getInfo() {
       if(lineType == STOP_LINE) {
-        int stopMinutes = Math.abs(mainView.getMinute(p2.x) - mainView.getMinute(p1.x));
-        String stationName = mainView.getStationName(p1.y);
+        int stopMinutes = Math.abs(chartView.getMinute(p2.x) - chartView.getMinute(p1.x));
+        String stationName = chartView.getStationName(p1.y);
         return TrainDrawing.this.getTrainName() + "次 "
             + stationName + "站 停车" + stopMinutes + "分钟 ("
-            + mainView.getTime(p1.x) + "到 " + mainView.getTime(p2.x) + "发)";
+            + chartView.getTime(p1.x) + "到 " + chartView.getTime(p2.x) + "发)";
       }
       else{
-        String station1 = mainView.getStationName(p1.y);
-        String station2 = mainView.getStationName(p2.y);
-        int dist = Math.abs(mainView.getDist(p2.y) - mainView.getDist(p1.y));
-        int runMinutes = mainView.getMinute(p2.x) - mainView.getMinute(p1.x);
+        String station1 = chartView.getStationName(p1.y);
+        String station2 = chartView.getStationName(p2.y);
+        int dist = Math.abs(chartView.getDist(p2.y) - chartView.getDist(p1.y));
+        int runMinutes = chartView.getMinute(p2.x) - chartView.getMinute(p1.x);
         return TrainDrawing.this.getTrainName() + "次 "
             +station1+"至"+station2
             +" 区间"+dist+"公里"
             +" 行车"+runMinutes+"分钟"
-            +"("+ mainView.getTime(p1.x) + "发" + mainView.getTime(p2.x) + "到)"
+            +"("+ chartView.getTime(p1.x) + "发" + chartView.getTime(p2.x) + "到)"
             +" 平均时速"+dist*60/runMinutes+"公里";
       }
     }
@@ -490,7 +521,7 @@ public class TrainDrawing {
 	
 	public static final int UNKOW = -99;
     public static final int EDGE = -1;
-    public static final int PASS = 0;
+    public static final int PASS = 0; //实际上没有用到PASS类型
     public static final int START = 1;
     public static final int TERMINAL = 2;
     public static final int STOP_ARRIVE = 3;
@@ -498,14 +529,14 @@ public class TrainDrawing {
     public static final int ARRIVE_IN_CHART = 5;
     public static final int LEAVE_OUT_CHART = 6;
     int type;
+    
+    //是否图定
+    public boolean isSchedular = true;
 
-    public ChartPoint(int _x, int _y, int _type) {
+    public ChartPoint(int _x, int _y, int _type, boolean _isSchedular) {
       super(_x, _y);
       type = _type;
-    }
-
-    public ChartPoint(int _x, int _y) {
-      this(_x, _y, PASS);
+      isSchedular = _isSchedular;
     }
 
     /**
@@ -516,19 +547,40 @@ public class TrainDrawing {
      * @param y0 int
      */
     private void drawStopPoint(Graphics g) {
-      g.fillRect(x-1, y-1, 3, 3);
+		Color oldColor = g.getColor();
+    	if(!isSchedular && !oldColor.equals(chartView.underDrawingColor)) {
+    		g.setColor(notSchedularColor);
+    	}
+		
+    	g.fillRect(x-1, y-1, 3, 3);
+
+		g.setColor(oldColor);
     }
 
     private void drawStopPointActive(Graphics g) {
-      g.fillRect(x-2, y-2, 5, 5);
+		Color oldColor = g.getColor();
+    	if(!isSchedular && !oldColor.equals(chartView.underDrawingColor)) {
+    		g.setColor(notSchedularColor);
+    	}
+		
+   		g.fillRect(x-2, y-2, 5, 5);
+
+		g.setColor(oldColor);
     }
 
     private void drawStopPointSelected(Graphics g) {
-      Color oldColor = g.getColor();
-      g.setColor(selectedColor);
-      g.fillRect(x-2, y-2, 5, 5);
-      g.setColor(oldColor);
-      g.fillRect(x-1, y-1, 3, 3);
+		Color oldColor = g.getColor();
+    	if(!isSchedular && !oldColor.equals(chartView.underDrawingColor)) {
+    		g.setColor(notSchedularColor);
+    	}
+		
+		Color drawingColor = g.getColor();
+		g.setColor(selectedColor);
+		g.fillRect(x - 2, y - 2, 5, 5);
+		g.setColor(drawingColor);
+		g.fillRect(x - 1, y - 1, 3, 3);
+
+		g.setColor(oldColor);
     }
 
     /**
@@ -601,11 +653,11 @@ public class TrainDrawing {
   }
 
   public String getStationName() {
-    return chart.circuit.getStationName(mainView.getDist(y));
+    return chart.circuit.getStationName(chartView.getDist(y));
   }
 
   public int getDrawStopIndex() {
-    return mainView.getDrawStopIndex(train, getStationName());
+    return chartView.getDrawStopIndex(train, getStationName());
   }
 
   }
@@ -703,7 +755,7 @@ public class TrainDrawing {
     private boolean pointOnMeTop(Point p) {
       if((p.x > anchor.x - 5)
          &&(p.x < anchor.x + 5)
-         &&(p.y > anchor.y - mainView.trainNameRecHeight - 10)
+         &&(p.y > anchor.y - chartView.trainNameRecHeight - 10)
          &&(p.y < anchor.y))
         return true;
       else
@@ -713,7 +765,7 @@ public class TrainDrawing {
     private boolean pointOnMeBottom(Point p) {
       if((p.x > anchor.x - 5)
          &&(p.x < anchor.x + 5)
-         &&(p.y < anchor.y + mainView.trainNameRecHeight + 10)
+         &&(p.y < anchor.y + chartView.trainNameRecHeight + 10)
          &&(p.y > anchor.y))
         return true;
       else
@@ -752,17 +804,17 @@ public class TrainDrawing {
       int top = anchor.y;
       switch(isDownTrain) {
         case Train.DOWN_TRAIN:
-          top  = anchor.y - mainView.trainNameRecMargin
-                 - 10 - mainView.trainNameRecHeight;
+          top  = anchor.y - chartView.trainNameRecMargin
+                 - 10 - chartView.trainNameRecHeight;
           break;
         case Train.UP_TRAIN:
-          top = anchor.y + mainView.trainNameRecMargin + 10;
+          top = anchor.y + chartView.trainNameRecMargin + 10;
           break;
       }
       rec.x = left;
       rec.y = top;
       rec.width = 10;
-      rec.height = mainView.trainNameRecMargin + mainView.trainNameRecMargin + 10;
+      rec.height = chartView.trainNameRecMargin + chartView.trainNameRecMargin + 10;
       return rec;
     }
 
@@ -779,12 +831,12 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y - mainView.trainNameRecMargin;
+      int y1 = y - chartView.trainNameRecMargin;
       int px[] = {x, x-5, x+5};
       int py[] = {y1, y1-10, y1-10};
       g.fillPolygon(px, py, 3);
       //g.drawLine(x, y, x, y1);
-      drawNameRec(g, x-5, y1-10-mainView.trainNameRecHeight, isActive);
+      drawNameRec(g, x-5, y1-10-chartView.trainNameRecHeight, isActive);
     }
 
     //上行入图
@@ -792,7 +844,7 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y + mainView.trainNameRecMargin;
+      int y1 = y + chartView.trainNameRecMargin;
       int px[] = {x, x-5, x+5};
       int py[] = {y1, y1+10, y1+10};
       g.fillPolygon(px, py, 3);
@@ -813,8 +865,8 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y + mainView.trainNameRecMargin;
-      int y2 = y1 + mainView.trainNameRecHeight;
+      int y1 = y + chartView.trainNameRecMargin;
+      int y2 = y1 + chartView.trainNameRecHeight;
       int px[] = {x, x - 5, x + 5};
       int py[] = {y2 + 10, y2, y2};
       g.fillPolygon(px, py, 3);
@@ -826,7 +878,7 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y - mainView.trainNameRecHeight - mainView.trainNameRecMargin;
+      int y1 = y - chartView.trainNameRecHeight - chartView.trainNameRecMargin;
       int px[] = {x, x-5, x+5};
       int py[] = {y1-10, y1, y1};
       g.fillPolygon(px, py, 3);
@@ -846,12 +898,12 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y - mainView.trainNameRecMargin;
+      int y1 = y - chartView.trainNameRecMargin;
 
 //    g.fillRect(x-5, y1-mainView.trainNameRecHeight-5, 11, 4);
-      drawTailRecDown(g, x-5, y1-mainView.trainNameRecHeight-5);
+      drawTailRecDown(g, x-5, y1-chartView.trainNameRecHeight-5);
       
-      drawNameRec(g, x-5, y1-mainView.trainNameRecHeight, isActive);
+      drawNameRec(g, x-5, y1-chartView.trainNameRecHeight, isActive);
     }
 
     //上行始发
@@ -859,10 +911,10 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y + mainView.trainNameRecMargin;
+      int y1 = y + chartView.trainNameRecMargin;
 
 //    g.fillRect(x-5, y1+mainView.trainNameRecHeight+2, 11, 4);
-      drawTailRecUp(g, x-5, y1+mainView.trainNameRecHeight+2);
+      drawTailRecUp(g, x-5, y1+chartView.trainNameRecHeight+2);
 
       drawNameRec(g, x-5, y1, isActive);
     }
@@ -880,10 +932,10 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y + mainView.trainNameRecMargin;
+      int y1 = y + chartView.trainNameRecMargin;
 
 //    g.fillRect(x-5, y1+mainView.trainNameRecHeight+2, 11, 4);
-      drawTailRecDown(g, x-5, y1+mainView.trainNameRecHeight+2);
+      drawTailRecDown(g, x-5, y1+chartView.trainNameRecHeight+2);
 
       drawNameRec(g, x-5, y1, isActive);
     }
@@ -893,12 +945,12 @@ public class TrainDrawing {
       int x = anchor.x;
       int y = anchor.y;
 
-      int y1 = y - mainView.trainNameRecMargin;
+      int y1 = y - chartView.trainNameRecMargin;
 
 //    g.fillRect(x-5, y1-mainView.trainNameRecHeight-5, 11, 4);
-      drawTailRecUp(g, x-5, y1-mainView.trainNameRecHeight-5);
+      drawTailRecUp(g, x-5, y1-chartView.trainNameRecHeight-5);
 
-      drawNameRec(g, x-5, y1-mainView.trainNameRecHeight, isActive);
+      drawNameRec(g, x-5, y1-chartView.trainNameRecHeight, isActive);
     }
     
     //画下行始发终到车的尾框
@@ -939,10 +991,10 @@ public class TrainDrawing {
     private void drawNameRecInactive(Graphics g, int x, int y) {
       Color oldColor = g.getColor();
       g.setColor(Color.white);
-      g.fillRect(x, y, 10, mainView.trainNameRecHeight);
+      g.fillRect(x, y, 10, chartView.trainNameRecHeight);
       g.setColor(oldColor);
 
-      g.drawRect(x, y, 10, mainView.trainNameRecHeight);
+      g.drawRect(x, y, 10, chartView.trainNameRecHeight);
 
       int h = g.getFontMetrics().getHeight() - 5;
       int xt = x + 3;
@@ -956,7 +1008,7 @@ public class TrainDrawing {
     private void drawNameRecActive(Graphics g, int x, int y) {
       //Color oldColor = g.getColor();
       //g.setColor(Color.white);
-      g.fillRect(x, y, 11, mainView.trainNameRecHeight+1);
+      g.fillRect(x, y, 11, chartView.trainNameRecHeight+1);
       //g.setColor(oldColor);
 
       //g.drawRect(x, y, 10, chart.trainNameRecHeight);
