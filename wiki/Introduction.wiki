@@ -4,7 +4,7 @@
 
 This project aims to implement a cross-platform train graph drawing software. By inputting the information of the train lines and trains, the software can draw train graph automatically. At the same time, it can simulate the train running status by animations. 
 
-This project originally named as "ETRC" and was published as close-source shareware. It was developed by LGuo, which can be obtained from the BBS of Hasea (One of the biggest railfan forum in China). 
+This project originally named as "ETRC" and was published as close-source shareware. It was developed by LGuo, and can be obtained from the BBS of Hasea (One of the biggest railfan forum in China). 
 
 URL to download ETRC: http://bbs.hasea.com/viewthread.php?tid=227051
 
