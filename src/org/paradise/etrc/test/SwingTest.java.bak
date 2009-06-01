@@ -1,0 +1,422 @@
+package org.paradise.etrc.test;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.tree.*;
+import javax.swing.event.*;
+import javax.swing.border.*;
+import javax.swing.table.*;
+
+/** 
+ * Swing ¡Á¨¦?????????¨°
+ * ????Swing?¨´??¡Á¨¦???¡ã???¨¤????????
+ * @author ?¨¬?¨ª.?? 2003.4.17 ?¨ª23:14
+ * @link http://www.robochina.org
+ * @link robococde@etang.com
+ */
+public class SwingTest extends JFrame
+{
+    /**
+     * ?¡Â???¨¦?????????¨´??¡Á????¨¦?????¨¨???¡Â?¨°?????¨¤??????
+     */
+    public SwingTest()
+    {
+        // ???????¨´?????¨¦
+        MenuTest menuTest = new MenuTest();
+        LeftPanel leftPanel = new LeftPanel();
+        RightPanel rightPanel = new RightPanel();
+        BottomPanel bottomPanel = new BottomPanel();
+        CenterPanel centerPanel = new CenterPanel();
+        
+        // ?¨¨???¡Â?¨°????????
+        Container c = this.getContentPane();
+        // c.setLayout(new BorderLayout())
+        this.setJMenuBar(menuTest);
+        
+        c.add(leftPanel,BorderLayout.WEST);
+        c.add(rightPanel,BorderLayout.EAST);
+        c.add(centerPanel,BorderLayout.CENTER);
+        c.add(bottomPanel,BorderLayout.SOUTH);
+        
+        // ?????????????¨¤???????¡ã??????
+        this.addWindowListener(new WindowAdapter()
+            {
+                public void WindowClosing(WindowEvent e)
+                {   
+                    // ??¡¤?¡Á????????????¨°
+                    dispose();
+                    System.exit(0);
+                }
+            });
+            
+        
+        
+        setSize(700,500);
+        setTitle("Swing ¡Á¨¦???¨®???¨°??¡ã?");
+        // ????frame??¡À¨º????,???????¡À??¡À?????¡¤?¡À?????window????
+        // setUndecorated(true);
+        setLocation(200,150);
+        show();        
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * ?????????¨ª???¨¦
+     * JMenuBar --+
+     *            --JMenu--+
+     *                       --JMenuItem  --ActionListener 
+     *              
+     */
+    class MenuTest extends JMenuBar
+    {
+        private JDialog aboutDialog;
+            
+        /**
+         * ????????????¡Á¡Â
+         */    
+        public MenuTest()
+        {
+            JMenu fileMenu = new JMenu("????");
+            JMenuItem exitMenuItem = new JMenuItem("????",KeyEvent.VK_E);
+            JMenuItem aboutMenuItem = new JMenuItem("????...",KeyEvent.VK_A);            
+                                                
+            fileMenu.add(exitMenuItem);
+            fileMenu.add(aboutMenuItem);
+            
+            this.add(fileMenu);        
+            
+                    
+            aboutDialog = new JDialog();
+            initAboutDialog();
+                        
+            // ????????
+            exitMenuItem.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    dispose();
+                    System.exit(0);
+                }
+            });
+            
+            aboutMenuItem.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    // "????"???¡ã?¨°?????¨ª
+                    aboutDialog.show();
+                }
+            });            
+                        
+        }
+        
+        /**
+         * ¡¤??????????¡ã?¨°
+         */
+        public JDialog getAboutDialog()
+        {
+            return aboutDialog;
+        }
+        
+        /**
+         * ?¨¨??"????"???¡ã?¨°???????¡ã?¨¬??????,??¡Á¡Â??JFrame???¨´??????????
+         * ?¨°??????????
+         */
+        public void initAboutDialog()
+        {
+            aboutDialog.setTitle("????");
+            
+            Container con =aboutDialog.getContentPane();
+             
+            // Swing ??????html????
+            Icon icon = new ImageIcon("smile.gif");
+            JLabel aboutLabel = new JLabel("<html><b><font size=5>"+
+            "<center>Swing ¡Á¨¦???¨®???¨°??¡ã???"+"<br>?¨¬?¨ª.??",icon,JLabel.CENTER);
+                        
+            //JLabel aboutLabel = new JLabel("Swing ¡Á¨¦???¨®???¨°??¡ã???",icon,JLabel.CENTER);
+            con.add(aboutLabel,BorderLayout.CENTER);
+            
+            aboutDialog.setSize(450,225);
+            aboutDialog.setLocation(300,300);                        
+            aboutDialog.addWindowListener(new WindowAdapter()
+            {
+                public void WindowClosing(WindowEvent e)
+                {
+                    dispose();
+                }                    
+            });            
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * ¡Á?¡Á¨®¡À????¨¦??????JPanel,????????????JTree
+     * JPanel--+
+     *         --JTree
+     */
+    class LeftPanel extends JPanel
+    {
+        private int i = 0;
+        public LeftPanel()
+        {
+            
+            DefaultMutableTreeNode    root = new DefaultMutableTreeNode("Root");
+            DefaultMutableTreeNode child = new DefaultMutableTreeNode("Child");
+            DefaultMutableTreeNode select = new DefaultMutableTreeNode("select");
+            
+            DefaultMutableTreeNode child1 = new DefaultMutableTreeNode(""+i);
+            
+            root.add(child);        
+            root.add(select);
+            child.add(child1);    
+            
+            JTree tree = new JTree(root);
+            tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            
+            // ??????????????
+            tree.setRowHeight(20);            
+            tree.addTreeSelectionListener(new TreeSelectionListener ()
+            {
+                public void valueChanged(TreeSelectionEvent e)
+                {
+                    // ?????¨¤?????¡À???????????¨¤tree??1.????¡À??????¨º?¡Â??final 2.???¡§?????¨¤?????¨®
+                    JTree tree =(JTree)e.getSource();
+                    DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+                    i++;
+                    selectNode.add(new DefaultMutableTreeNode(""+i));
+                }
+            });            
+            
+            tree.setPreferredSize(new Dimension(100,300));
+        //    tree.setEnabled(true);
+            JScrollPane scrollPane = new JScrollPane(tree);
+            //scrollPane.setSize(100,350);
+            this.add(scrollPane);
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * ¡Á??????????¨¦??????JPanel,?????????????????????????¡§?¡À?¡Â????
+     * JPanel--+
+     *         --JProcessBar  --Timer
+     */
+    class BottomPanel extends JPanel
+    {
+        private JProgressBar pb;
+        ////////////////////////////////////////
+        //public class 
+        //////////////////////////////
+        public BottomPanel()
+        {
+            pb = new JProgressBar();
+            pb.setPreferredSize(new Dimension(680,20));
+            
+            // ?¨¨???¡§?¡À?¡Â?????????????????????¨ª
+            Timer time = new Timer(1,new ActionListener()
+            { 
+                int counter = 0;
+                public void actionPerformed(ActionEvent e)
+                {
+                    counter++;
+                    pb.setValue(counter);
+                    Timer t = (Timer)e.getSource();
+                    
+                    // ??????????????¡Á??¨®????????¡¤?????
+                    if (counter == pb.getMaximum())
+                    {
+                        t.stop();
+                        counter =0;
+                        t.start();
+                    }                    
+                }
+            });
+            time.start();
+            
+            pb.setStringPainted(true);
+            pb.setMinimum(0);
+            pb.setMaximum(1000);
+            pb.setBackground(Color.white);
+            pb.setForeground(Color.red);
+                        
+            this.add(pb);                
+        }
+        
+        /**
+         * ?¨¨??????????????????
+         */
+        public void setProcessBar(BoundedRangeModel rangeModel)
+        {
+            pb.setModel(rangeModel);
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * ¡Á???¡À????¨¦??????JPanel,???????¡Â??¡ã???
+     * JPanel--+
+     *         --JButton  --JToggleButton -- JList -- JCombox --JCheckBox ....
+     */
+    class RightPanel extends JPanel
+    {
+        public RightPanel()
+        {
+            this.setLayout(new GridLayout(8,1));        
+            
+            
+            // ???????¡Â??¡ã???
+            JCheckBox checkBox = new JCheckBox("????¡ã???");            
+            JButton button = new JButton("?¨°??????");
+            button.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    JFileChooser file = new JFileChooser();
+                    int result = file.showOpenDialog(new JPanel());
+                    if (result ==file.APPROVE_OPTION) 
+                    {
+                        String fileName = file.getSelectedFile().getName();                    
+                        String dir = file.getCurrentDirectory().toString();
+                          JOptionPane.showConfirmDialog(null,dir+"\\"+fileName,"??????????",JOptionPane.YES_OPTION);
+                     }
+                }
+            });
+            ////////////////////////////////////////
+            //public
+            //////////////////////////////////////////
+                    
+            JToggleButton toggleButton = new JToggleButton("????¡ã???");
+            
+            ButtonGroup    buttonGroup = new ButtonGroup();
+            JRadioButton radioButton1 = new JRadioButton("????¡ã???1",false);
+            JRadioButton radioButton2 = new JRadioButton("????¡ã???2",false);
+            
+            // ¡Á¨¦???¨°?????¨ª
+            JComboBox comboBox = new JComboBox();
+            comboBox.setToolTipText("???¡Â??????¡À¨ª????????");
+            comboBox.addActionListener(new ActionListener() 
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    JComboBox comboBox =(JComboBox)e.getSource();
+                    comboBox.addItem("???¨°?¡À");
+                    comboBox.addItem("¡¤????¡À");
+                }
+            });
+            
+            // ??¡À¨ª?¨°?????¨ª
+            DefaultListModel litem = new DefaultListModel();
+            litem.addElement("????");
+            litem.addElement("????");
+            JList list = new JList(litem);
+            
+            
+            list.addListSelectionListener(new ListSelectionListener ()
+            {
+                public void valueChanged(ListSelectionEvent e)
+                {
+                    JList l = (JList)e.getSource();
+                    Object s= l.getSelectedValue();
+                    JOptionPane.showMessageDialog(null,s,"?????¨°",JOptionPane.YES_OPTION);
+                }
+            });
+            
+            // ????¡ã???¡Á¨¦
+            buttonGroup.add(radioButton1);
+            buttonGroup.add(radioButton2);
+            
+            // ?????¡Â??¡ã?????JPanel??????
+            add(button);
+            add(toggleButton);
+            add(checkBox);
+            add(radioButton1);            
+            add(radioButton2);
+            add(comboBox);
+            
+            add(list);
+            
+            this.setBorder(new EtchedBorder(EtchedBorder.LOWERED,Color.LIGHT_GRAY,Color.blue));
+        }        
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * ?????????¨¦??????JPanel,??????????,???????????¨¨????¡À?????¡À¨ª??,
+     * ??¡À?????????¡¤?????¡¤???
+     * JPanel--+
+     *         -JTabbedPane--+
+     *                          --Draw    --JTable  -JTextAreas -JText --JPopupMenu
+     */
+    class CenterPanel extends JPanel
+    {
+        public CenterPanel()
+        {
+            JTabbedPane tab = new JTabbedPane(JTabbedPane.TOP);
+            
+            JTextField textField = new JTextField("??¡À??¨°,???¡Â?¨°??<????¡ã???>??????????");
+            textField.setActionCommand("textField");
+            
+            JTextPane textPane = new JTextPane();
+            textPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+            textPane.setText("¡À¨¤???¡Â,??¡Á????¡Â??¡À???????¡Á?????¡¤???????");
+                        
+            textPane.addMouseListener(new MouseAdapter () 
+            {
+                public void mousePressed (MouseEvent e)
+                {
+                    JTextPane textPane = (JTextPane)e.getSource();
+                    textPane.setText("¡À¨¤???¡Â???¡Â?¨¹??????");
+                //    textField.setText(""+textPane.getText());
+                }
+            });
+            
+            /*
+            UpperCaseDocument doc = new Document(); 
+            textField.setDocumentsetDocument(doc);
+            doc.addDocumentListener(new DocumentListener()
+            {
+                public void changedUpdate(DocumentEvent e){}
+                public void removeUpdate(DocumentEvent e){}
+                public void insertUpdate(DocumentEvent e)
+                {
+                    Document text = (Document)e.getDocument();
+                    text.setText("????????");
+                }                
+            });
+            */
+            
+            JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,textField,textPane);
+            
+                
+            JTable table = new JTable(10,10);
+            //table.showHorizontalLines(true);
+            //table.showVerticalLines(true);
+            //table.gridColor(Color.blue);
+            
+            JPanel pane  = new JPanel();
+            pane.add(table.getTableHeader(),BorderLayout.NORTH);
+            pane.add(table);
+                        
+            tab.addTab("??¡À?????",splitPane);
+            //tab.addTab(table.getTableHeader());
+            tab.addTab("¡À¨ª??????",pane);
+            tab.setPreferredSize(new Dimension(500,600));
+            this.add(tab);
+            this.setEnabled(true);            
+        }
+    }
+    
+    
+    public static void main(String args[])
+    {
+        // ?¨¨???¡Â?¨°??????,?????????????????¨°???????¡ì??
+        //try
+        //{
+        //    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        //}
+        //catch  (Exception e){}
+        new SwingTest();                        
+    }
+}
