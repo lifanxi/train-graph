@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import com.borland.jbcl.layout.*;
+//import com.borland.jbcl.layout.*;
 
 import org.paradise.etrc.*;
 import org.paradise.etrc.view.chart.ChartView;

@@ -20,7 +20,7 @@ import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.skb.ETRCLCB;
 
-import com.borland.jbcl.layout.VerticalFlowLayout;
+//import com.borland.jbcl.layout.VerticalFlowLayout;
 
 public class CircuitMakeDialog extends JDialog {
 	private static final long serialVersionUID = -5891299808461231142L;

@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.borland.jbcl.layout.*;
+//import com.borland.jbcl.layout.*;
 
 import org.paradise.etrc.*;
 
