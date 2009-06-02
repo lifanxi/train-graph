@@ -441,6 +441,9 @@ public class Train {
 	public static final int UP_TRAIN = 2;
 
 	public int isDownTrain(Circuit c) {
+		return isDownTrain(c, true);
+	}
+	public int isDownTrain(Circuit c, boolean isGuessByTrainName) {
 		int lastDist = -1;
 		for (int i = 0; i < stopNum; i++) {
 			int thisDist = c.getStationDist(stops[i].stationName);
@@ -455,7 +458,7 @@ public class Train {
 			lastDist = thisDist;
 		}
 		//遍历完仍然未能确定
-		return isDownTrainByTrainName(c);
+		return isGuessByTrainName?isDownTrainByTrainName(c):UNKOWN;
 	}
 
 	private int isDownTrainByTrainName(Circuit c) {

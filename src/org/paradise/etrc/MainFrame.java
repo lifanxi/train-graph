@@ -869,7 +869,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 //							+ Train.toTrainFormat(loadingTrain.stops[i].leave)
 //							+ " 发");
 
-				if(loadingTrain.isDownTrain(chart.circuit) > 0)
+				if(loadingTrain.isDownTrain(chart.circuit, false) > 0)
 					chart.addTrain(loadingTrain);
 			}
 
