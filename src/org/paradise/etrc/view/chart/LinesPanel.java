@@ -233,8 +233,8 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 
 		drawTrains(g);
 		
-		if(chartView.activeTrainDrawing!= null)
-			moveToTrainDrawing(chartView.activeTrainDrawing);
+//		if(chartView.activeTrainDrawing!= null)
+//			moveToTrainDrawing(chartView.activeTrainDrawing);
 	}
 
 	/**
