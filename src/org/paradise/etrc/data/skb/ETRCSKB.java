@@ -50,9 +50,29 @@ public class ETRCSKB {
 		
 		DataInputStream in = new DataInputStream(new FileInputStream(f));
 		
+		// Skip the BOM of UTF-8 text file
+		boolean firstTime = true;
+		byte buf = 0;
+		while(in.available() > 0) {
+			buf = in.readByte();
+			if (buf > 0)
+				break;
+		}
+		
 		while(in.available() > 0) {
 			byte[] buffer = new byte[8];
-			in.read(buffer);
+			if (firstTime)	{
+				buffer[0] = buf;
+				for (int i = 0; i < 7; ++i)
+				{
+					buffer[i + 1] = in.readByte();
+				}
+				firstTime = false;
+			}
+			else
+			{
+				in.read(buffer);
+			}
 			
 			tk.add(decodeTK(new String(buffer)));
 		}
