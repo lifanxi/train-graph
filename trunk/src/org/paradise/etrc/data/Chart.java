@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Chart {
 	//Y轴（距离）显示参数
@@ -225,7 +227,7 @@ public class Chart {
 	}
 
 	public void loadFromFile(File f) throws IOException {
-		BufferedReader in = new BufferedReader(new FileReader(f));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));
 
 		//读取文件状态
 		final int READING_CIRCUIT = 1;
