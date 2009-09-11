@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.paradise.etrc.data.BOMStripperInputStream;
 import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
@@ -59,7 +61,7 @@ public class ETRCSKB {
 	private void loadzm() throws IOException {
 		File f = new File(path + "ezm.eda");
 		
-		BufferedReader in = new BufferedReader(new FileReader(f));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));
 		
 		String line = in.readLine();
 		while(line != null) {
@@ -72,7 +74,7 @@ public class ETRCSKB {
 	private void loadcc() throws IOException {
 		File f = new File(path + "ecc.eda");
 		
-		BufferedReader in = new BufferedReader(new FileReader(f));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));
 		
 		String line = in.readLine();
 		while(line != null) {

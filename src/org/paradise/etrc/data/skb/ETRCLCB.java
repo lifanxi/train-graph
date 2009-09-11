@@ -2,9 +2,13 @@ package org.paradise.etrc.data.skb;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
+import org.paradise.etrc.data.BOMStripperInputStream;
+
 
 
 public class ETRCLCB {
@@ -84,7 +88,7 @@ public class ETRCLCB {
 		lc = new Vector();
 		File f = new File(path + "elc.eda");
 		
-		BufferedReader in = new BufferedReader(new FileReader(f));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));
 		
 		String line = in.readLine();
 		while(line != null) {
@@ -98,7 +102,7 @@ public class ETRCLCB {
 		xl = new Vector();
 		File f = new File(path + "exl.eda");
 		
-		BufferedReader in = new BufferedReader(new FileReader(f));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));
 		
 		String line = in.readLine();
 		while(line != null) {

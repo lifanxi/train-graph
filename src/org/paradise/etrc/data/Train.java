@@ -163,7 +163,7 @@ public class Train {
 	}
 
 	public void loadFromFile(String file) throws IOException {
-		BufferedReader in = new BufferedReader(new FileReader(file));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(file)),"UTF-8"));
 
 		String line;
 		//车次
