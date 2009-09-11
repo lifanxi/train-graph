@@ -564,6 +564,7 @@ public class Train {
 		switch(type) {
 		case 'D':
 		case 'Z':
+		case 'C':
 			return new Color(128, 0, 128);
 		case 'T':
 			return Color.BLUE;
@@ -781,6 +782,7 @@ public class Train {
 		switch(type) {
 		case 'D':
 		case 'Z':
+		case 'C':
 			return 120;
 		case 'T':
 			return 100;
