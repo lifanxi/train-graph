@@ -26,6 +26,7 @@ public class AboutBox extends JDialog implements ActionListener {
 	ImageIcon image1 = new ImageIcon();
 
 	JLabel label5 = new JLabel();
+	JLabel label6 = new JLabel();
 	GridBagLayout gridBagLayout1 = new GridBagLayout();
 
 	public AboutBox(Frame parent) {
@@ -52,13 +53,15 @@ public class AboutBox extends JDialog implements ActionListener {
 		label1.setFont(new java.awt.Font("Dialog", 0, 12));
 		label1.setText("LGuo的电子运行图");
 
-		label2.setText("Version 2.40 Beta");
-		label3.setText("Build 200704170064");
+		label2.setText("Version 2.50 Beta");
+		label3.setText("Build 20090912 Revision 36");
 
 		label4.setFont(new java.awt.Font("Dialog", 0, 12));
 		label4.setText("郭磊（海子ID: lguo）出品");
-		label5.setText("鸣谢：海子网 achen1 等网友！   ");
+		label5.setText("鸣谢：海子网 achen1 等网友");
 		label5.setFont(new java.awt.Font("Dialog", 0, 12));
+		label6.setText("http://train-graph.googlecode.com    ");
+		label6.setFont(new java.awt.Font("Dialog", 0, 12));
 
 		button1.setActionCommand("Ok");
 		button1.setText("确定");
@@ -77,10 +80,13 @@ public class AboutBox extends JDialog implements ActionListener {
 		panel1.add(label5, new GridBagConstraints(1, 4, 3, 1, 0.0, 0.0,
 				GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
 				new Insets(0, 0, 20, 0), 0, 0));
+		panel1.add(label6, new GridBagConstraints(1, 5, 3, 1, 0.0, 0.0,
+				GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
+				new Insets(0, 0, 20, 0), 0, 0));
 		panel1.add(label1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
 				new Insets(20, 0, 0, 0), 0, 0));
-		panel1.add(button1, new GridBagConstraints(0, 5, 3, 1, 0.0, 0.0,
+		panel1.add(button1, new GridBagConstraints(0, 6, 3, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
 						0, 0, 10, 0), 0, 0));
 		panel1.add(imageLabel, new GridBagConstraints(0, 1, 1, 5, 0.0, 0.0,
