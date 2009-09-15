@@ -151,9 +151,9 @@ public class Circuit {
 			//跨越0点情况的处理
 			int myTime = time;
 			if(t2 < t1) {
-				t2 += 24 * 60;
-				if(myTime < 60)
+				if (myTime < t2)
 					myTime += 24 * 60;
+				t2 += 24 * 60;
 			}
 
 			//t1 == t2时通过或者始发、终到，不作为停靠处理
@@ -189,9 +189,9 @@ public class Circuit {
 			//跨越0点情况的处理
 			int myTime = time;
 			if(t2 < t1) {
-				t2 += 24 * 60;
-				if(myTime < 60)
+				if (myTime < t2)
 					myTime += 24 * 60;
+				t2 += 24 * 60;
 			}
 
 			if(t1<= myTime && t2 >= myTime ) {
@@ -223,9 +223,9 @@ public class Circuit {
 			//跨越0点情况的处理
 			int myTime = time;
 			if(t2 < t1) {
-				t2 += 24 * 60;
-				if(myTime < 60)
+				if (myTime < t2)
 					myTime += 24 * 60;
+				t2 += 24 * 60;
 			}
 			
 			if(t1 <= myTime && t2 >= myTime) {
