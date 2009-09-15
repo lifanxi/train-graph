@@ -61,7 +61,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	public Chart chart;
 
 	private static final int MAX_TRAIN_SELECT_HISTORY_RECORD = 12;
-	public Vector trainSelectHistory;
+	public Vector<String> trainSelectHistory;
 	public JComboBox cbTrainSelectHistory;
 	
 	//Construct the frame
@@ -74,7 +74,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		
 		prop = new Properties(defaultProp);
 		
-		trainSelectHistory = new Vector();
+		trainSelectHistory = new Vector<String>();
 		cbTrainSelectHistory = new JComboBox(new DefaultComboBoxModel(trainSelectHistory));
 		
 		try {

@@ -92,7 +92,7 @@ public class FindTrainsDialog extends JDialog {
 			msgLabel.setText("正在查找车次，请稍等...");
 			
 			ETRCSKB skb = mainFrame.getSKB();
-			Vector trains = skb.findTrains(mainFrame.chart.circuit);
+			Vector<Train> trains = skb.findTrains(mainFrame.chart.circuit);
 			
 			for(int i=0; i<trains.size(); i++) {
 				Train loadingTrain = (Train) (trains.get(i));

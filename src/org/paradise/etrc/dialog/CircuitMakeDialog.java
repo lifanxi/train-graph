@@ -19,6 +19,7 @@ import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.skb.ETRCLCB;
+import org.paradise.etrc.data.skb.LCBStation;
 
 //import com.borland.jbcl.layout.VerticalFlowLayout;
 
@@ -33,7 +34,7 @@ public class CircuitMakeDialog extends JDialog {
 	private ETRCLCB lcb;
 	private String xianlu;
 	
-	private Vector allStations;
+	private Vector<LCBStation> allStations;
 	private Circuit circuit;
 	
 	public CircuitMakeDialog(MainFrame _mainFrame, String _xianlu) {
@@ -54,7 +55,7 @@ public class CircuitMakeDialog extends JDialog {
 		}
 	}
 
-	private Circuit makeCircuit(Vector staLCB) {
+	private Circuit makeCircuit(Vector<LCBStation> staLCB) {
 		System.out.println(staLCB);
 		
 		Circuit cir = new Circuit();
@@ -88,12 +89,12 @@ public class CircuitMakeDialog extends JDialog {
 	}
 	
 	private String xianluFirstStationName() {
-		Vector allStations = lcb.findLCBStation(xianlu);
+		Vector<LCBStation> allStations = lcb.findLCBStation(xianlu);
 		return ( (Station) (allStations.get(0)) ).name; 
 	}
 
 	private String xianluLastStationName() {
-		Vector allStations = lcb.findLCBStation(xianlu);
+		Vector<LCBStation> allStations = lcb.findLCBStation(xianlu);
 		return ( (Station) (allStations.get(allStations.size()-1)) ).name; 
 	}
 
@@ -106,7 +107,7 @@ public class CircuitMakeDialog extends JDialog {
 				String name2 = (String) list2.getSelectedValue();
 				
 				if(new YesNoBox("请确认" + xianlu + " " + name1 + " 至 " + name2 + " 为下行方向！").askForYes()) {
-					Vector selectedStations = new Vector();
+					Vector<LCBStation> selectedStations = new Vector<LCBStation>();
 					int index1 = list1.getSelectedIndex();
 					int index2 = list2.getSelectedIndex();
 					
@@ -149,7 +150,7 @@ public class CircuitMakeDialog extends JDialog {
 	}
 	
 	private JPanel buildXianluPanel() {
-		Vector allNames = new Vector();
+		Vector<String> allNames = new Vector<String>();
 		for(int i=0; i<allStations.size(); i++) {
 			Station sta = (Station) (allStations.get(i));
 			allNames.add(sta.name);

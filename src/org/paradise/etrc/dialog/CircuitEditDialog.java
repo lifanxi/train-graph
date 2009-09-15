@@ -330,7 +330,7 @@ public class CircuitEditDialog extends JDialog {
 		 * @param columnIndex int
 		 * @return Class
 		 */
-		public Class getColumnClass(int columnIndex) {
+		public Class<?> getColumnClass(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
 				return String.class;
@@ -342,6 +342,7 @@ public class CircuitEditDialog extends JDialog {
 			default:
 				return null;
 			}
+		
 		}
 
 		/**

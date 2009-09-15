@@ -183,8 +183,8 @@ public class WZTrainNameInput extends WizardDialog {
 			
 			tfFull.setText(fullName);
 			
-			Vector upNames = new Vector();
-			Vector downNames = new Vector();
+			Vector<String> upNames = new Vector<String>();
+			Vector<String> downNames = new Vector<String>();
 			for(int i = 0; i < myNames.length; i++) {
 				if(myNames[i] != null) {
 					if(Train.isDownName(myNames[i])) {

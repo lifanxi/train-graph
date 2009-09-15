@@ -247,7 +247,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		chartView.buildTrainDrawings();
 
 		// 先画水印部分
-		for (Enumeration e = chartView.underDrawings.elements(); e
+		for (Enumeration<TrainDrawing> e = chartView.underDrawings.elements(); e
 				.hasMoreElements();) {
 			Object obj = e.nextElement();
 			if (obj instanceof TrainDrawing) {
@@ -260,7 +260,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 
 		// 再画非选中部分
-		for (Enumeration e = chartView.normalDrawings.elements(); e
+		for (Enumeration<TrainDrawing> e = chartView.normalDrawings.elements(); e
 				.hasMoreElements();) {
 			Object obj = e.nextElement();
 			if (obj instanceof TrainDrawing) {
@@ -433,9 +433,9 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	 * @return Train[]
 	 */
 	private Train[] findTrains(Point p) {
-		Vector trainsFound = new Vector();
+		Vector<Train> trainsFound = new Vector<Train>();
 		// 正常部分
-		for (Enumeration e = chartView.normalDrawings.elements(); e
+		for (Enumeration<TrainDrawing> e = chartView.normalDrawings.elements(); e
 				.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.pointOnMe(p)) {
@@ -446,7 +446,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		// 水印部分
 		// 如果“水印显示反向车次”未选中则不给选水印车次
 		if(chartView.underDrawingColor != null) {
-			for (Enumeration e = chartView.underDrawings.elements(); e
+			for (Enumeration<TrainDrawing> e = chartView.underDrawings.elements(); e
 					.hasMoreElements();) {
 				TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 				if (trainDrawing.pointOnMe(p)) {
@@ -457,7 +457,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		
 		Train array[] = new Train[trainsFound.size()];
 		int i = 0;
-		for (Enumeration e = trainsFound.elements(); e.hasMoreElements();) {
+		for (Enumeration<Train> e = trainsFound.elements(); e.hasMoreElements();) {
 			array[i++] = (Train) e.nextElement();
 		}
 		
@@ -507,7 +507,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		// 先查水印部分的
 		// 如果“水印显示反向车次”未选中则不给选水印车次
 		if(chartView.underDrawingColor != null) {
-			for (Enumeration e = chartView.underDrawings.elements(); e.hasMoreElements();) {
+			for (Enumeration<TrainDrawing> e = chartView.underDrawings.elements(); e.hasMoreElements();) {
 				TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 				if (trainDrawing.pointOnMyRect(p) || trainDrawing.pointOnMe(p)) {
 					// System.out.println(trainDrawing.getTrainName()+ " A");
@@ -517,7 +517,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		}
 
 		// 后查正常部分的，这样正常部分比较容易选中
-		for (Enumeration e = chartView.normalDrawings.elements(); e
+		for (Enumeration<TrainDrawing> e = chartView.normalDrawings.elements(); e
 				.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.pointOnMyRect(p) || trainDrawing.pointOnMe(p)) {

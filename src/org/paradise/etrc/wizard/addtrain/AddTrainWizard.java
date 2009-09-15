@@ -46,11 +46,11 @@ public class AddTrainWizard extends Wizard {
 					
 					if(new YesNoBox(chartView.mainFrame, "是否查询内置时刻表获取点单数据？").askForYes()) {
 						String[] names = fullName.split("/");
-						Vector trains = new Vector();
+						Vector<Train> trains = new Vector<Train>();
 						for(int i=0; i<names.length; i++) {
-							Vector fTras = chartView.mainFrame.getSKB().getTrains(names[i]);
+							Vector<Train> fTras = chartView.mainFrame.getSKB().getTrains(names[i]);
 							for(int j=0; j<fTras.size(); j++) {
-								Object obj = fTras.get(j);
+								Train obj = fTras.get(j);
 								if(!trains.contains(obj))
 									trains.add(obj);
 							}
@@ -83,7 +83,7 @@ public class AddTrainWizard extends Wizard {
 					}
 
 					//看看输入的上下行车次时候与查出来的一致，如果一致则设置为输入的，否则就用时刻表读出来的时候所设的默认的
-					Vector myNamesVec = new Vector();
+					Vector<String> myNamesVec = new Vector<String>();
 					String[] myNames = train.getTrainName().split("/");
 					for(int i=0; i<myNames.length; i++)
 						myNamesVec.add(myNames[i]);

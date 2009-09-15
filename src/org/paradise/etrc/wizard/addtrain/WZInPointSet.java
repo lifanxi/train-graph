@@ -149,7 +149,7 @@ public class WZInPointSet extends WizardDialog {
 			return oldTime;
 		}
 		
-		Vector events = trainSlice.getStationEventsAt(curStation);
+		Vector<ChartEvent> events = trainSlice.getStationEventsAt(curStation);
 		if(events.size() > 0) {
 			ChartEvent event = (ChartEvent) events.get(0);
 			oldTime = Train.intToTrainTime(event.time);

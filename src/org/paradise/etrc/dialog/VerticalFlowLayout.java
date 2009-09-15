@@ -5,9 +5,6 @@
 //----------------------------------------------------
 package org.paradise.etrc.dialog;
 
-import java.io.ObjectInputStream;
-import java.io.IOException;
-
 import java.awt.LayoutManager;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -23,6 +20,10 @@ import java.awt.Insets;
  */
 public class VerticalFlowLayout implements LayoutManager, java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 444019841455498625L;
 	int _halign;
 	int _valign;
 	int _hgap;

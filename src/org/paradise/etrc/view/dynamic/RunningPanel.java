@@ -16,6 +16,7 @@ import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.Train;
 
+
 public class RunningPanel extends JPanel {
 	private static final long serialVersionUID = -2001053748609300887L;
 
@@ -150,8 +151,8 @@ public class RunningPanel extends JPanel {
 		g.setColor(oldColor);
 	}
 	
-	private Hashtable runningTrains = new Hashtable();
-	private Hashtable atStationTrains = new Hashtable();
+	private Hashtable<Train, String> runningTrains = new Hashtable<Train, String>();
+	private Hashtable<Train, String>  atStationTrains = new Hashtable<Train, String> ();
 	
 	private void drawTrains(Graphics g) {
 		//找出停靠中的车
@@ -180,7 +181,7 @@ public class RunningPanel extends JPanel {
 		}
 		
 		//画运行中的列车
-		Enumeration en = runningTrains.keys();
+		Enumeration<Train> en = runningTrains.keys();
 		while(en.hasMoreElements()) {
 			Train theRunningTrain = (Train) en.nextElement();
 			int theDist = Integer.parseInt((String) runningTrains.get(theRunningTrain));
@@ -196,9 +197,9 @@ public class RunningPanel extends JPanel {
 		for(int i=0; i<chart.circuit.stationNum; i++) {
 			String theStation = chart.circuit.stations[i].name;
 			int stationDist = chart.circuit.stations[i].dist;
-			Vector myTrains = new Vector();
+			Vector<Train> myTrains = new Vector<Train>();
 			
-			Enumeration stoped = atStationTrains.keys();
+			Enumeration<Train> stoped = atStationTrains.keys();
 			while(stoped.hasMoreElements()) {
 				Train theTrain = (Train) stoped.nextElement();
 				String sta = (String) atStationTrains.get(theTrain);
@@ -212,8 +213,8 @@ public class RunningPanel extends JPanel {
 	}
 	
 	//找出停靠于本线区间车站上的列车
-	private Hashtable findTrainsAtStation(int time) {
-		Hashtable trains = new Hashtable();
+	private Hashtable<Train, String> findTrainsAtStation(int time) {
+		Hashtable<Train, String> trains = new Hashtable<Train, String>();
 		for(int i = 0; i < chart.trainNum; i++) {
 			String station = chart.circuit.getStationNameAtTheTime(chart.trains[i], time);
 			
@@ -224,7 +225,7 @@ public class RunningPanel extends JPanel {
 		return trains;
 	}
 
-	private void drawTrainsAtStation(Graphics g, Vector myTrains, int dist) {
+	private void drawTrainsAtStation(Graphics g, Vector<Train> myTrains, int dist) {
 		int dNum = 0;
 		int uNum = 0;
 		for(int i = 0; i < myTrains.size(); i++) {

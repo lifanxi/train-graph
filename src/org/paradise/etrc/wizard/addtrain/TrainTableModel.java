@@ -33,7 +33,7 @@ public class TrainTableModel extends AbstractTableModel {
 		}
 	}
 	
-	public Class getColumnClass(int columnIndex) {
+	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
 		case 0:
 			return String.class;

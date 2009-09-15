@@ -13,8 +13,8 @@ import org.paradise.etrc.data.BOMStripperInputStream;
 
 public class ETRCLCB {
 	private String path;
-	private Vector xl;
-	private Vector lc;
+	private Vector<String> xl;
+	private Vector<LCBStation> lc;
 	
 	public ETRCLCB(String _path) throws IOException {
 		path = _path;
@@ -56,8 +56,8 @@ public class ETRCLCB {
 //		return null;
 //	}
 	
-	public Vector findXianlu(char head) {
-		Vector xlFound = new Vector();
+	public Vector<String> findXianlu(char head) {
+		Vector<String> xlFound = new Vector<String>();
 		
 		for(int i=0; i<xl.size(); i++) {
 			String theXL = (String) xl.get(i);
@@ -68,8 +68,8 @@ public class ETRCLCB {
 		return xlFound;
 	}
 
-	public Vector findLCBStation(String xlName) {
-		Vector stFound = new Vector();
+	public Vector<LCBStation> findLCBStation(String xlName) {
+		Vector<LCBStation> stFound = new Vector<LCBStation>();
 		
 		for(int i=0; i<lc.size(); i++) {
 			LCBStation theStation = (LCBStation) lc.get(i);
@@ -85,7 +85,7 @@ public class ETRCLCB {
 	}
 
 	private void loadlc() throws IOException {
-		lc = new Vector();
+		lc = new Vector<LCBStation>();
 		File f = new File(path + "elc.eda");
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));
@@ -99,7 +99,7 @@ public class ETRCLCB {
 	}
 
 	private void loadxl() throws IOException {
-		xl = new Vector();
+		xl = new Vector<String>();
 		File f = new File(path + "exl.eda");
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(f)),"UTF-8"));

@@ -60,8 +60,8 @@ public class ChartLine {
 //		return found;
 //	}
 	
-	public static Vector getChartLineByDistWithEnd(Vector lines, int dist) {
-		Vector found = new Vector();
+	public static Vector<ChartLine> getChartLineByDistWithEnd(Vector<ChartLine> lines, int dist) {
+		Vector<ChartLine> found = new Vector<ChartLine>();
 		for(int i=0; i<lines.size(); i++) {
 			ChartLine line = (ChartLine) lines.get(i);
 			if(line.isDistOnMe(dist) || line.isDistOnMyEnd(dist)) {
@@ -71,8 +71,8 @@ public class ChartLine {
 		return found;
 	}
 	
-	public static Vector getChartLineByDistWithoutEnd(Vector lines, int dist) {
-		Vector found = new Vector();
+	public static Vector<ChartLine> getChartLineByDistWithoutEnd(Vector<ChartLine> lines, int dist) {
+		Vector<ChartLine> found = new Vector<ChartLine>();
 		for(int i=0; i<lines.size(); i++) {
 			ChartLine line = (ChartLine) lines.get(i);
 			if(line.isDistOnMe(dist)) {
