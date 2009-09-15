@@ -49,8 +49,8 @@ public class ChartView extends JPanel {
 	public static final int ScrollUnitIncrement = 16;
 
 	public TrainDrawing activeTrainDrawing;
-	Vector normalDrawings = new Vector();
-	Vector underDrawings  = new Vector();
+	Vector<TrainDrawing> normalDrawings = new Vector<TrainDrawing>();
+	Vector<TrainDrawing> underDrawings  = new Vector<TrainDrawing>();
 
 	public CircuitPanel panelCircuit;
 	public LinesPanel panelLines;
@@ -83,7 +83,7 @@ public class ChartView extends JPanel {
 //		System.out.println("findAndMoveToTrain:" + trainName);
 //		
 		boolean found = false;
-	    for(Enumeration e = normalDrawings.elements(); e.hasMoreElements(); ) {
+	    for(Enumeration<TrainDrawing> e = normalDrawings.elements(); e.hasMoreElements(); ) {
 	      TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 	      if((trainDrawing.train.trainNameDown.equalsIgnoreCase(trainName))
 	        ||(trainDrawing.train.trainNameUp.equalsIgnoreCase(trainName))) {
@@ -92,7 +92,7 @@ public class ChartView extends JPanel {
 	      }
 	    }
 
-	    for(Enumeration e = underDrawings.elements(); e.hasMoreElements(); ) {
+	    for(Enumeration<TrainDrawing> e = underDrawings.elements(); e.hasMoreElements(); ) {
 	      TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 	      if((trainDrawing.train.trainNameDown.equalsIgnoreCase(trainName))
 	        ||(trainDrawing.train.trainNameUp.equalsIgnoreCase(trainName))) {
@@ -115,14 +115,14 @@ public class ChartView extends JPanel {
 		if (train == null)
 			return;
 		
-		for (Enumeration e = normalDrawings.elements(); e.hasMoreElements();) {
+		for (Enumeration<TrainDrawing> e = normalDrawings.elements(); e.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.train.equals(train)) {
 				panelLines.moveToTrainDrawing(trainDrawing);
 			}
 		}
 
-		for (Enumeration e = underDrawings.elements(); e.hasMoreElements();) {
+		for (Enumeration<TrainDrawing> e = underDrawings.elements(); e.hasMoreElements();) {
 			TrainDrawing trainDrawing = (TrainDrawing) e.nextElement();
 			if (trainDrawing.train.equals(train)) {
 				panelLines.moveToTrainDrawing(trainDrawing);

@@ -49,7 +49,7 @@ public class SheetModel extends AbstractTableModel {
 		return chart.trains[conIndex].getTrainName(chart.circuit);
 	}
 	
-	public Class getColumnClass(int columnIndex) {
+	public Class<?> getColumnClass(int columnIndex) {
 		return Stop.class;
 	}
 	

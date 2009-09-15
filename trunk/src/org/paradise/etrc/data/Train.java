@@ -621,7 +621,7 @@ public class Train {
 		return name;
 	}
 	
-	public static String makeFullName(Vector names) {
+	public static String makeFullName(Vector<String> names) {
 		return makeFullName((String[]) names.toArray());
 	}
 

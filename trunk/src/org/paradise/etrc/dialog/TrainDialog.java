@@ -389,7 +389,7 @@ public class TrainDialog extends JDialog {
 		 * @param columnIndex int
 		 * @return Class
 		 */
-		public Class getColumnClass(int columnIndex) {
+		public Class<?> getColumnClass(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
 			case 1:

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
@@ -21,24 +20,24 @@ public class ETRCSKB {
 	/**
 	 * 车次列表
 	 */
-	private Vector cc;
+	private Vector<String> cc;
 	
 	/**
 	 * 车站列表
 	 */
-	private Vector zm;
+	private Vector<String> zm;
 	
 	/**
 	 * 停靠信息列表
 	 */
-	private Vector tk;
+	private Vector<String []> tk;
 
 	public ETRCSKB(String _path) throws IOException {
 		path = _path;
 		
-		cc = new Vector();
-		zm = new Vector();
-		tk = new Vector();
+		cc = new Vector<String>();
+		zm = new Vector<String>();
+		tk = new Vector<String []>();
 		
 		loadcc();
 		loadzm();
@@ -131,15 +130,15 @@ public class ETRCSKB {
 	/**
 	 * 查找经过某个circuit的车次
 	 */
-	public Vector findTrains(Circuit cir) {
-		Vector trains = new Vector();
+	public Vector<Train> findTrains(Circuit cir) {
+		Vector<Train> trains = new Vector<Train>();
 		
 		for(int i=0; i<cir.stationNum; i++) {
-			Vector newTrains = findTrains(cir.stations[i].name);
+			Vector<Train> newTrains = findTrains(cir.stations[i].name);
 			
-			Enumeration en = newTrains.elements();
+			Enumeration<Train> en = newTrains.elements();
 			while(en.hasMoreElements()) {
-				Object train = en.nextElement();
+				Train train = en.nextElement();
 				if(!trains.contains(train))
 					trains.add(train);
 			}
@@ -153,10 +152,10 @@ public class ETRCSKB {
 	 * @param stationName
 	 * @return
 	 */
-	public Vector findTrains(String stationName) {
-		Vector trains = new Vector();
+	public Vector<Train> findTrains(String stationName) {
+		Vector<Train> trains = new Vector<Train>();
 		
-		Enumeration en = tk.elements();
+		Enumeration<String []> en = tk.elements();
 		while(en.hasMoreElements()) {
 			String tkInfo[] = (String[]) en.nextElement();
 			
@@ -178,10 +177,10 @@ public class ETRCSKB {
 	 * @param trainName
 	 * @return
 	 */
-	public Vector getTrains(String trainName) {
-		Vector trains = new Vector();
+	public Vector<Train> getTrains(String trainName) {
+		Vector<Train> trains = new Vector<Train>();
 		
-		Enumeration en = cc.elements();
+		Enumeration<String> en = cc.elements();
 		while(en.hasMoreElements()) {
 			String myFullName = (String)en.nextElement();
 			String myNames[] = myFullName.split("/");
@@ -207,7 +206,7 @@ public class ETRCSKB {
 	private Train getTrainByFullName(String trainName) {
 		Train train = new Train();
 		
-		Enumeration en = tk.elements();
+		Enumeration<String []> en = tk.elements();
 		while(en.hasMoreElements()) {
 			String tkInfo[] = (String[]) en.nextElement();
 			
@@ -281,7 +280,7 @@ public class ETRCSKB {
 			
 			Circuit cir = new Circuit();
 			cir.loadFromFile("C:\\trains\\沪杭线.cir");
-			Vector trains = data.findTrains(cir);
+			Vector<Train> trains = data.findTrains(cir);
 			System.out.println("沪杭线：" + trains.size() + "\r\n");
 //			System.in.read();
 //			System.out.println(trains);

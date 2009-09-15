@@ -9,8 +9,8 @@ public class TrainSlice {
 	Train train;
 	Circuit circuit;
 	
-	Vector runLines  = new Vector();
-	Vector stopLines = new Vector();
+	Vector<ChartLine> runLines  = new Vector<ChartLine>();
+	Vector<ChartLine> stopLines = new Vector<ChartLine>();
 	
 	public TrainSlice(Train _train, Circuit _circuit) {
 		train = _train;
@@ -19,8 +19,8 @@ public class TrainSlice {
 	}
 	
 	//车次切片 反向 会车
-	public Vector getTrainEventsOfDiffDir(TrainSlice he) {
-		Vector events = new Vector();
+	public Vector<TrainEvent> getTrainEventsOfDiffDir(TrainSlice he) {
+		Vector<TrainEvent> events = new Vector<TrainEvent>();
 		
 		//同一趟车
 		if(he.train.equals(train))
@@ -128,8 +128,8 @@ public class TrainSlice {
 	}
 	
 	// 车次切片：同向 越 让 领 跟
-	public Vector getTrainEventsOfSameDir(TrainSlice he) {
-		Vector events = new Vector();
+	public Vector<TrainEvent> getTrainEventsOfSameDir(TrainSlice he) {
+		Vector<TrainEvent> events = new Vector<TrainEvent>();
 		
 		//同一趟车
 		if(he.train.equals(train))
@@ -262,8 +262,8 @@ public class TrainSlice {
 	}
 	
 	//车次切片：通、到、发
-	public Vector getStationEvents() {
-		Vector events = new Vector();
+	public Vector<ChartEvent> getStationEvents() {
+		Vector<ChartEvent> events = new Vector<ChartEvent>();
 		
 		//用车站横线扫描列车线
 		for(int staIndex=0; staIndex<circuit.stationNum; staIndex++) {
@@ -276,9 +276,9 @@ public class TrainSlice {
 	}
 	
 	//本次列车在station站 上的事件
-	public Vector getStationEventsAt(Station station) {
-		Vector events = new Vector();
-		Vector sLines = getStopLineByDist(station.dist);
+	public Vector<ChartEvent> getStationEventsAt(Station station) {
+		Vector<ChartEvent> events = new Vector<ChartEvent>();
+		Vector<ChartLine> sLines = getStopLineByDist(station.dist);
 		
 		//扫描到多于1条停车线：（同一趟列车用一个车次在本线路停两次？）
 		if(sLines.size() > 1) {
@@ -324,7 +324,7 @@ public class TrainSlice {
 		}
 		//没有扫描到停车线，扫描行车线
 		else {
-			Vector rLines = getRunLineByDist(station.dist);
+			Vector<ChartLine> rLines = getRunLineByDist(station.dist);
 			//确有两次通过一个车站的情况发生，所以要遍历所有行车线
 			for(int lineIndex=0; lineIndex<rLines.size(); lineIndex++) {
 				RunLine line = (RunLine) rLines.get(lineIndex);
@@ -488,7 +488,7 @@ public class TrainSlice {
 //	}
 	
 	//运行线不考虑端点
-	private Vector getRunLineByDist(int dist) {
+	private Vector<ChartLine> getRunLineByDist(int dist) {
 		return ChartLine.getChartLineByDistWithoutEnd(runLines, dist);
 	}
 	
@@ -497,7 +497,7 @@ public class TrainSlice {
 //	}
 	
 	//停站线考虑端点
-	private Vector getStopLineByDist(int dist) {
+	private Vector<ChartLine> getStopLineByDist(int dist) {
 		return ChartLine.getChartLineByDistWithEnd(stopLines, dist);
 	}
 }

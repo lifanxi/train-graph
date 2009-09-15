@@ -17,8 +17,8 @@ public class ChartEvent {
 	String desc;
 	String comment;
 	
-	public static Vector sortByTime(Vector events) {
-		Vector newEvents = new Vector();
+	public static Vector<ChartEvent> sortByTime(Vector<ChartEvent> events) {
+		Vector<ChartEvent> newEvents = new Vector<ChartEvent>();
 		
 		for(int time=0; time<1440; time++) {
 			for(int j=0; j<events.size(); j++) {
@@ -31,7 +31,7 @@ public class ChartEvent {
 		return newEvents;
 	}
 	
-	public static Vector sortByDistAsc(Vector events) {
+	public static Vector<ChartEvent> sortByDistAsc(Vector<ChartEvent> events) {
 		for(int i=0; i<events.size(); i++) {
 			ChartEvent Ei = (ChartEvent) events.get(i);
 			for(int j=i+1; j<events.size(); j++) {
@@ -47,7 +47,7 @@ public class ChartEvent {
 		return sortByTimeInSameDist(events);
 	}
 	
-	public static Vector sortByDistDesc(Vector events) {
+	public static Vector<ChartEvent> sortByDistDesc(Vector<ChartEvent> events) {
 		for(int i=0; i<events.size(); i++) {
 			ChartEvent Ei = (ChartEvent) events.get(i);
 			for(int j=i+1; j<events.size(); j++) {
@@ -64,7 +64,7 @@ public class ChartEvent {
 	}
 	
 	//把距离相等的事件 按时间先后排列
-	public static Vector sortByTimeInSameDist(Vector events) {
+	public static Vector<ChartEvent> sortByTimeInSameDist(Vector<ChartEvent> events) {
 		for(int i=0; i<events.size(); i++) {
 			ChartEvent Ei = (ChartEvent) events.get(i);
 			for(int j=i+1; j<events.size(); j++) {
@@ -78,9 +78,9 @@ public class ChartEvent {
 		return events;
 	}
 	
-	private static void exchange(Vector vec, int i, int j) {
-		Object oi = vec.get(i);
-		Object oj = vec.get(j);
+	private static void exchange(Vector<ChartEvent> vec, int i, int j) {
+		ChartEvent oi = vec.get(i);
+		ChartEvent oj = vec.get(j);
 		
 		vec.set(i, oj);
 		vec.set(j, oi);

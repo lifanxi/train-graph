@@ -23,7 +23,7 @@ public class TrainDrawing {
 
   //实际存在于图上的各部件
   //行车线和停车线
-  private Vector lines = new Vector();
+  private Vector<TrainLine> lines = new Vector<TrainLine>();
   //车次框
   private TrainNameRect firstRect = null;
   private TrainNameRect lastRect = null;
@@ -181,7 +181,7 @@ public class TrainDrawing {
     g.setColor(chartView.underDrawingColor);
     //System.out.println(train.getTrainName(chart.circuit) + color.toString());
 
-    for (Enumeration e = lines.elements(); e.hasMoreElements(); ) {
+    for (Enumeration<TrainLine> e = lines.elements(); e.hasMoreElements(); ) {
       Object obj = e.nextElement();
       if (obj instanceof TrainLine)
         ( (TrainLine) obj).draw(g);
@@ -203,7 +203,7 @@ public class TrainDrawing {
     g.setColor(train.color);
     //System.out.println(train.getTrainName(chart.circuit) + color.toString());
 
-    for (Enumeration e = lines.elements(); e.hasMoreElements(); ) {
+    for (Enumeration<TrainLine> e = lines.elements(); e.hasMoreElements(); ) {
       Object obj = e.nextElement();
       if (obj instanceof TrainLine)
         ( (TrainLine) obj).draw(g);
@@ -229,7 +229,7 @@ public class TrainDrawing {
     Color oldColor = g.getColor();
     g.setColor(train.color);
 
-    for (Enumeration e = lines.elements(); e.hasMoreElements(); ) {
+    for (Enumeration<TrainLine> e = lines.elements(); e.hasMoreElements(); ) {
       Object obj = e.nextElement();
       if (obj instanceof TrainLine)
         ( (TrainLine) obj).draw(g);
@@ -297,7 +297,7 @@ public class TrainDrawing {
    * @return boolean
    */
   public boolean pointOnMe(Point p) {
-    for(Enumeration e = lines.elements(); e.hasMoreElements(); ) {
+    for(Enumeration<TrainLine> e = lines.elements(); e.hasMoreElements(); ) {
       TrainLine line = (TrainLine)e.nextElement();
       if(line.pointOnMe(p))
         return true;
@@ -317,7 +317,7 @@ public class TrainDrawing {
   }
 
   public TrainLine findNearTrainLine(Point p) {
-    for(Enumeration e = lines.elements(); e.hasMoreElements(); ) {
+    for(Enumeration<TrainLine> e = lines.elements(); e.hasMoreElements(); ) {
       TrainLine line = (TrainLine)e.nextElement();
       if(line.pointOnMe(p))
         return line;
@@ -339,7 +339,7 @@ public class TrainDrawing {
     int top = Integer.MAX_VALUE;
     int right = Integer.MIN_VALUE;
     int bottom = Integer.MIN_VALUE;
-    for(Enumeration e = lines.elements(); e.hasMoreElements(); ) {
+    for(Enumeration<TrainLine> e = lines.elements(); e.hasMoreElements(); ) {
       TrainLine line = (TrainLine)e.nextElement();
       left = Math.min(Math.min(left, line.p1.x), line.p2.x);
       top = Math.min(Math.min(top, line.p1.y), line.p2.y);
