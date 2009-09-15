@@ -21,6 +21,7 @@ import org.paradise.etrc.data.skb.ETRCLCB;
 import org.paradise.etrc.data.skb.ETRCSKB;
 import org.paradise.etrc.dialog.*;
 import org.paradise.etrc.filter.CSVFilter;
+import org.paradise.etrc.filter.GIFFilter;
 import org.paradise.etrc.filter.TRCFilter;
 import org.paradise.etrc.filter.TRFFilter;
 import org.paradise.etrc.view.chart.ChartView;
@@ -407,7 +408,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private final String File_Clear_Chart = "File_Clear_Chart";
 //	private final String File_Circuit = "File_Circuit";
 	private final String File_Train = "File_Train";
-	private final String File_Print = "File_Print";
+	private final String File_Export = "File_Export";
 	private final String File_Exit = "File_Exit";
 
 	private final String Edit_FindTrain = "Edit_FindTrain";
@@ -436,7 +437,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 //		menuFile.add(createMenuItem("更改线路...", File_Circuit)); //Bug:更改线路后没有清空车次
 		menuFile.add(createMenuItem("载入车次...", File_Train));
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("打印运行图...", File_Print));
+		menuFile.add(createMenuItem("导出运行图...", File_Export));
 		menuFile.addSeparator();
 		menuFile.add(createMenuItem("退出", File_Exit));
 
@@ -544,8 +545,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			this.doSaveChartAs();
 		} else if (command.equalsIgnoreCase(File_Load_Chart)) {
 			this.doLoadChart();
-		} else if (command.equalsIgnoreCase(File_Print)) {
-			this.doPrintChart();
+		} else if (command.equalsIgnoreCase(File_Export)) {
+			this.doExportChart();
 		} else if (command.equalsIgnoreCase(Help_About)) {
 			this.doHelpAbout();
 		}
@@ -659,20 +660,38 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	}
 
 	/**
-	 * doPrint
+	 * doExportChart
 	 */
-	private void doPrintChart() {
-		new MessageBox(this, "JAVA的打印能力太弱，不想做这个功能了。拟改图片输出，请查看 C:\\ETRC.gif。 ").showMessage();
-		
-		try {
-			BufferedImage image = chartView.getBufferedImage();
+	private void doExportChart() {
+		JFileChooser chooser = new JFileChooser();
+		ETRC.setFont(chooser);
 
-			ImageIO.write(image, "gif", new File("c:\\ETRC.gif"));
-		}
-		catch(Exception ioe) {
-			ioe.printStackTrace();
+		chooser.setDialogTitle("导出运行图");
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setFileFilter(new GIFFilter());
+		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+		String fileName = chart.circuit.name + df.format(new Date());
+		chooser.setSelectedFile(new File(fileName));
+
+		int returnVal = chooser.showOpenDialog(this); 
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File f = chooser.getSelectedFile();
+			if (!f.getAbsolutePath().endsWith(".gif"))
+				f = new File(f.getAbsolutePath() + ".gif");
+			try {
+				BufferedImage image = chartView.getBufferedImage();
+				ImageIO.write(image, "gif", f);
+			}
+			catch(Exception ioe) {
+				ioe.printStackTrace();
+				this.statusBarMain.setText("导出运行图出错！");
+			}
 		}
 		
+
 //		//获取默认打印作业
 //		PrinterJob myPrtJob = PrinterJob.getPrinterJob();
 //
