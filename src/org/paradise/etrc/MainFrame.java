@@ -427,41 +427,46 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private JMenuBar loadMenu() {
 		JMenuBar jMenuBar = new JMenuBar();
 
-		JMenu menuFile = createMenu("文件");
-		menuFile.add(createMenuItem("清空运行图", File_Clear_Chart));
-		menuFile.add(createMenuItem("打开运行图...", File_Load_Chart));
+		JMenu menuFile = createMenu("文件(F)");
+		menuFile.setMnemonic(KeyEvent.VK_F);
+		menuFile.add(createMenuItem("清空运行图(N)", File_Clear_Chart)).setMnemonic(KeyEvent.VK_N);
+		menuFile.add(createMenuItem("打开运行图(O)...", File_Load_Chart)).setMnemonic(KeyEvent.VK_O);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("保存运行图", File_Save_Chart));
-		menuFile.add(createMenuItem("运行图另存为...", File_Save_Chart_As));
+		menuFile.add(createMenuItem("保存运行图(S)", File_Save_Chart)).setMnemonic(KeyEvent.VK_S);
+		menuFile.add(createMenuItem("运行图另存为(A)...", File_Save_Chart_As)).setMnemonic(KeyEvent.VK_A);
 		menuFile.addSeparator();
 //		menuFile.add(createMenuItem("更改线路...", File_Circuit)); //Bug:更改线路后没有清空车次
-		menuFile.add(createMenuItem("载入车次...", File_Train));
+		menuFile.add(createMenuItem("载入车次(L)...", File_Train)).setMnemonic(KeyEvent.VK_L);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("导出运行图...", File_Export));
+		menuFile.add(createMenuItem("导出运行图(P)...", File_Export)).setMnemonic(KeyEvent.VK_P);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("退出", File_Exit));
+		menuFile.add(createMenuItem("退出(X)", File_Exit)).setMnemonic(KeyEvent.VK_X);
 
-		JMenu menuSetup = createMenu("设置");
-		menuSetup.add(createMenuItem("边距设定...", Setup_Margin));
+		JMenu menuSetup = createMenu("设置(S)");
+		menuSetup.setMnemonic(KeyEvent.VK_S);
+		menuSetup.add(createMenuItem("边距设定(M)...", Setup_Margin)).setMnemonic(KeyEvent.VK_M);
 		menuSetup.addSeparator();
-		menuSetup.add(createMenuItem("时间轴设定...", Setup_Time));
-		menuSetup.add(createMenuItem("距离轴设定...", Setup_Dist));
+		menuSetup.add(createMenuItem("时间轴设定(T)...", Setup_Time)).setMnemonic(KeyEvent.VK_T);
+		menuSetup.add(createMenuItem("距离轴设定(D)...", Setup_Dist)).setMnemonic(KeyEvent.VK_D);
 
-		JMenu menuEdit = createMenu("编辑");
-		menuEdit.add(createMenuItem("线路编辑...", Edit_Circuit));
-		menuEdit.add(createMenuItem("车次编辑...", Edit_Trains));
+		JMenu menuEdit = createMenu("编辑(E)");
+		menuEdit.setMnemonic(KeyEvent.VK_E);
+		menuEdit.add(createMenuItem("线路编辑(C)...", Edit_Circuit)).setMnemonic(KeyEvent.VK_C);
+		menuEdit.add(createMenuItem("车次编辑(R)...", Edit_Trains)).setMnemonic(KeyEvent.VK_R);
 		menuEdit.addSeparator();
 //		menuEdit.add(createMenuItem("车次录入...", Edit_NewTrain));
-		menuEdit.add(createMenuItem("车次查找...", Edit_FindTrain));
+		menuEdit.add(createMenuItem("车次查找(F)...", Edit_FindTrain)).setMnemonic(KeyEvent.VK_F);
 //		menuEdit.addSeparator();
 //		menuEdit.add(createMenuItem("颜色设定...", Edit_Color));
 		
-		JMenu menuTools = createMenu("工具");
-		menuTools.add(createMenuItem("线路导入...", Tools_Circuit));
-		menuTools.add(createMenuItem("车次导入...", Tools_Train));
+		JMenu menuTools = createMenu("工具(T)");
+		menuTools.setMnemonic(KeyEvent.VK_T);
+		menuTools.add(createMenuItem("线路导入(C)...", Tools_Circuit)).setMnemonic(KeyEvent.VK_C);
+		menuTools.add(createMenuItem("车次导入(R)...", Tools_Train)).setMnemonic(KeyEvent.VK_R);
 
-		JMenu menuHelp = createMenu("帮助");
-		menuHelp.add(createMenuItem("关于...", Help_About));
+		JMenu menuHelp = createMenu("帮助(H)");
+		menuHelp.setMnemonic(KeyEvent.VK_H);
+		menuHelp.add(createMenuItem("关于(A)...", Help_About)).setMnemonic(KeyEvent.VK_A);
 
 		jMenuBar.add(menuFile);
 		jMenuBar.add(menuEdit);
