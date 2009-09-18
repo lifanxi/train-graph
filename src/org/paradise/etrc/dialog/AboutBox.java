@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import org.paradise.etrc.ETRC;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -48,23 +50,23 @@ public class AboutBox extends JDialog implements ActionListener {
 		image1 = new ImageIcon(org.paradise.etrc.MainFrame.class
 				.getResource("/pic/about.png"));
 		imageLabel.setIcon(image1);
-		this.setTitle("关于");
+		this.setTitle(ETRC.getString("About"));
 		panel1.setLayout(gridBagLayout1);
 		label1.setFont(new java.awt.Font("Dialog", 0, 12));
-		label1.setText("LGuo的电子运行图");
+		label1.setText(ETRC.getString("LGuo's Train Graph"));
 
 		label2.setText("Version 2.50 Beta");
 		label3.setText("Build 20090912 Revision 36");
 
 		label4.setFont(new java.awt.Font("Dialog", 0, 12));
-		label4.setText("郭磊（海子ID: lguo）出品");
-		label5.setText("鸣谢：海子网 achen1 等网友");
+		label4.setText(ETRC.getString("Author: Guo Lei (HASEA ID:lguo)"));
+		label5.setText(ETRC.getString("Thanks to: achen1 on HASEA"));
 		label5.setFont(new java.awt.Font("Dialog", 0, 12));
 		label6.setText("http://train-graph.googlecode.com    ");
 		label6.setFont(new java.awt.Font("Dialog", 0, 12));
 
 		button1.setActionCommand("Ok");
-		button1.setText("确定");
+		button1.setText(ETRC.getString("OK"));
 		button1.setFont(new java.awt.Font("Dialog", 0, 12));
 		button1.addActionListener(this);
 

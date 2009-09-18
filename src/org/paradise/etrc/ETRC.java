@@ -2,8 +2,11 @@ package org.paradise.etrc;
 
 import javax.swing.UIManager;
 import java.awt.*;
+import java.util.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
+
 
 /**
  * @author lguo@sina.com
@@ -15,6 +18,9 @@ public class ETRC {
   
   private static ETRC instance = null;
   private MainFrame frame;
+  
+  public static ResourceBundle res;
+  
 
   public static ETRC getInstance() {
 	  return instance;
@@ -24,10 +30,31 @@ public class ETRC {
 	  return frame;
   }
   
+  public static String getString(String str) {
+	  if (res == null) {
+		  return str; 
+	  }
+	  else  {
+		  if (str == "FONT_NAME") {
+		  	  return "Sans";
+		  }
+		  else {
+		  	  return res.getString(str);	  
+		  }
+		  
+	  }
+  }
+  
   //Construct the application
   public ETRC() {
 	instance = this;
-	
+	try	{
+		res = ResourceBundle.getBundle("org.paradise.etrc.l10n.Res");
+	}
+	catch (MissingResourceException ex)	{
+		res = null;
+	}
+
     frame = new MainFrame();
     //Validate frames that have preset sizes
     //Pack frames that have useful preferred size info, e.g. from their layout

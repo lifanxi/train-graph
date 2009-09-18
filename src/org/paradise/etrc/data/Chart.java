@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.paradise.etrc.ETRC;
+
 public class Chart {
 	//Y轴（距离）显示参数
 	public int distScale = 3; //每公里像素数
@@ -308,7 +310,7 @@ public class Chart {
 			timeInterval = Integer.parseInt(setup[5]);
 
 		} catch (Exception e) {
-			throw new IOException("运行图设置读取错误");
+			throw new IOException(ETRC.getString("Unable to read chart settings."));
 		}
 	}
 	
@@ -322,7 +324,7 @@ public class Chart {
 		String colorLine[] = line.split(",");
 
 		if (colorLine.length < 4)
-			throw new IOException("颜色读取错");
+			throw new IOException(ETRC.getString("Error reading color."));
 
 		int r = 255;
 		int g = 255;
@@ -332,7 +334,7 @@ public class Chart {
 			g = Integer.parseInt(colorLine[2]);
 			b = Integer.parseInt(colorLine[3]);
 		} catch (Exception e) {
-			throw new IOException(colorLine[0] + "次颜色读取错误");
+			throw new IOException(String.format(ETRC.getString("Error reading color settings for the train %s."), colorLine[0]));
 		}
 
 		for (int i = 0; i < readTrainNum; i++) {

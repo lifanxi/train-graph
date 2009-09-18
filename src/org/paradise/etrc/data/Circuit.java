@@ -1,6 +1,7 @@
 package org.paradise.etrc.data;
 
 import java.io.*;
+import org.paradise.etrc.ETRC;
 
 /**
  * @author lguo@sina.com
@@ -250,7 +251,7 @@ public class Circuit {
 		if ((line = in.readLine()) != null) {
 			this.name = line;
 		} else {
-			throw new IOException("线路名读取错");
+			throw new IOException(ETRC.getString("Error reading circuit name."));
 		}
 
 		// 线路总长
@@ -259,10 +260,10 @@ public class Circuit {
 			try {
 				this.length = Integer.parseInt(stLength);
 			} catch (NumberFormatException e) {
-				throw new IOException("线路总长数据格式错");
+				throw new IOException(ETRC.getString("Error in circuit lenght format."));
 			}
 		} else {
-			throw new IOException("线路总长读取错");
+			throw new IOException(ETRC.getString("Error reading circuit length."));
 		}
 
 		// 站点
@@ -398,9 +399,9 @@ public class Circuit {
 
 		if (addSuffix) {
 			if (minGap > 1)
-				return stations[minIndex].name + "站附近";
+				return String.format(ETRC.getString("Near %s Station"), stations[minIndex].name);
 			else
-				return stations[minIndex].name + "站";
+				return String.format(ETRC.getString("%s Station"), stations[minIndex].name);
 		} else
 			return stations[minIndex].name;
 	}
@@ -430,7 +431,7 @@ public class Circuit {
 			try {
 				this.length = Integer.parseInt(line);
 			} catch (NumberFormatException e) {
-				throw new IOException("线路总长数据格式错");
+				throw new IOException(ETRC.getString("Error in circuit lenght format."));
 			}
 			break;
 		default:
@@ -441,7 +442,7 @@ public class Circuit {
 	private void parseStationLine(String line) throws IOException {
 		String stStation[] = line.split(",");
 		if (stStation.length < 2)
-			throw new IOException("第" + (stationNum + 1) + "站数据有误");
+			throw new IOException(String.format(ETRC.getString("Invalid data for station %d"), stationNum + 1));
 
 		// 站名
 		String stName = stStation[0];
@@ -452,7 +453,7 @@ public class Circuit {
 		try {
 			dist = Integer.parseInt(stDist);
 		} catch (NumberFormatException e) {
-			throw new IOException(stName + "站公里数数据格式错");
+			throw new IOException(String.format(ETRC.getString("Invalid distance data for station %s"), stName));
 		}
 
 		// 等级，特等站为0；读不到的则认为是特等站
@@ -462,7 +463,7 @@ public class Circuit {
 			try {
 				level = Integer.parseInt(stLevel);
 			} catch (NumberFormatException e) {
-				throw new IOException(stName + "站等级数据格式错");
+				throw new IOException(String.format(ETRC.getString("Invalid level data for station %s"), stName));
 			}
 		}
 
@@ -477,7 +478,7 @@ public class Circuit {
 					|| stHide.equalsIgnoreCase("false"))
 				hide = false;
 			else
-				throw new IOException(stName + "站是否隐藏数据格式错");
+				throw new IOException(String.format(ETRC.getString("Invalid hidden type data for station %s"), stName));
 		}
 
 		Station st = new Station(stName, dist, level, hide);

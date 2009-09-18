@@ -24,9 +24,9 @@ public class SliceDialog extends JDialog implements ActionListener {
 
 	ImageIcon image1 = new ImageIcon();
 
-	String msg = "信息内容";
+	String msg = ETRC.getString("Message Content");
 
-	String title = "切片输出窗口（临时）";
+	String title = ETRC.getString("Slice Output");
 	
 	String name;
 	
@@ -51,7 +51,7 @@ public class SliceDialog extends JDialog implements ActionListener {
 		super(ETRC.getInstance().getMainFrame());
 		name = _name;
 		msg = _msg;
-		title = "运行图切片输出窗口（临时）";
+		title = ETRC.getString("Slice Output");
 		frame = ETRC.getInstance().getMainFrame();
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		try {
@@ -72,7 +72,7 @@ public class SliceDialog extends JDialog implements ActionListener {
 		mainPanel.setLayout(borderLayout1);
 		button1.setFont(new java.awt.Font("Dialog", 0, 12));
 		button1.setActionCommand("Ok");
-		button1.setText("确定");
+		button1.setText(ETRC.getString("OK"));
 		button1.addActionListener(this);
 
 		msgLabel = new JLabel(name, image1, JLabel.LEFT);

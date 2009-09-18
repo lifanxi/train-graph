@@ -29,10 +29,10 @@ MainFrame mainFrame = null;
   JPanel jPanel3 = new JPanel();
   GridBagLayout gridBagLayout2 = new GridBagLayout();
 
-  String defaultStatus = "请输入要查找的车次";
+  String defaultStatus = ETRC.getString("Input the train you want to find");
 
   public FindTrainDialog(Frame frame) {
-    super(frame, "车次查找", false);
+    super(frame, ETRC.getString("Find a Train"), false);
 
     if(frame instanceof MainFrame) {
       mainFrame = (MainFrame) frame;
@@ -54,7 +54,7 @@ MainFrame mainFrame = null;
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-    lbTrainName.setText("查找的车次：");
+    lbTrainName.setText(ETRC.getString("Train number to find:"));
     lbTrainName.setFont(new java.awt.Font("宋体", 0, 12));
     lbTrainName.setPreferredSize(new Dimension(8, 15));
     lbTrainName.setToolTipText("");
@@ -74,13 +74,13 @@ MainFrame mainFrame = null;
     btFind.requestFocus(false);
 
     btClear.setFont(new java.awt.Font("宋体", 0, 12));
-    btClear.setText("清空");
+    btClear.setText(ETRC.getString("Clear"));
     btClear.setActionCommand("Button_Clear");
     btClear.addActionListener(this);
 
     statusBar.setFont(new java.awt.Font("宋体", 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-    statusBar.setText("请输入要查找的车次");
+    statusBar.setText(ETRC.getString("Input the train you want to find"));
     verticalFlowLayout1.setHgap(2);
     verticalFlowLayout1.setVgap(2);
 
@@ -135,7 +135,7 @@ MainFrame mainFrame = null;
     if(mainFrame.chartView.findAndMoveToTrain(trainName))
       this.statusBar.setText(trainName);
     else {
-      this.statusBar.setText("没有找到");
+      this.statusBar.setText(ETRC.getString("Not found"));
       //doClear();
     }
   }

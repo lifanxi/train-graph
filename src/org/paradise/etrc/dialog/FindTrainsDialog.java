@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.data.skb.ETRCSKB;
@@ -37,13 +38,13 @@ public class FindTrainsDialog extends JDialog {
 	}
 
 	private void jbInit() throws Exception {
-		this.setTitle("查找车次");
+		this.setTitle(ETRC.getString("Finding Train Information"));
 
 		ImageIcon image = new ImageIcon(org.paradise.etrc.MainFrame.class.getResource("/pic/msg.png"));
 		JLabel imageLabel = new JLabel();
 		imageLabel.setIcon(image);
 		
-		msgLabel = new JLabel("删除现有车次，请稍等...");
+		msgLabel = new JLabel(ETRC.getString("Removing existing train data, please wait..."));
 		msgLabel.setFont(new java.awt.Font("Dialog", 0, 12));
 
 		JPanel messagePanel = new JPanel();
@@ -89,7 +90,7 @@ public class FindTrainsDialog extends JDialog {
 			mainFrame.chart.clearTrains();
 			mainFrame.chartView.repaint();
 			
-			msgLabel.setText("正在查找车次，请稍等...");
+			msgLabel.setText(ETRC.getString("Please wait while imporing train information..."));
 			
 			ETRCSKB skb = mainFrame.getSKB();
 			Vector<Train> trains = skb.findTrains(mainFrame.chart.circuit);
@@ -100,7 +101,7 @@ public class FindTrainsDialog extends JDialog {
 				if(loadingTrain.isDownTrain(mainFrame.chart.circuit) > 0) {
 					mainFrame.chart.addTrain(loadingTrain);
 					
-					msgLabel.setText("找到 " + loadingTrain.getTrainName() + "次...");
+					msgLabel.setText(String.format(ETRC.getString("Importing train information %s"), loadingTrain.getTrainName()));
 					hold(50);
 				}
 			}

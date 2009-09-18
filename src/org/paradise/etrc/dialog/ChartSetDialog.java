@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.view.chart.ChartView;
@@ -27,10 +28,10 @@ public class ChartSetDialog extends JDialog {
 	private JTextField t1;
 	private JTextField t2;
 	
-	private static String defaultStatus = "设定运行图参数";
+	private static String defaultStatus = ETRC.getString("Settings for Train Graph");
 
 	public ChartSetDialog(MainFrame _mainFrame) {
-		super(_mainFrame, "运行图参数设定", false);
+		super(_mainFrame, ETRC.getString("Settings for Train Graph"), false);
 		mainFrame = _mainFrame;
 
 		init();
@@ -50,10 +51,10 @@ public class ChartSetDialog extends JDialog {
 		t2 = createJTextField("" + chart.timeInterval);
 		
 		JPanel distPanel = creatJPanel(
-				createJLabelL("每公里像素数："), d0, createJLabelR(""),
-				createJLabelL("最低显示等级："), d1, createJLabelR("等站"),
-				createJLabelL("最低粗线坐标："), d2, createJLabelR("等站"),
-				createJLabelM(" 特等站等级为0"));
+                createJLabelL(ETRC.getString("Pixels per kilometer:")), d0, createJLabelR(""),
+				createJLabelL(ETRC.getString("Lowest display station level:")), d1, createJLabelR(""),
+				createJLabelL(ETRC.getString("Highest station level to show blod line:")), d2, createJLabelR(""),
+                createJLabelM(ETRC.getString(" The highest station level is 0")));
 		
 		JPanel timePanel = creatJPanel(				
 				createJLabelL("零坐标时刻："), t0, createJLabelR("点　"),
@@ -62,8 +63,8 @@ public class ChartSetDialog extends JDialog {
 				createJLabelM(" 必须是60的约数"));
 
 
-		tbPane.add("距离轴", distPanel);
-		tbPane.add("时间轴", timePanel);
+        tbPane.add(ETRC.getString("Distance bar"), distPanel);
+		tbPane.add(ETRC.getString("Timeline"), timePanel);
 
 	    statusBar = new JLabel(defaultStatus);
 	    statusBar.setBorder(BorderFactory.createLoweredBevelBorder());

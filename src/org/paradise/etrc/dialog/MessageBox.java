@@ -24,9 +24,9 @@ public class MessageBox extends JDialog implements ActionListener {
 
 	ImageIcon image1 = new ImageIcon();
 
-	String msg = "信息内容";
+	String msg = ETRC.getString("Message Content");
 
-	String title = "消息";
+	String title = ETRC.getString("Message");
 
 	BorderLayout borderLayout1 = new BorderLayout();
 
@@ -50,11 +50,11 @@ public class MessageBox extends JDialog implements ActionListener {
 	}
 
 	public MessageBox(Frame parent, String _msg) {
-		this(parent, _msg, "消息");
+		this(parent, _msg, ETRC.getString("Message"));
 	}
 
 	public MessageBox(String _msg) {
-		this(ETRC.getInstance().getMainFrame(), _msg, "消息");
+		this(ETRC.getInstance().getMainFrame(), _msg, ETRC.getString("Message"));
 	}
 
 	//Component initialization
@@ -66,7 +66,7 @@ public class MessageBox extends JDialog implements ActionListener {
 		panel1.setLayout(borderLayout1);
 		button1.setFont(new java.awt.Font("Dialog", 0, 12));
 		button1.setActionCommand("Ok");
-		button1.setText("确定");
+		button1.setText("OK");
 		button1.addActionListener(this);
 
 		msgLabel.setFont(new java.awt.Font("Dialog", 0, 12));
