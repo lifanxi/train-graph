@@ -7,6 +7,8 @@ import java.util.*;
 
 import java.awt.*;
 
+import org.paradise.etrc.ETRC;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -170,21 +172,21 @@ public class Train {
 		if ((line = in.readLine()) != null) {
 			paserTrainNameLine(line);
 		} else {
-			throw new IOException("车次读取错");
+			throw new IOException(ETRC.getString("Error reading train number."));
 		}
 
 		//始发站
 		if ((line = in.readLine()) != null) {
 			this.setStartStation(line);
 		} else {
-			throw new IOException("始发站读取错");
+			throw new IOException(ETRC.getString("Error reading departure station."));
 		}
 
 		//终到站
 		if ((line = in.readLine()) != null) {
 			this.setTerminalStation(line);
 		} else {
-			throw new IOException("终到读取错");
+			throw new IOException(ETRC.getString("Error reading terminal station."));
 		}
 
 		//停站
@@ -193,7 +195,7 @@ public class Train {
 		}
 
 		if (stopNum < 2)
-			throw new IOException("车次不完整");
+			throw new IOException(ETRC.getString("Data incomplete."));
 	}
 	
 	public void writeTo(String fileName) throws IOException {
@@ -256,7 +258,7 @@ public class Train {
 
 		String stStop[] = line.split(",");
 		if (stStop.length < 3)
-			throw new IOException("第" + (stopNum + 1) + "站数据有误=>" + line);
+			throw new IOException(String.format(ETRC.getString("Station %d data error in line %s"), (stopNum + 1), line));
 		
 		//20070224增加是否图定
 		boolean isSchedular = true;

@@ -41,7 +41,7 @@ MainFrame mainFrame = null;
   JButton btTest = new JButton();
 
   public MarginSetDialog(Frame frame) {
-    super(frame, "边距设置", false);
+    super(frame, ETRC.getString("Margin Settings"), false);
 
     if(frame instanceof MainFrame) {
       mainFrame = (MainFrame) frame;
@@ -67,13 +67,13 @@ MainFrame mainFrame = null;
     lbRight.setFont(new java.awt.Font("宋体", 0, 12));
     lbRight.setPreferredSize(new Dimension(8, 15));
     lbRight.setHorizontalAlignment(SwingConstants.RIGHT);
-    lbRight.setText("右：");
+    lbRight.setText(ETRC.getString("Right:"));
 
     tfRight.setMinimumSize(new Dimension(12, 22));
     tfRight.setPreferredSize(new Dimension(20, 22));
     tfRight.setText(mainFrame.chartView.rightMargin+"");
 
-    lbLeft.setText("左：");
+    lbLeft.setText(ETRC.getString("Left:"));
     lbLeft.setFont(new java.awt.Font("宋体", 0, 12));
     lbLeft.setPreferredSize(new Dimension(8, 15));
     lbLeft.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -83,7 +83,7 @@ MainFrame mainFrame = null;
     tfLeft.setPreferredSize(new Dimension(20, 22));
     tfLeft.setText(mainFrame.chartView.leftMargin+"");
 
-    lbDown.setText("下：");
+    lbDown.setText(ETRC.getString("Bottom:"));
     lbDown.setFont(new java.awt.Font("宋体", 0, 12));
     lbDown.setPreferredSize(new Dimension(8, 15));
     lbDown.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -92,7 +92,7 @@ MainFrame mainFrame = null;
     tfDown.setPreferredSize(new Dimension(20, 22));
     tfDown.setText(mainFrame.chartView.bottomMargin+"");
 
-    lbUp.setText("上：");
+    lbUp.setText(ETRC.getString("Top:"));
     lbUp.setFont(new java.awt.Font("宋体", 0, 12));
     lbUp.setPreferredSize(new Dimension(8, 15));
     lbUp.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -102,18 +102,18 @@ MainFrame mainFrame = null;
     tfUp.setText(mainFrame.chartView.topMargin+"");
 
     btOK.setFont(new java.awt.Font("宋体", 0, 12));
-    btOK.setText("设定");
+    btOK.setText(ETRC.getString("Set"));
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
     btDefault.setFont(new java.awt.Font("宋体", 0, 12));
-    btDefault.setText("默认");
+    btDefault.setText(ETRC.getString("Default"));
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
 
     btTest.addActionListener(this);
     btTest.setActionCommand("Button_Test");
-    btTest.setText("测试");
+    btTest.setText(ETRC.getString("Test"));
     btTest.setFont(new java.awt.Font("宋体", 0, 12));
 
     jPanel1.setLayout(gridBagLayout1);
@@ -128,11 +128,11 @@ MainFrame mainFrame = null;
 
     titledBorder1.setTitlePosition(2);
     titledBorder1.setTitleFont(new java.awt.Font("宋体", 0, 12));
-    titledBorder1.setTitle("图表边距");
+    titledBorder1.setTitle(ETRC.getString("Graph Margin"));
 
     statusBar.setFont(new java.awt.Font("宋体", 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-    statusBar.setText("设定图表边距");
+    statusBar.setText(ETRC.getString("Set Graph Margin"));
     verticalFlowLayout1.setHgap(2);
     verticalFlowLayout1.setVgap(2);
 
@@ -202,7 +202,7 @@ MainFrame mainFrame = null;
     this.tfDown.setText(ChartView.DEFAULT_BOTTOM_MARGIN+"");
     this.tfLeft.setText(ChartView.DEFAULT_LEFT_MARGIN+"");
     this.tfRight.setText(ChartView.DEFAULT_RIGHT_MARGIN+"");
-    this.statusBar.setText("设定图表边距");
+    this.statusBar.setText(ETRC.getString("Set Graph Margin"));
   }
 
   /**
@@ -228,7 +228,7 @@ MainFrame mainFrame = null;
           && (down >= 0 && down <= 200)
           && (left >= 0 && left <= 200)
           && (right >= 0 && right <= 200))) {
-        this.statusBar.setText("输入数据超出范围(0-200)！");
+          this.statusBar.setText(String.format(ETRC.getString("Input data out of range (%d-%d)."), 0, 200));
       }
       else{
         if(this.mainFrame != null) {
@@ -240,11 +240,11 @@ MainFrame mainFrame = null;
           mainFrame.chartView.repaint();
           mainFrame.validate();
         }
-        this.statusBar.setText("设定图表边距");
+        this.statusBar.setText(ETRC.getString("Set Graph Margin"));
       }
     }
     catch(NumberFormatException e) {
-      this.statusBar.setText("输入数据格式错！");
+      this.statusBar.setText(ETRC.getString("Invalid input"));
     }
   }
 }

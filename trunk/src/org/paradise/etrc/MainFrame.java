@@ -94,7 +94,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	public void doExit() {
 		if(chart != null)
-			if(new YesNoBox(this, "是否在退出前保存运行图？").askForYes())
+			if(new YesNoBox(this, ETRC.getString("The train graph is has changed.\r\nDo you want to save the changes?")).askForYes())
 				doSaveChart(); 
 		
 		try {
@@ -135,7 +135,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		mainPanel.add(splitPane, BorderLayout.CENTER);
 
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-		this.setFont(new java.awt.Font("宋体", 0, 10));
+		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 10));
 		this.setLocale(java.util.Locale.getDefault());
 		this.setResizable(true);
 		this.setState(Frame.NORMAL);
@@ -209,7 +209,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		this.setTitle();
 	}
 */
-	private static final String titlePrefix = "<[ LGuo的电子运行图 ]>";
+    private static final String titlePrefix = ETRC.getString("LGuo's Electronic Train Graph");
 
 	private String activeTrainName = "";
 
@@ -257,8 +257,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		Border border = BorderFactory.createLoweredBevelBorder();
 
 		statusBar.setBorder(border);
-		statusBar.setFont(new java.awt.Font("宋体", 0, 12));
-		statusBar.setText("状态：正常 <lguo@sina.com>");
+		statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		statusBar.setText(ETRC.getString("Status: Normal"));
 		return statusBar;
 	}
 
@@ -270,28 +270,28 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		JToolBar jToolBar = new JToolBar();
 		
 		//文件操作
-		JButton jbOpenFile = createTBButton("openFile", "Open A Chart", File_Load_Chart);
-		JButton jbSaveFile = createTBButton("saveFile", "Save The Chart", File_Save_Chart);
-		JButton jbSaveAs   = createTBButton("saveAs", "Save The Chart As ...", File_Save_Chart_As);
+		JButton jbOpenFile = createTBButton("openFile", ETRC.getString("Open a Chart"), File_Load_Chart);
+		JButton jbSaveFile = createTBButton("saveFile", ETRC.getString("Save Chart"), File_Save_Chart);
+		JButton jbSaveAs   = createTBButton("saveAs", ETRC.getString("Save Chart As"), File_Save_Chart_As);
 		jToolBar.add(jbOpenFile);
 		jToolBar.add(jbSaveFile);
 		jToolBar.add(jbSaveAs);
 		
 		//车次、线路编辑
-		JButton jbCircuitEdit = createTBButton("circuit", "Edit The Circuit", Edit_Circuit);
-		JButton jbTrainsEdit  = createTBButton("trains", "Edit The Trains", Edit_Trains);
+		JButton jbCircuitEdit = createTBButton("circuit", ETRC.getString("Edit Circuit"), Edit_Circuit);
+		JButton jbTrainsEdit  = createTBButton("trains", ETRC.getString("Edit Train Information"), Edit_Trains);
 		jToolBar.addSeparator();
 		jToolBar.add(jbCircuitEdit);
 		jToolBar.add(jbTrainsEdit);
 		
 		//查找车次
-		JButton jbFindTrain = createTBButton("findTrain", "Find A Train", Edit_FindTrain);
+		JButton jbFindTrain = createTBButton("findTrain", ETRC.getString("Find a Train"), Edit_FindTrain);
 		jToolBar.addSeparator();
 		jToolBar.add(jbFindTrain);
 
 		//坐标设置
-		JButton jbSetupH = createTBButton("setupH", "Setup Time Coordinate", Setup_Time);
-		JButton jbSetupV = createTBButton("setupV", "Setup Distance Coordinate", Setup_Dist);
+		JButton jbSetupH = createTBButton("setupH", ETRC.getString("Timeline Settings"), Setup_Time);
+		JButton jbSetupV = createTBButton("setupV", ETRC.getString("Distance Bar Settings"), Setup_Dist);
 		jToolBar.addSeparator();
 		jToolBar.add(jbSetupH);
 		jToolBar.add(jbSetupV);
@@ -299,7 +299,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		//动态图是否开启
 		ImageIcon imageRun = new ImageIcon(this.getClass().getResource("/pic/show_run.png"));
 		jtButtonShowRun = new JToggleButton(imageRun);
-		jtButtonShowRun.setToolTipText("Show Dynamic Chart");
+		jtButtonShowRun.setToolTipText(ETRC.getString("Show Dynamic Chart"));
 		jtButtonShowRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.this.changeShowRunState();
@@ -323,8 +323,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		ImageIcon imageUp = new ImageIcon(this.getClass().getResource("/pic/up.png"));
 		jtButtonDown = new JToggleButton(imageDown);
 		jtButtonUp = new JToggleButton(imageUp);
-		jtButtonUp.setToolTipText("Display Up-Going Trains");
-		jtButtonDown.setToolTipText("Display Down-Going Trains");
+		jtButtonUp.setToolTipText(ETRC.getString("Display Up-going Trains"));
+		jtButtonDown.setToolTipText(ETRC.getString("Display Down-going Trains"));
 		jtButtonDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chartView.changeShowDown();
@@ -379,7 +379,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 					return;
 				
 				if(!chartView.findAndMoveToTrain(trainToFind))
-					new MessageBox(MainFrame.this, "没有找到" + trainToFind + "次列车！").showMessage();
+					new MessageBox(MainFrame.this, String.format(ETRC.getString("Cannot find train information: %s"), trainToFind)).showMessage();
 			}
 		});
 		jToolBar.addSeparator();
@@ -427,46 +427,46 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private JMenuBar loadMenu() {
 		JMenuBar jMenuBar = new JMenuBar();
 
-		JMenu menuFile = createMenu("文件(F)");
+		JMenu menuFile = createMenu(ETRC.getString("File"));
 		menuFile.setMnemonic(KeyEvent.VK_F);
-		menuFile.add(createMenuItem("清空运行图(N)", File_Clear_Chart)).setMnemonic(KeyEvent.VK_N);
-		menuFile.add(createMenuItem("打开运行图(O)...", File_Load_Chart)).setMnemonic(KeyEvent.VK_O);
+		menuFile.add(createMenuItem(ETRC.getString("New"), File_Clear_Chart)).setMnemonic(KeyEvent.VK_N);
+		menuFile.add(createMenuItem(ETRC.getString("Open..."), File_Load_Chart)).setMnemonic(KeyEvent.VK_O);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("保存运行图(S)", File_Save_Chart)).setMnemonic(KeyEvent.VK_S);
-		menuFile.add(createMenuItem("运行图另存为(A)...", File_Save_Chart_As)).setMnemonic(KeyEvent.VK_A);
+		menuFile.add(createMenuItem(ETRC.getString("Save"), File_Save_Chart)).setMnemonic(KeyEvent.VK_S);
+		menuFile.add(createMenuItem(ETRC.getString("Save As..."), File_Save_Chart_As)).setMnemonic(KeyEvent.VK_A);
 		menuFile.addSeparator();
 //		menuFile.add(createMenuItem("更改线路...", File_Circuit)); //Bug:更改线路后没有清空车次
-		menuFile.add(createMenuItem("载入车次(L)...", File_Train)).setMnemonic(KeyEvent.VK_L);
+		menuFile.add(createMenuItem(ETRC.getString("Load Train..."), File_Train)).setMnemonic(KeyEvent.VK_L);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("导出运行图(P)...", File_Export)).setMnemonic(KeyEvent.VK_P);
+		menuFile.add(createMenuItem(ETRC.getString("Export..."), File_Export)).setMnemonic(KeyEvent.VK_P);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem("退出(X)", File_Exit)).setMnemonic(KeyEvent.VK_X);
+		menuFile.add(createMenuItem(ETRC.getString("Exit"), File_Exit)).setMnemonic(KeyEvent.VK_X);
 
-		JMenu menuSetup = createMenu("设置(S)");
+		JMenu menuSetup = createMenu(ETRC.getString("Settings"));
 		menuSetup.setMnemonic(KeyEvent.VK_S);
-		menuSetup.add(createMenuItem("边距设定(M)...", Setup_Margin)).setMnemonic(KeyEvent.VK_M);
+		menuSetup.add(createMenuItem(ETRC.getString("Margin..."), Setup_Margin)).setMnemonic(KeyEvent.VK_M);
 		menuSetup.addSeparator();
-		menuSetup.add(createMenuItem("时间轴设定(T)...", Setup_Time)).setMnemonic(KeyEvent.VK_T);
-		menuSetup.add(createMenuItem("距离轴设定(D)...", Setup_Dist)).setMnemonic(KeyEvent.VK_D);
+		menuSetup.add(createMenuItem(ETRC.getString("Timeline..."), Setup_Time)).setMnemonic(KeyEvent.VK_T);
+		menuSetup.add(createMenuItem(ETRC.getString("Distance Bar..."), Setup_Dist)).setMnemonic(KeyEvent.VK_D);
 
-		JMenu menuEdit = createMenu("编辑(E)");
+        JMenu menuEdit = createMenu(ETRC.getString("Edit"));
 		menuEdit.setMnemonic(KeyEvent.VK_E);
-		menuEdit.add(createMenuItem("线路编辑(C)...", Edit_Circuit)).setMnemonic(KeyEvent.VK_C);
-		menuEdit.add(createMenuItem("车次编辑(R)...", Edit_Trains)).setMnemonic(KeyEvent.VK_R);
+        menuEdit.add(createMenuItem(ETRC.getString("Circuit..."), Edit_Circuit)).setMnemonic(KeyEvent.VK_C);
+        menuEdit.add(createMenuItem(ETRC.getString("Train..."), Edit_Trains)).setMnemonic(KeyEvent.VK_R);
 		menuEdit.addSeparator();
 //		menuEdit.add(createMenuItem("车次录入...", Edit_NewTrain));
-		menuEdit.add(createMenuItem("车次查找(F)...", Edit_FindTrain)).setMnemonic(KeyEvent.VK_F);
+        menuEdit.add(createMenuItem(ETRC.getString("Find Train..."), Edit_FindTrain)).setMnemonic(KeyEvent.VK_F);
 //		menuEdit.addSeparator();
 //		menuEdit.add(createMenuItem("颜色设定...", Edit_Color));
 		
-		JMenu menuTools = createMenu("工具(T)");
+        JMenu menuTools = createMenu(ETRC.getString("Tool"));
 		menuTools.setMnemonic(KeyEvent.VK_T);
-		menuTools.add(createMenuItem("线路导入(C)...", Tools_Circuit)).setMnemonic(KeyEvent.VK_C);
-		menuTools.add(createMenuItem("车次导入(R)...", Tools_Train)).setMnemonic(KeyEvent.VK_R);
+        menuTools.add(createMenuItem(ETRC.getString("Import Circuit..."), Tools_Circuit)).setMnemonic(KeyEvent.VK_C);
+        menuTools.add(createMenuItem(ETRC.getString("Import Train..."), Tools_Train)).setMnemonic(KeyEvent.VK_R);
 
-		JMenu menuHelp = createMenu("帮助(H)");
+        JMenu menuHelp = createMenu(ETRC.getString("Help"));
 		menuHelp.setMnemonic(KeyEvent.VK_H);
-		menuHelp.add(createMenuItem("关于(A)...", Help_About)).setMnemonic(KeyEvent.VK_A);
+        menuHelp.add(createMenuItem(ETRC.getString("About..."), Help_About)).setMnemonic(KeyEvent.VK_A);
 
 		jMenuBar.add(menuFile);
 		jMenuBar.add(menuEdit);
@@ -479,14 +479,14 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	private JMenu createMenu(String name) {
 		JMenu menu = new JMenu(name);
-		menu.setFont(new java.awt.Font("宋体", 0, 12));
+		menu.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
 		return menu;
 	}
 
 	private JMenuItem createMenuItem(String name, String actionCommand) {
 		JMenuItem menuItem = new JMenuItem(name);
-		menuItem.setFont(new java.awt.Font("宋体", 0, 12));
+		menuItem.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
 		menuItem.setActionCommand(actionCommand);
 		menuItem.addActionListener(this);
@@ -499,12 +499,12 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		try {
 			chart = new Chart(chartFile);
 		} catch (IOException e) {
-			System.out.println("上次工作的运行图文件载入错误，尝试载入默认的运行图");
+			System.out.println("Load old graph from last session failed, try to load the default graph.");
 			try {
 				chartFile = new File(Sample_Chart_File);
 				chart = new Chart(chartFile);
 			} catch (IOException e1) {
-				new MessageBox("运行图文件载入失败，请在检查"+Sample_Chart_File+"文件").showMessage();
+				new MessageBox(String.format(ETRC.getString("Load train graph failed, please check the %s file."), Sample_Chart_File)).showMessage();
 				doExit();
 			}
 		}
@@ -559,7 +559,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	private void doTrainTools() {
 		//new MessageBox(this, "todo：从网络获取数据生成车次描述文件(.trf文件)。").showMessage();
-		if(new YesNoBox(this, "删除所有车次，从本系统自带的时刻表中自动导入经过本线路（停2站以上）的车次，是否继续？").askForYes()) {
+		if(new YesNoBox(this, ETRC.getString("This operation will delete all the train information on the graph, then import the train information from the default time table for this circuit. Continue?")).askForYes()) {
 			FindTrainsDialog waitingBox = new FindTrainsDialog(this);
 			waitingBox.findTrains();
 		}
@@ -671,11 +671,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("导出运行图");
+		chooser.setDialogTitle(ETRC.getString("Export Train Graph"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.setFileFilter(new GIFFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		String fileName = chart.circuit.name + df.format(new Date());
@@ -692,7 +692,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			}
 			catch(Exception ioe) {
 				ioe.printStackTrace();
-				this.statusBarMain.setText("导出运行图出错！");
+				this.statusBarMain.setText(ETRC.getString("Unable to export the graph."));
 			}
 		}
 		
@@ -772,7 +772,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 				chart.saveToFile(savingFile);
 			} catch (IOException ex) {
 				System.err.println("Err:" + ex.getMessage());
-				this.statusBarMain.setText("保存运行图出错！");
+				this.statusBarMain.setText(ETRC.getString("Unable to save the graph."));
 			}
 		}
 	}
@@ -784,11 +784,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("保存运行图");
+		chooser.setDialogTitle(ETRC.getString("Save As"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.setFileFilter(new TRCFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		String fileName = chart.circuit.name + df.format(new Date());
@@ -806,7 +806,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
 				System.err.println("Err:" + ex.getMessage());
-				this.statusBarMain.setText("保存运行图出错！");
+				this.statusBarMain.setText(ETRC.getString("Unable to save the graph."));
 			}
 		}
 	}
@@ -818,11 +818,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("载入运行图");
+		chooser.setDialogTitle(ETRC.getString("Open"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.setFileFilter(new TRCFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -843,7 +843,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 				prop.setProperty(Prop_Working_Chart, f.getAbsolutePath());
 			} catch (IOException ex) {
 				System.err.println("Err:" + ex.getMessage());
-				statusBarMain.setText("载入运行图出错！");
+				statusBarMain.setText(ETRC.getString("Unable to load the graph."));
 			}
 		}
 	}
@@ -852,18 +852,18 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 * doLoadTrain
 	 */
 	public void doLoadTrain() {
-		if(!(new YesNoBox(this, "（批量）读入车次文件，覆盖已经存在的车次，是否继续？").askForYes()))
+		if(!(new YesNoBox(this, ETRC.getString("Load train information file and overwrite the existing information. Continue?")).askForYes()))
 			return;
 
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("载入车次");
+		chooser.setDialogTitle(ETRC.getString("Load Train Information"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setMultiSelectionEnabled(true);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new TRFFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -956,7 +956,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			try {
 				skb = new ETRCSKB("eda/");
 			} catch (IOException e) {
-				new MessageBox(this, "打开时刻表文件失败！").showMessage();
+				new MessageBox(this, ETRC.getString("Unable to open time table.")).showMessage();
 				e.printStackTrace();
 			}
 			
@@ -969,7 +969,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			try {
 				lcb = new ETRCLCB("eda/");
 			} catch (IOException e) {
-				new MessageBox(this, "打开里程表文件失败！").showMessage();
+				new MessageBox(this, ETRC.getString("Unable to open circuit table.")).showMessage();
 				e.printStackTrace();
 			}
 		

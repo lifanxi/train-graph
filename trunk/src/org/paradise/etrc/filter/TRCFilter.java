@@ -1,6 +1,7 @@
 package org.paradise.etrc.filter;
 
 import java.io.File;
+import org.paradise.etrc.ETRC;
 
 public class TRCFilter extends javax.swing.filechooser.FileFilter {
 
@@ -18,7 +19,7 @@ public class TRCFilter extends javax.swing.filechooser.FileFilter {
 	}
 
 	public String getDescription() {
-		return "trc 列车运行图文件";
+		return ETRC.getString("Train Graph File (*.trc)");
 	}
 }
 

@@ -1,6 +1,7 @@
 package org.paradise.etrc.filter;
 
 import java.io.File;
+import org.paradise.etrc.ETRC;
 
 public class CIRFilter extends javax.swing.filechooser.FileFilter {
 
@@ -18,7 +19,7 @@ public class CIRFilter extends javax.swing.filechooser.FileFilter {
 	}
 
 	public String getDescription() {
-		return "cir 线路描述文件";
+		return ETRC.getString("Line Description File (*.cir)");
 	}
 }
 

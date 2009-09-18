@@ -26,8 +26,8 @@ public class YesNoBox extends JDialog implements ActionListener {
 
 	ImageIcon image1 = new ImageIcon();
 
-	String msg = "信息内容";
-	String title = "消息";
+	String msg = ETRC.getString("Message Content");
+	String title = ETRC.getString("Message");
 
 	BorderLayout borderLayout1 = new BorderLayout();
 
@@ -50,11 +50,11 @@ public class YesNoBox extends JDialog implements ActionListener {
 	}
 
 	public YesNoBox(Frame parent, String _msg) {
-		this(parent, _msg, "问题");
+		this(parent, _msg, ETRC.getString("Question"));
 	}
 
 	public YesNoBox(String _msg) {
-		this(ETRC.getInstance().getMainFrame(), _msg, "问题");
+		this(ETRC.getInstance().getMainFrame(), _msg, ETRC.getString("Question"));
 	}
 
 	//Component initialization
@@ -67,12 +67,12 @@ public class YesNoBox extends JDialog implements ActionListener {
 		
 		buttonYes.setFont(new java.awt.Font("Dialog", 0, 12));
 		buttonYes.setActionCommand("Yes");
-		buttonYes.setText("是");
+		buttonYes.setText(ETRC.getString("Yes"));
 		buttonYes.addActionListener(this);
 		
 		buttonNo.setFont(new java.awt.Font("Dialog", 0, 12));
 		buttonNo.setActionCommand("No");
-		buttonNo.setText("否");
+		buttonNo.setText(ETRC.getString("No"));
 		buttonNo.addActionListener(this);
 
 		msgLabel.setFont(new java.awt.Font("Dialog", 0, 12));
