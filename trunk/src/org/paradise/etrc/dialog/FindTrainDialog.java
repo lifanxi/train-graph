@@ -50,12 +50,12 @@ MainFrame mainFrame = null;
   private void jbInit() throws Exception {
     panel.setLayout(verticalFlowLayout1);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    this.setFont(new java.awt.Font("宋体", 0, 12));
+    this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
     lbTrainName.setText(ETRC.getString("Train number to find:"));
-    lbTrainName.setFont(new java.awt.Font("宋体", 0, 12));
+    lbTrainName.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbTrainName.setPreferredSize(new Dimension(8, 15));
     lbTrainName.setToolTipText("");
     lbTrainName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -67,18 +67,18 @@ MainFrame mainFrame = null;
     tfTrainName.setActionCommand("Button_Find");
     tfTrainName.addActionListener(this);
 
-    btFind.setFont(new java.awt.Font("宋体", 0, 12));
-    btFind.setText("查找");
+    btFind.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    btFind.setText(ETRC.getString("Find"));
     btFind.setActionCommand("Button_Find");
     btFind.addActionListener(this);
     btFind.requestFocus(false);
 
-    btClear.setFont(new java.awt.Font("宋体", 0, 12));
+    btClear.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btClear.setText(ETRC.getString("Clear"));
     btClear.setActionCommand("Button_Clear");
     btClear.addActionListener(this);
 
-    statusBar.setFont(new java.awt.Font("宋体", 0, 12));
+    statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
     statusBar.setText(ETRC.getString("Input the train you want to find"));
     verticalFlowLayout1.setHgap(2);

@@ -99,6 +99,7 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Author: Guo Lei (HASEA ID:lguo)", "郭磊（海子ID: lguo）出品" },
         { "Thanks to: achen1 on HASEA", "鸣谢：海子网 achen1 等网友" },
         { "OK", "确定" },
+        { "Cancel", "取消" },
 
         { "Settings for Train Graph", "设定运行图参数" },
         { "Pixels per kilometer:", "每公里像素数：" },
@@ -123,6 +124,7 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Slice Output", "切片输出窗口（临时）" },
         
         { "Finding Train Information", "查找车次" },
+        { "Find", "查找" },
         { "Removing existing train data, please wait...", "删除现有车次，请稍等..." },
         { "Please wait while imporing train information...", "正在查找车次，请稍等..." },
         { "Importing train information %s", "找到车次信息：%s" },
@@ -141,6 +143,24 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Input data out of range (%d-%d).", "输入数据超出范围(%d-%d)！" },
         { "Invalid nput", "输入数据格式错！" },
         
+        { "Circuit Selection", "选择线路" }, 
+        { "Train Information", "车次信息" },
+        { "Display opposite direction train using watermark", "水印显示反向车次" },
+        { "Add", "添加" },
+        { "Add (Before)", "添加(前)" },
+        { "Add(After)", "添加(后)" },
+        { "Load", "载入" },
+        { "Edit", "编辑" },
+        { "Delete", "删除" },    
+        
+        { "Number", "车次" },
+        { "Departure", "起始站" },
+        { "Termial", "终点站" },
+        { "Color", "颜色" },
+        { "Select the color for the line", "请选择行车线颜色" },
+        { "%s is already in the graph. Overwrite?", "%已经在运行图中，是否覆盖？"},
+        { "Middle", "中间站" },
+        { "Station", "站名" },
     };
 
 	@Override

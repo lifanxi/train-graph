@@ -7,6 +7,8 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import org.paradise.etrc.ETRC;
+
 public abstract class WizardDialog extends JDialog {
 	private static final long serialVersionUID = -5409636948664788767L;
 
@@ -50,7 +52,7 @@ public abstract class WizardDialog extends JDialog {
 		lbNumberPic.setBorder(BorderFactory.createEmptyBorder(20, 2, 20, 2));
 		
 		JLabel lbStepTitle = new JLabel("第" + step + "步：" + stepTitle);
-		lbStepTitle.setFont(new Font("宋体", Font.PLAIN, 12));
+		lbStepTitle.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 		lbStepTitle.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		JPanel right = new JPanel();

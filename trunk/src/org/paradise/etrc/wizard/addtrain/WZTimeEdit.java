@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.wizard.WizardDialog;
@@ -119,7 +120,7 @@ public class WZTimeEdit extends WizardDialog {
 		info = new JTextArea();
 		
 		info.setText("    时分间隔可以是空格、冒号、分号或者句点。也可以直接输入3位或者4位纯数字，如：凌晨1点23分可以直接输入123，用鼠标点击下一输入框结束输入。");
-		info.setFont(new Font("宋体", Font.PLAIN, 12));
+		info.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 		info.setCaret(new DefaultCaret() {  
 			private static final long serialVersionUID = 1L;
 			public boolean isVisible() {  

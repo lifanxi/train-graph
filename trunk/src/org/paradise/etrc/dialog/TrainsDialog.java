@@ -33,7 +33,7 @@ public class TrainsDialog extends JDialog {
 	JCheckBox cbUnderColor;
 
 	public TrainsDialog(MainFrame _mainFrame) {
-		super(_mainFrame, "车次", true);
+		super(_mainFrame, ETRC.getString("Train Information"), true);
 		
 		mainFrame = _mainFrame;
 		chart = mainFrame.chart;
@@ -59,7 +59,7 @@ public class TrainsDialog extends JDialog {
 
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText("水印显示反向车次");
+		cbUnderColor.setText(ETRC.getString("Display opposite direction train using watermark"));
 		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -81,7 +81,7 @@ public class TrainsDialog extends JDialog {
 		colorPanel.add(spColorTable, BorderLayout.CENTER);
 		colorPanel.add(underColorPanel, BorderLayout.SOUTH);
 
-		JButton btOK = new JButton("确 定");
+		JButton btOK = new JButton(ETRC.getString("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class TrainsDialog extends JDialog {
 //			}
 //		});
 
-		JButton btAdd = new JButton("添 加");
+		JButton btAdd = new JButton(ETRC.getString("Add"));
 		btAdd.setFont(new Font("dialog", 0, 12));
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -106,7 +106,7 @@ public class TrainsDialog extends JDialog {
 			}
 		});
 		
-		JButton btLoad = new JButton("载 入");
+		JButton btLoad = new JButton(ETRC.getString("Load"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -114,7 +114,7 @@ public class TrainsDialog extends JDialog {
 			}
 		});
 		
-		JButton btEdit = new JButton("编 辑");
+		JButton btEdit = new JButton(ETRC.getString("Edit"));
 		btEdit.setFont(new Font("dialog", 0, 12));
 		btEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,7 +125,7 @@ public class TrainsDialog extends JDialog {
 			}
 		});
 		
-		JButton btDel = new JButton("删 除");
+		JButton btDel = new JButton(ETRC.getString("Delete"));
 		btDel.setFont(new Font("dialog", 0, 12));
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -184,9 +184,9 @@ public class TrainsDialog extends JDialog {
 		newTrain.trainNameDown = "DDDD";
 		newTrain.trainNameUp   = "UUUU";
 		newTrain.stopNum = 3;
-		newTrain.stops[0] = new Stop("起点", "00:00", "00:00", false);
-		newTrain.stops[1] = new Stop("中间站", "00:00", "00:00", false);
-		newTrain.stops[2] = new Stop("终点", "00:00", "00:00", false);
+		newTrain.stops[0] = new Stop(ETRC.getString("Departure"), "00:00", "00:00", false);
+		newTrain.stops[1] = new Stop(ETRC.getString("Middle"), "00:00", "00:00", false);
+		newTrain.stops[2] = new Stop(ETRC.getString("Terminal"), "00:00", "00:00", false);
 		TrainDialog dialog = new TrainDialog(mainFrame, newTrain);
 
 		dialog.editTrain();
@@ -194,7 +194,7 @@ public class TrainsDialog extends JDialog {
 		if(!dialog.isCanceled) {
 			Train addingTrain = dialog.getTrain();
 			if(chart.isLoaded(addingTrain)) {
-				if(new YesNoBox(mainFrame, addingTrain.getTrainName()+"已经在运行图中，是否覆盖？").askForYes())
+				if(new YesNoBox(mainFrame, String.format(ETRC.getString("%s is already in the graph. Overwrite?"), addingTrain.getTrainName())).askForYes())
 					chart.updateTrain(addingTrain);
 			}
 			else {
@@ -229,7 +229,7 @@ public class TrainsDialog extends JDialog {
 
 			//Set up the dialog that the button brings up.
 			colorChooser = new JColorChooser();
-			dialog = JColorChooser.createDialog(TrainsDialog.this, "请选择行车线颜色",
+			dialog = JColorChooser.createDialog(TrainsDialog.this, "Select the color for the line",
 					true, //modal
 					colorChooser, this, //OK button handler
 					null); //no CANCEL button handler
@@ -449,13 +449,13 @@ public class TrainsDialog extends JDialog {
 		public String getColumnName(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return "车次";
+				return ETRC.getString("Number");
 			case 1:
-				return "始发站";
+				return ETRC.getString("Departure");
 			case 2:
-				return "终到站";
+				return ETRC.getString("Terminal");
 			case 3:
-				return "颜色";
+				return ETRC.getString("Color");
 			default:
 				return null;
 			}

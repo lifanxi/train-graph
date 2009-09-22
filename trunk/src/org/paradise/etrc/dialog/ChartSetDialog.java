@@ -51,9 +51,9 @@ public class ChartSetDialog extends JDialog {
 		t2 = createJTextField("" + chart.timeInterval);
 		
 		JPanel distPanel = creatJPanel(
-                createJLabelL(ETRC.getString("Pixels per kilometer:")), d0, createJLabelR(""),
-				createJLabelL(ETRC.getString("Lowest display station level:")), d1, createJLabelR(""),
-				createJLabelL(ETRC.getString("Highest station level to show blod line:")), d2, createJLabelR(""),
+                createJLabelL(ETRC.getString("Pixels per km:")), d0, createJLabelR(" "),
+				createJLabelL(ETRC.getString("Display level:")), d1, createJLabelR(" "),
+				createJLabelL(ETRC.getString("Bold line level:")), d2, createJLabelR(" "),
                 createJLabelM(ETRC.getString(" The highest station level is 0")));
 		
 		JPanel timePanel = creatJPanel(				

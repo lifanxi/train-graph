@@ -67,7 +67,7 @@ public class CircuitEditDialog extends JDialog {
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new CIRFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -98,7 +98,7 @@ public class CircuitEditDialog extends JDialog {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CIRFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		chooser.setSelectedFile(new File(circuit.name));
 
 		int returnVal = chooser.showOpenDialog(this);

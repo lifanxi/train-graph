@@ -20,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.wizard.WizardDialog;
 
@@ -209,7 +210,7 @@ public class WZTrainNameInput extends WizardDialog {
 			JPanel pane = new JPanel();
 			
 			JLabel lbName = new JLabel(name);
-			lbName.setFont(new Font("宋体", Font.PLAIN, 12));
+			lbName.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 			
 			pane.setLayout(new BorderLayout());
 			pane.add(lbName, BorderLayout.WEST);
@@ -224,7 +225,7 @@ public class WZTrainNameInput extends WizardDialog {
 			info = new JTextArea();
 			
 //			info.setText("    请输入全车次，复车次的间隔符可以是左右斜杠，顿号，逗号，句号（点），后续车次可以只输入最后一位或者两位，Tab键结束输入。");
-			info.setFont(new Font("宋体", Font.PLAIN, 12));
+			info.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 			info.setCaret(new DefaultCaret() {  
 				private static final long serialVersionUID = 1L;
 				public boolean isVisible() {  

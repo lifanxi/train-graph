@@ -100,7 +100,7 @@ public class SliceDialog extends JDialog implements ActionListener {
 
 	private void buildSliceText() {
 		taSlice.setEditable(false);
-		taSlice.setFont(new Font("宋体", Font.PLAIN, 12));
+		taSlice.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 		taSlice.setText(msg);
 //		taSlice.selectAll();
 	}
