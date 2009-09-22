@@ -60,11 +60,11 @@ MainFrame mainFrame = null;
     titledBorder1 = new TitledBorder("");
     panel.setLayout(verticalFlowLayout1);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    this.setFont(new java.awt.Font("宋体", 0, 12));
+    this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-    lbRight.setFont(new java.awt.Font("宋体", 0, 12));
+    lbRight.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbRight.setPreferredSize(new Dimension(8, 15));
     lbRight.setHorizontalAlignment(SwingConstants.RIGHT);
     lbRight.setText(ETRC.getString("Right:"));
@@ -74,7 +74,7 @@ MainFrame mainFrame = null;
     tfRight.setText(mainFrame.chartView.rightMargin+"");
 
     lbLeft.setText(ETRC.getString("Left:"));
-    lbLeft.setFont(new java.awt.Font("宋体", 0, 12));
+    lbLeft.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbLeft.setPreferredSize(new Dimension(8, 15));
     lbLeft.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -84,7 +84,7 @@ MainFrame mainFrame = null;
     tfLeft.setText(mainFrame.chartView.leftMargin+"");
 
     lbDown.setText(ETRC.getString("Bottom:"));
-    lbDown.setFont(new java.awt.Font("宋体", 0, 12));
+    lbDown.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbDown.setPreferredSize(new Dimension(8, 15));
     lbDown.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -93,7 +93,7 @@ MainFrame mainFrame = null;
     tfDown.setText(mainFrame.chartView.bottomMargin+"");
 
     lbUp.setText(ETRC.getString("Top:"));
-    lbUp.setFont(new java.awt.Font("宋体", 0, 12));
+    lbUp.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbUp.setPreferredSize(new Dimension(8, 15));
     lbUp.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -101,12 +101,12 @@ MainFrame mainFrame = null;
     tfUp.setPreferredSize(new Dimension(20, 22));
     tfUp.setText(mainFrame.chartView.topMargin+"");
 
-    btOK.setFont(new java.awt.Font("宋体", 0, 12));
+    btOK.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btOK.setText(ETRC.getString("Set"));
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
-    btDefault.setFont(new java.awt.Font("宋体", 0, 12));
+    btDefault.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btDefault.setText(ETRC.getString("Default"));
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
@@ -114,7 +114,7 @@ MainFrame mainFrame = null;
     btTest.addActionListener(this);
     btTest.setActionCommand("Button_Test");
     btTest.setText(ETRC.getString("Test"));
-    btTest.setFont(new java.awt.Font("宋体", 0, 12));
+    btTest.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
     jPanel1.setLayout(gridBagLayout1);
 
@@ -122,15 +122,15 @@ MainFrame mainFrame = null;
     lbCenter.setPreferredSize(new Dimension(64, 48));
     lbCenter.setText("");
 
-    jPanel1.setFont(new java.awt.Font("宋体", 0, 12));
+    jPanel1.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jPanel1.setAlignmentY((float) 0.5);
     jPanel1.setBorder(titledBorder1);
 
     titledBorder1.setTitlePosition(2);
-    titledBorder1.setTitleFont(new java.awt.Font("宋体", 0, 12));
+    titledBorder1.setTitleFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     titledBorder1.setTitle(ETRC.getString("Graph Margin"));
 
-    statusBar.setFont(new java.awt.Font("宋体", 0, 12));
+    statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
     statusBar.setText(ETRC.getString("Set Graph Margin"));
     verticalFlowLayout1.setHgap(2);

@@ -64,12 +64,12 @@ MainFrame mainFrame = null;
     titledBorder1 = new TitledBorder("");
     panel.setLayout(verticalFlowLayout1);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    this.setFont(new java.awt.Font("宋体", 0, 12));
+    this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
     lbDisplay.setText("每公里像素数：");
-    lbDisplay.setFont(new java.awt.Font("宋体", 0, 12));
+    lbDisplay.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbDisplay.setPreferredSize(new Dimension(8, 15));
     lbDisplay.setToolTipText("");
     lbDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -80,7 +80,7 @@ MainFrame mainFrame = null;
     tfDistScale.setColumns(0);
 
     lbDistScale.setText("最低显示等级：");
-    lbDistScale.setFont(new java.awt.Font("宋体", 0, 12));
+    lbDistScale.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbDistScale.setPreferredSize(new Dimension(32, 15));
     lbDistScale.setRequestFocusEnabled(true);
     lbDistScale.setToolTipText("");
@@ -90,12 +90,12 @@ MainFrame mainFrame = null;
     tfDisplay.setPreferredSize(new Dimension(20, 22));
     tfDisplay.setText(chart.displayLevel+"");
 
-    btOK.setFont(new java.awt.Font("宋体", 0, 12));
+    btOK.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btOK.setText("设定");
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
-    btDefault.setFont(new java.awt.Font("宋体", 0, 12));
+    btDefault.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btDefault.setText("默认");
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
@@ -105,10 +105,10 @@ MainFrame mainFrame = null;
 
 
     titledBorder1.setTitlePosition(2);
-    titledBorder1.setTitleFont(new java.awt.Font("宋体", 0, 12));
+    titledBorder1.setTitleFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     titledBorder1.setTitle("距离轴参数");
 
-    statusBar.setFont(new java.awt.Font("宋体", 0, 12));
+    statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
     statusBar.setText("设定距离轴参数");
     verticalFlowLayout1.setHgap(2);
@@ -117,11 +117,11 @@ MainFrame mainFrame = null;
     jPanel3.setBorder(titledBorder1);
     jPanel3.setInputVerifier(null);
     jPanel3.setLayout(gridBagLayout2);
-    jLabel1.setFont(new java.awt.Font("宋体", 0, 12));
+    jLabel1.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel1.setHorizontalAlignment(SwingConstants.LEFT);
     jLabel1.setText("等站");
     jLabel2.setText("特等站等级为0");
-    jLabel2.setFont(new java.awt.Font("宋体", 0, 12));
+    jLabel2.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel2.setToolTipText("");
     jLabel2.setHorizontalAlignment(SwingConstants.LEFT);
     jLabel2.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -129,7 +129,7 @@ MainFrame mainFrame = null;
     lbBold.setToolTipText("");
     lbBold.setRequestFocusEnabled(true);
     lbBold.setPreferredSize(new Dimension(32, 15));
-    lbBold.setFont(new java.awt.Font("宋体", 0, 12));
+    lbBold.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbBold.setText("最低粗线坐标：");
 
     tfBold.setText(chart.boldLevel+"");
@@ -138,7 +138,7 @@ MainFrame mainFrame = null;
 
     jLabel3.setText("等站");
     jLabel3.setHorizontalAlignment(SwingConstants.LEFT);
-    jLabel3.setFont(new java.awt.Font("宋体", 0, 12));
+    jLabel3.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     getContentPane().add(panel);
 
     panel.add(jPanel3, null);

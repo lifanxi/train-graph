@@ -65,7 +65,7 @@ public class TrainDialog extends JDialog {
 		table.setFont(new Font("Dialog", 0, 12));
 		table.getTableHeader().setFont(new Font("Dialog", 0, 12));
 		
-		JButton btColor = new JButton("颜 色"); 
+		JButton btColor = new JButton(ETRC.getString("Color")); 
 		btColor.setFont(new Font("dialog", 0, 12));
 		btColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -76,7 +76,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btLoad = new JButton("读 取");
+		JButton btLoad = new JButton(ETRC.getString("Load"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btSave = new JButton("保 存");
+		JButton btSave = new JButton(ETRC.getString("Save"));
 		btSave.setFont(new Font("dialog", 0, 12));
 		btSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -114,7 +114,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btOK = new JButton("确 定");
+		JButton btOK = new JButton(ETRC.getString("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -132,7 +132,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton("取 消");
+		JButton btCancel = new JButton(ETRC.getString("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -159,7 +159,7 @@ public class TrainDialog extends JDialog {
 	}
 	
 	private JPanel buildTrainPanel() {
-		JButton btDel = new JButton("删 除");
+		JButton btDel = new JButton(ETRC.getString("Delete"));
 		btDel.setFont(new Font("dialog", 0, 12));
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -172,12 +172,12 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btAdd = new JButton("增加(前)");
+		JButton btAdd = new JButton(ETRC.getString("Add(Before)"));
 		btAdd.setFont(new Font("dialog", 0, 12));
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
-				String name = "站名";
+				String name = ETRC.getString("Station");
 				String arrive = "00:00";
 				String leave = "00:00";
 				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), 
@@ -187,7 +187,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btApp = new JButton("增加(后)");
+		JButton btApp = new JButton(ETRC.getString("Add(After)"));
 		btApp.setFont(new Font("dialog", 0, 12));
 		btApp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -196,7 +196,7 @@ public class TrainDialog extends JDialog {
 				if(curIndex<0)
 					return;
 				
-				String name = "站名";
+				String name = ETRC.getString("Station");
 				String arrive = "00:00";
 				String leave = "00:00";
 				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), curIndex+1);
@@ -256,7 +256,7 @@ public class TrainDialog extends JDialog {
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new TRFFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		chooser.setApproveButtonText("保存");
 		
 		String savingName = savingTrain.getTrainName().replace('/', '_'); 
@@ -288,7 +288,7 @@ public class TrainDialog extends JDialog {
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new TRFFilter());
-		chooser.setFont(new java.awt.Font("宋体", 0, 12));
+		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {

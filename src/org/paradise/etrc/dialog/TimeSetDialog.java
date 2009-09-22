@@ -62,7 +62,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     titledBorder1 = new TitledBorder("");
     panel.setLayout(verticalFlowLayout1);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    this.setFont(new java.awt.Font("宋体", 0, 12));
+    this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
@@ -71,7 +71,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
 
 
     lbMinScale.setText("每分钟像素：");
-    lbMinScale.setFont(new java.awt.Font("宋体", 0, 12));
+    lbMinScale.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbMinScale.setPreferredSize(new Dimension(8, 15));
     lbMinScale.setToolTipText("");
     lbMinScale.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -82,7 +82,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     tfMinScale.setColumns(0);
 
     lbInterval.setText("纵坐标间隔：");
-    lbInterval.setFont(new java.awt.Font("宋体", 0, 12));
+    lbInterval.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbInterval.setPreferredSize(new Dimension(32, 15));
     lbInterval.setRequestFocusEnabled(true);
     lbInterval.setToolTipText("");
@@ -92,12 +92,12 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     tfInterval.setPreferredSize(new Dimension(20, 22));
     tfInterval.setText(chart.timeInterval+"");
 
-    btOK.setFont(new java.awt.Font("宋体", 0, 12));
+    btOK.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btOK.setText("设定");
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
-    btDefault.setFont(new java.awt.Font("宋体", 0, 12));
+    btDefault.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     btDefault.setText("默认");
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
@@ -107,10 +107,10 @@ public class TimeSetDialog extends JDialog implements ActionListener {
 
 
     titledBorder1.setTitlePosition(2);
-    titledBorder1.setTitleFont(new java.awt.Font("宋体", 0, 12));
+    titledBorder1.setTitleFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     titledBorder1.setTitle("时间轴参数");
 
-    statusBar.setFont(new java.awt.Font("宋体", 0, 12));
+    statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
     statusBar.setText("设定时间轴参数");
     verticalFlowLayout1.setHgap(2);
@@ -119,11 +119,11 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     jPanel3.setBorder(titledBorder1);
     jPanel3.setInputVerifier(null);
     jPanel3.setLayout(gridBagLayout2);
-    jLabel1.setFont(new java.awt.Font("宋体", 0, 12));
+    jLabel1.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel1.setHorizontalAlignment(SwingConstants.LEFT);
     jLabel1.setText("分钟");
     jLabel2.setText("必须是60的约数");
-    jLabel2.setFont(new java.awt.Font("宋体", 0, 12));
+    jLabel2.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel2.setToolTipText("");
     jLabel2.setHorizontalAlignment(SwingConstants.LEFT);
     jLabel2.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -136,12 +136,12 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     lbStart.setHorizontalAlignment(SwingConstants.RIGHT);
     lbStart.setToolTipText("");
     lbStart.setPreferredSize(new Dimension(8, 15));
-    lbStart.setFont(new java.awt.Font("宋体", 0, 12));
+    lbStart.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbStart.setText("零坐标时刻：");
 
     jLabel3.setText("点");
     jLabel3.setHorizontalAlignment(SwingConstants.LEFT);
-    jLabel3.setFont(new java.awt.Font("宋体", 0, 12));
+    jLabel3.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     getContentPane().add(panel);
 
     panel.add(jPanel3, null);

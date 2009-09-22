@@ -36,10 +36,17 @@ public class ETRC {
 	  }
 	  else  {
 		  if (str == "FONT_NAME") {
-		  	  return "Sans";
+		  	  return "Dialog";
 		  }
 		  else {
-		  	  return res.getString(str);	  
+			  try
+			  {
+				  return res.getString(str);
+			  }
+			  catch (MissingResourceException ex)
+			  {
+				  return str;
+			  }
 		  }
 		  
 	  }

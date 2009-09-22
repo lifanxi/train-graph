@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.skb.ETRCLCB;
 
@@ -30,7 +31,7 @@ public class XianluSelectDialog extends JDialog {
 	public boolean isCanceled = false;
 	
 	public XianluSelectDialog(MainFrame _mainFrame){
-		super(_mainFrame, "选择线路", true);
+		super(_mainFrame, ETRC.getString("Circuit Selection"), true);
 		
 		mainFrame = _mainFrame;
 		lcb = mainFrame.getLCB();
@@ -44,7 +45,7 @@ public class XianluSelectDialog extends JDialog {
 	}
 	
 	private void jbInit() throws Exception {
-		this.setTitle("选择线路");
+		this.setTitle(ETRC.getString("Circuit Selection"));
 		btChar = new JButton[27];
 		
 		JPanel buttonPanel = new JPanel();
@@ -60,7 +61,7 @@ public class XianluSelectDialog extends JDialog {
 		xlList = buildXianluList();
 		JScrollPane jsp = new JScrollPane(xlList);
 
-		JButton btOK = new JButton("确 定");
+		JButton btOK = new JButton(ETRC.getString("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -69,7 +70,7 @@ public class XianluSelectDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton("取 消");
+		JButton btCancel = new JButton(ETRC.getString("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

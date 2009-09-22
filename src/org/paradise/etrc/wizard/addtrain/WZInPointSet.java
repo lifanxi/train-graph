@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DefaultCaret;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.Stop;
@@ -169,7 +170,7 @@ public class WZInPointSet extends WizardDialog {
 	private JComponent createInfoField() {
 		info = new JTextArea();
 		
-		info.setFont(new Font("宋体", Font.PLAIN, 12));
+		info.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 		info.setCaret(new DefaultCaret() {  
 			private static final long serialVersionUID = 1L;
 			public boolean isVisible() {  

@@ -210,7 +210,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	
 	void jbInit() throws Exception {
 		this.setBackground(Color.white);
-		this.setFont(new java.awt.Font("宋体", 0, 12));
+		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		this.setDebugGraphicsOptions(0);
 		this.setLayout(new BorderLayout());
 		this.addMouseMotionListener(this);

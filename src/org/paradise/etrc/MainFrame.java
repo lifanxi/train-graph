@@ -180,7 +180,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		runView.setMinimumSize(runView.getPreferredSize());
 
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-		this.setFont(new java.awt.Font("宋体", 0, 10));
+		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 10));
 		this.setLocale(java.util.Locale.getDefault());
 		this.setResizable(true);
 		this.setState(Frame.NORMAL);
