@@ -62,7 +62,7 @@ public class CircuitEditDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("载入线路");
+		chooser.setDialogTitle(ETRC.getString("Load Circuit"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
@@ -93,8 +93,8 @@ public class CircuitEditDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("保存线路");
-		chooser.setApproveButtonText("保存");
+		chooser.setDialogTitle(ETRC.getString("Save Circuit"));
+		chooser.setApproveButtonText(ETRC.getString("Save"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CIRFilter());
@@ -127,7 +127,7 @@ public class CircuitEditDialog extends JDialog {
 //		JPanel circuitPanel = new JPanel();
 		//trainPanel.add(underColorPanel,  BorderLayout.SOUTH);
 
-		JButton btOK = new JButton("确 定");
+		JButton btOK = new JButton(ETRC.getString("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -141,7 +141,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton("取 消");
+		JButton btCancel = new JButton(ETRC.getString("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -149,7 +149,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btLoad = new JButton("读 入");
+		JButton btLoad = new JButton(ETRC.getString("Load"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,7 +163,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btSave = new JButton("保 存");
+		JButton btSave = new JButton(ETRC.getString("Save"));
 		btSave.setFont(new Font("dialog", 0, 12));
 		btSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -186,7 +186,7 @@ public class CircuitEditDialog extends JDialog {
 	}
 	
 	private JPanel buildCircuitPanel() {
-		JButton btDel = new JButton("删 除");
+		JButton btDel = new JButton(ETRC.getString("Delete"));
 		btDel.setFont(new Font("dialog", 0, 12));
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -200,14 +200,14 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btAdd = new JButton("增加(前)");
+		JButton btAdd = new JButton(ETRC.getString("Add(Before)"));
 		btAdd.setFont(new Font("dialog", 0, 12));
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
 				Circuit cir = ((StationTableModel)table.getModel()).circuit;
 				
-				String name = "站名";
+				String name = ETRC.getString("Station");
 				int dist = 0;
 				int level = 2;
 				boolean hide = false;
@@ -218,13 +218,13 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btApp = new JButton("增加(后)");
+		JButton btApp = new JButton(ETRC.getString("Add(After)"));
 		btApp.setFont(new Font("dialog", 0, 12));
 		btApp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
 				
-				String name = "站名";
+				String name = ETRC.getString("Station");
 				int dist = 0;
 				int level = 2;
 				boolean hide = false;
@@ -242,7 +242,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JLabel lbName = new JLabel("线路名：");
+		JLabel lbName = new JLabel(ETRC.getString("Circuit Name:"));
 		lbName.setFont(new Font("dialog", 0, 12));
 		
 		tfName = new JTextField(12);
@@ -402,13 +402,13 @@ public class CircuitEditDialog extends JDialog {
 		public String getColumnName(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return "站名";
+				return ETRC.getString("Station");
 			case 1:
-				return "距离";
+				return ETRC.getString("Distance");
 			case 2:
-				return "等级";
+				return ETRC.getString("Level");
 			case 3:
-				return "隐藏";
+				return ETRC.getString("Hidden");
 			default:
 				return null;
 			}

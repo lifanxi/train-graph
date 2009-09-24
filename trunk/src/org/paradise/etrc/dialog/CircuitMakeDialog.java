@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Circuit;
 import org.paradise.etrc.data.Station;
@@ -81,7 +82,7 @@ public class CircuitMakeDialog extends JDialog {
 			cir.name = xianlu;
 		else
 			cir.name = xianlu + firstStation.getOneName()
-			           + lastStation.getOneName() + "段";
+			           + lastStation.getOneName() + ETRC.getString(" Section");
 		
 		cir.length = cir.stations[cir.stationNum - 1].dist;
 
@@ -99,14 +100,14 @@ public class CircuitMakeDialog extends JDialog {
 	}
 
 	private void jbInit() throws Exception {
-		JButton btOK = new JButton("确 定");
+		JButton btOK = new JButton(ETRC.getString("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name1 = (String) list1.getSelectedValue();
 				String name2 = (String) list2.getSelectedValue();
 				
-				if(new YesNoBox("请确认" + xianlu + " " + name1 + " 至 " + name2 + " 为下行方向！").askForYes()) {
+				if(new YesNoBox(String.format(ETRC.getString("Please confirm the down-going direction for circuit %s is from %s to %s"), xianlu, name1, name2)).askForYes()) {
 					Vector<LCBStation> selectedStations = new Vector<LCBStation>();
 					int index1 = list1.getSelectedIndex();
 					int index2 = list2.getSelectedIndex();
@@ -129,7 +130,7 @@ public class CircuitMakeDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton("取 消");
+		JButton btCancel = new JButton(ETRC.getString("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -156,13 +157,13 @@ public class CircuitMakeDialog extends JDialog {
 			allNames.add(sta.name);
 		}
 
-		JLabel lb1 = new JLabel("起点：");
+		JLabel lb1 = new JLabel(ETRC.getString("From:"));
 		lb1.setFont(new Font("dialog", 0, 12));
 		list1 = new JList(allNames);
 		list1.setFont(new Font("dialog", 0, 12));
 		JScrollPane jsp1 = new JScrollPane(list1);
 		
-		JLabel lb2 = new JLabel("终点：");
+		JLabel lb2 = new JLabel(ETRC.getString("To:"));
 		lb2.setFont(new Font("dialog", 0, 12));
 		list2 = new JList(allNames);
 		list2.setFont(new Font("dialog", 0, 12));

@@ -141,13 +141,14 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Graph Margin", "图表边距" },
         { "Set Graph Margin", "设定图表边距" },
         { "Input data out of range (%d-%d).", "输入数据超出范围(%d-%d)！" },
-        { "Invalid nput", "输入数据格式错！" },
+        { "Input data out of range.", "输入数据超出范围！" },
+        { "Invalid input", "输入数据格式错！" },
         
         { "Circuit Selection", "选择线路" }, 
         { "Train Information", "车次信息" },
         { "Display opposite direction train using watermark", "水印显示反向车次" },
         { "Add", "添加" },
-        { "Add (Before)", "添加(前)" },
+        { "Add(Before)", "添加(前)" },
         { "Add(After)", "添加(后)" },
         { "Load", "载入" },
         { "Edit", "编辑" },
@@ -161,6 +162,51 @@ public class Res_zh_CN extends ListResourceBundle {
         { "%s is already in the graph. Overwrite?", "%已经在运行图中，是否覆盖？"},
         { "Middle", "中间站" },
         { "Station", "站名" },
+        
+        { " Must be a divider of 60", " 必须是60的约数" },
+        { "Time for 0 pos:", "零坐标时刻：" },
+        { "Pixel per min：", "每分钟像素：" },
+        { "Y-axis gap (min):", "纵坐标间隔：" },
+        { "min", "分钟" },
+        
+        { "Add New Train", "添加新车" },
+        { "Export Graph...", "导出运行图" },
+        { "Train Slice", "车次切片" },
+        { "Change Color", "更改颜色" }, 
+        { "Edit Time Table", "编辑点单" },
+        
+        { "Train %s is already in the graph, overwrite?", "%s次已经在图中，是否覆盖？" },
+        
+        { "Load Circuit", "载入线路" },
+        { "Save Circuit", "保存线路" },
+        { "Distance", "距离" },
+        { "Level", "等级" },
+        { "Hidden", "隐藏" },
+        { "Circuit Name:", "线路名：" },
+        
+        { "From:", "起点：" },
+        { "To:", "终点：" },
+        { " Section", "段" },
+        { "Please confirm the down-going direction for circuit %s is from %s to %s.", "请确认%s %s 至 %2 为下行方向！" },
+        
+        { "Always highlight termials", "始终突出画到发点" },
+        { "Enable watermark display", "开启反向水印显示" },
+        
+        { "Set timeline settings", "设定时间轴参数" },
+        
+        { "Distance Bar Setting", "距离轴设置" },
+        { "Set distance bar setting", "设定距离轴参数" },
+        
+        { "Up-going:", "上行车次：" },
+        { "Down-going:", "下行车次：" },
+        { "Train number:", "车次：" },
+        { "Save Train", "保存车次" },
+        { "Save ", "保存" },
+        
+        { "Arrival", "到点" },
+        { "Leave", "发点" },
+        { "Passenger", "办客" },
+        
     };
 
 	@Override

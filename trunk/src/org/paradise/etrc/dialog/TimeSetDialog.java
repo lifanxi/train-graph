@@ -35,7 +35,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
   GridBagLayout gridBagLayout2 = new GridBagLayout();
   JLabel jLabel1 = new JLabel();
 
-  String defaultStatus = "时间轴设置";
+  String defaultStatus = ETRC.getString("Timeline Settings");
   JLabel jLabel2 = new JLabel();
   JTextField tfStart = new JTextField();
   JLabel lbStart = new JLabel();
@@ -43,7 +43,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
 
   Chart chart;
   public TimeSetDialog(Frame frame, Chart _chart) {
-    super(frame, "时间轴设置", false);
+    super(frame, ETRC.getString("Timeline Settings"), false);
 
     if(frame instanceof MainFrame) {
       mainFrame = (MainFrame) frame;
@@ -70,7 +70,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
 
 
 
-    lbMinScale.setText("每分钟像素：");
+    lbMinScale.setText(ETRC.getString("Pixel per min："));
     lbMinScale.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbMinScale.setPreferredSize(new Dimension(8, 15));
     lbMinScale.setToolTipText("");
@@ -81,7 +81,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     tfMinScale.setText(chart.minuteScale+"");
     tfMinScale.setColumns(0);
 
-    lbInterval.setText("纵坐标间隔：");
+    lbInterval.setText(ETRC.getString("Y-axis gap (min):"));
     lbInterval.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbInterval.setPreferredSize(new Dimension(32, 15));
     lbInterval.setRequestFocusEnabled(true);
@@ -93,12 +93,12 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     tfInterval.setText(chart.timeInterval+"");
 
     btOK.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btOK.setText("设定");
+    btOK.setText(ETRC.getString("Set"));
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
     btDefault.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btDefault.setText("默认");
+    btDefault.setText(ETRC.getString("Default"));
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
 
@@ -108,11 +108,11 @@ public class TimeSetDialog extends JDialog implements ActionListener {
 
     titledBorder1.setTitlePosition(2);
     titledBorder1.setTitleFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    titledBorder1.setTitle("时间轴参数");
+    titledBorder1.setTitle(ETRC.getString("Timeline Settings"));
 
     statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-    statusBar.setText("设定时间轴参数");
+    statusBar.setText(ETRC.getString("Set timeline settings"));
     verticalFlowLayout1.setHgap(2);
     verticalFlowLayout1.setVgap(2);
 
@@ -121,8 +121,8 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     jPanel3.setLayout(gridBagLayout2);
     jLabel1.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel1.setHorizontalAlignment(SwingConstants.LEFT);
-    jLabel1.setText("分钟");
-    jLabel2.setText("必须是60的约数");
+    jLabel1.setText(ETRC.getString("min"));
+    jLabel2.setText(ETRC.getString(" Must be a divider of 60"));
     jLabel2.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel2.setToolTipText("");
     jLabel2.setHorizontalAlignment(SwingConstants.LEFT);
@@ -137,9 +137,9 @@ public class TimeSetDialog extends JDialog implements ActionListener {
     lbStart.setToolTipText("");
     lbStart.setPreferredSize(new Dimension(8, 15));
     lbStart.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    lbStart.setText("零坐标时刻：");
+    lbStart.setText(ETRC.getString("Time for 0 pos:"));
 
-    jLabel3.setText("点");
+    jLabel3.setText(" ");
     jLabel3.setHorizontalAlignment(SwingConstants.LEFT);
     jLabel3.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     getContentPane().add(panel);
@@ -239,7 +239,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
               || (interval == 20)
               || (interval == 30)
               || (interval == 60)))) {
-        this.statusBar.setText("输入数据超出范围！");
+        this.statusBar.setText(ETRC.getString("Input data out of range."));
       }
       else{
         if(this.mainFrame != null) {
@@ -254,7 +254,7 @@ public class TimeSetDialog extends JDialog implements ActionListener {
       }
     }
     catch(NumberFormatException e) {
-      this.statusBar.setText("输入数据格式错！");
+      this.statusBar.setText(ETRC.getString("Invalid input"));
     }
   }
 }

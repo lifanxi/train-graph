@@ -126,7 +126,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
             myTimer.schedule(new TimerTask() {
                 public void run() {
                     if (!hasMouseDoubleClicked) {     
-    					System.out.println("Single");
+    					//System.out.println("Single");
 	    				if (e.getButton() == MouseEvent.BUTTON1)
 							mouseClickedOneLeft(e);
 						else
@@ -141,7 +141,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
         else if (e.getClickCount() == 2) {
             hasMouseDoubleClicked = true;
             
-			System.out.println("Double");
+			//System.out.println("Double");
 			if(e.getButton() == MouseEvent.BUTTON1)
 				mouseClickedDoubleLeft(e);
 			else
@@ -662,48 +662,53 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 //		}
 		
 		//菜单项
-		MenuItem miNewTrain = new MenuItem("添加新车");
+		MenuItem miNewTrain = new MenuItem(ETRC.getString("Add New Train"));
 		miNewTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doAddNewTrain();
 			}
 		});
-		MenuItem miSelectCircuit = new MenuItem("选择线路");
-		miSelectCircuit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		//MenuItem miSelectCircuit = new MenuItem("选择线路");
+		//miSelectCircuit.addActionListener(new ActionListener() {
+		//	public void actionPerformed(ActionEvent e) {
 //				editActiveTrain();
-			}
-		});
-		MenuItem miGif = new MenuItem("保存为GIF");
+		//	}
+		//});
+		MenuItem miGif = new MenuItem(ETRC.getString("Export Graph..."));
 		miGif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ETRC.getInstance().getMainFrame().doExportChart();
 			}
 		});
-		MenuItem miFindTrains = new MenuItem("导入车次");
+		MenuItem miFindTrains = new MenuItem(ETRC.getString("Load Train..."));
 		miFindTrains.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ETRC.getInstance().getMainFrame().doLoadTrain();
 			}
 		});
-		MenuItem miLoad = new MenuItem("载入运行图");
+		MenuItem miLoad = new MenuItem(ETRC.getString("Open..."));
 		miLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ETRC.getInstance().getMainFrame().doLoadChart();
 			}
 		});
-		MenuItem miSave = new MenuItem("保存运行图");
+		MenuItem miSave = new MenuItem(ETRC.getString("Save"));
 		miSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ETRC.getInstance().getMainFrame().doSaveChart();
 			}
 		});
-		MenuItem miSaveAs = new MenuItem("另存为...");
+		MenuItem miSaveAs = new MenuItem(ETRC.getString("Save As..."));
 		miSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ETRC.getInstance().getMainFrame().doSaveChartAs();
 			}
 		});
 		
 		// 弹出PopupMenu
 		PopupMenu pop = new PopupMenu();
 		pop.add(miNewTrain);
-		pop.add(miSelectCircuit);
+//		pop.add(miSelectCircuit);
         pop.add(miFindTrains);
 		pop.addSeparator();
 		pop.add(miGif);
@@ -726,25 +731,25 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 			return;
 		
 		//菜单项
-		MenuItem miColor = new MenuItem("更改颜色");
+		MenuItem miColor = new MenuItem(ETRC.getString("Change Color"));
 		miColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doSetColor();
 			}
 		});
-		MenuItem miEditTimes = new MenuItem("编辑点单");
+		MenuItem miEditTimes = new MenuItem(ETRC.getString("Edit Time Table"));
 		miEditTimes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doEditActiveTrain();
 			}
 		});
-		MenuItem miTrainSlice = new MenuItem("车次切片");
+		MenuItem miTrainSlice = new MenuItem(ETRC.getString("Train Slice"));
 		miTrainSlice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new ChartSlice(chartView.mainFrame.chart).makeTrainSlice(chartView.activeTrain);
 			}
 		});
-		MenuItem miDelTrain = new MenuItem("删除本车");
+/*		MenuItem miDelTrain = new MenuItem("删除本车");
 		miDelTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO: 删除本车
@@ -756,15 +761,15 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				//TODO: 另存为
 			}
 		});
-		
+*/		
 		// 弹出PopupMenu
 		PopupMenu pop = new PopupMenu();
 		pop.add(miColor);
 		pop.add(miEditTimes);
         pop.add(miTrainSlice);
 		pop.addSeparator();
-		pop.add(miDelTrain);
-		pop.add(miSaveAs);
+//		pop.add(miDelTrain);
+//		pop.add(miSaveAs);
 		this.add(pop);
 		pop.show(this, p.x, p.y);
 	}
@@ -780,7 +785,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 			
 			Chart chart = chartView.mainFrame.chart;
 			if(chart.containTrain(train)) {
-				if(new YesNoBox(chartView.mainFrame, train.getTrainName() + "次已经在图中，是否覆盖？").askForYes()) {
+				if(new YesNoBox(chartView.mainFrame, String.format(ETRC.getString("Train %s is already in the graph, overwrite?"), train.getTrainName())).askForYes()) {
 					chartView.mainFrame.chart.delTrain(train);
 					chartView.addTrain(train);
 				}

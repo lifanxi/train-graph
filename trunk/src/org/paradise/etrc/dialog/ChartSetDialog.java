@@ -57,10 +57,10 @@ public class ChartSetDialog extends JDialog {
                 createJLabelM(ETRC.getString(" The highest station level is 0")));
 		
 		JPanel timePanel = creatJPanel(				
-				createJLabelL("零坐标时刻："), t0, createJLabelR("点　"),
-				createJLabelL("每分钟像素："), t1, createJLabelR(""),
-				createJLabelL("纵坐标间隔："), t2, createJLabelR("分钟"),
-				createJLabelM(" 必须是60的约数"));
+				createJLabelL(ETRC.getString("Time for 0 pos:")), t0, createJLabelR(" "),
+				createJLabelL(ETRC.getString("Pixel per min：")), t1, createJLabelR(" "),
+				createJLabelL(ETRC.getString("Y-axis gap:")), t2, createJLabelR("min"),
+				createJLabelM(ETRC.getString(" Must be a divider of 60")));
 
 
         tbPane.add(ETRC.getString("Distance bar"), distPanel);
@@ -82,8 +82,8 @@ public class ChartSetDialog extends JDialog {
 		JPanel panel = new JPanel();
 		
 		JPanel panelBT = new JPanel();
-		JButton btDefault = createJButton("默认");
-		JButton btOK      = createJButton("设定");
+		JButton btDefault = createJButton("Default");
+		JButton btOK      = createJButton("Set");
 	
 		panelBT.add(btDefault);
 		panelBT.add(btOK);
@@ -100,7 +100,7 @@ public class ChartSetDialog extends JDialog {
 		JCheckBox cbDrawPoint;
 		cbDrawPoint = new JCheckBox();
 		cbDrawPoint.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbDrawPoint.setText("始终突出画到发点");
+		cbDrawPoint.setText(ETRC.getString("Always highlight termials"));
 		cbDrawPoint.setSelected(mainFrame.chartView.isDrawNormalPoint);
 		cbDrawPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -116,7 +116,7 @@ public class ChartSetDialog extends JDialog {
 		JCheckBox cbUnderColor;
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText("开启反向水印显示");
+		cbUnderColor.setText(ETRC.getString("Enable watermark display"));
 		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -148,7 +148,7 @@ public class ChartSetDialog extends JDialog {
 		bt.setPreferredSize(new Dimension(62, 24));
 		bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				if(ae.getActionCommand().equals("默认"))
+				if(ae.getActionCommand().equals(ETRC.getString("Default")))
 					setDefault();
 				else
 					setValues();
@@ -317,7 +317,7 @@ public class ChartSetDialog extends JDialog {
     	              || (interval == 60))))	           
 	        ){
 
-	        this.statusBar.setText("输入数据超出范围！");
+	        this.statusBar.setText(ETRC.getString("Input data out of range."));
 	      }
 	      
 	      else{
@@ -336,7 +336,7 @@ public class ChartSetDialog extends JDialog {
 	      }
 	    }
 	    catch(NumberFormatException e) {
-	      this.statusBar.setText("输入数据格式错！");
+	      this.statusBar.setText(ETRC.getString("Invalid input"));
 	    }
 	  }
 }
