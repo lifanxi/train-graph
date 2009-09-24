@@ -107,10 +107,10 @@ public class ETRCSKB {
 		if(tk.length() != 8)
 			return new String[] {"0000", "错误", "00:00", "00:00"};
 		
-		int trainIndex = ETRCData.decode(tk.charAt(0)) * 64 
+		int trainIndex = ETRCData.decode(tk.charAt(0)) * ETRCData.codeTable.length
 		               + ETRCData.decode(tk.charAt(1));
 		
-		int stationIndex = ETRCData.decode(tk.charAt(2)) * 64
+		int stationIndex = ETRCData.decode(tk.charAt(2)) * ETRCData.codeTable.length
 		                 + ETRCData.decode(tk.charAt(3));
 		
 		int h_arrive = ETRCData.decode(tk.charAt(4));

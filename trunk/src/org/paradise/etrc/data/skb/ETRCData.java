@@ -10,6 +10,8 @@ public class ETRCData {
 			'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 			'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 
 			'U', 'V', 'W', 'X', 'Y', 'Z', '.', ' ',
+            '!', '@', '#', '$', '%', '^', '&', '*',
+            '(', ')', '-', '_', '=', '+', '[', ']',
 	};
 	
 	public static int decode(char c) {
@@ -25,11 +27,11 @@ public class ETRCData {
 	}
 	
 	public static String encode2(int num) {
-		if(num >= 64*64)
+		if(num >= codeTable.length*codeTable.length)
 			return "##";
 		
-		int num1 = num / 64;
-		int num2 = num % 64;
+		int num1 = num / codeTable.length;
+		int num2 = num % codeTable.length;
 		
 		return "" + codeTable[num1] + codeTable[num2];
 	}
