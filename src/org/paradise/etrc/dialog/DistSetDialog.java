@@ -35,7 +35,7 @@ MainFrame mainFrame = null;
   GridBagLayout gridBagLayout2 = new GridBagLayout();
   JLabel jLabel1 = new JLabel();
 
-  String defaultStatus = "距离轴设置";
+  String defaultStatus = ETRC.getString("Distance Bar Setting");
   JLabel jLabel2 = new JLabel();
   JLabel lbBold = new JLabel();
   JTextField tfBold = new JTextField();
@@ -43,7 +43,7 @@ MainFrame mainFrame = null;
 
   Chart chart;
   public DistSetDialog(Frame frame, Chart _chart) {
-    super(frame, "距离轴设置", false);
+    super(frame, ETRC.getString("Distance Bar Setting"), false);
 
     if(frame instanceof MainFrame) {
       mainFrame = (MainFrame) frame;
@@ -68,7 +68,7 @@ MainFrame mainFrame = null;
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-    lbDisplay.setText("每公里像素数：");
+    lbDisplay.setText(ETRC.getString("Pixels per kilometer:"));
     lbDisplay.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbDisplay.setPreferredSize(new Dimension(8, 15));
     lbDisplay.setToolTipText("");
@@ -79,7 +79,7 @@ MainFrame mainFrame = null;
     tfDistScale.setText(chart.distScale+"");
     tfDistScale.setColumns(0);
 
-    lbDistScale.setText("最低显示等级：");
+    lbDistScale.setText(ETRC.getString("Lowest display station level:"));
     lbDistScale.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     lbDistScale.setPreferredSize(new Dimension(32, 15));
     lbDistScale.setRequestFocusEnabled(true);
@@ -91,12 +91,12 @@ MainFrame mainFrame = null;
     tfDisplay.setText(chart.displayLevel+"");
 
     btOK.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btOK.setText("设定");
+    btOK.setText(ETRC.getString("Set"));
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
     btDefault.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btDefault.setText("默认");
+    btDefault.setText(ETRC.getString("Default"));
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
 
@@ -106,11 +106,11 @@ MainFrame mainFrame = null;
 
     titledBorder1.setTitlePosition(2);
     titledBorder1.setTitleFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    titledBorder1.setTitle("距离轴参数");
+    titledBorder1.setTitle(ETRC.getString("Distance Bar Setting"));
 
     statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-    statusBar.setText("设定距离轴参数");
+    statusBar.setText(ETRC.getString("Set distance bar setting"));
     verticalFlowLayout1.setHgap(2);
     verticalFlowLayout1.setVgap(2);
 
@@ -119,8 +119,8 @@ MainFrame mainFrame = null;
     jPanel3.setLayout(gridBagLayout2);
     jLabel1.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel1.setHorizontalAlignment(SwingConstants.LEFT);
-    jLabel1.setText("等站");
-    jLabel2.setText("特等站等级为0");
+    jLabel1.setText(" ");
+    jLabel2.setText(ETRC.getString(" The highest station level is 0"));
     jLabel2.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     jLabel2.setToolTipText("");
     jLabel2.setHorizontalAlignment(SwingConstants.LEFT);
@@ -130,13 +130,13 @@ MainFrame mainFrame = null;
     lbBold.setRequestFocusEnabled(true);
     lbBold.setPreferredSize(new Dimension(32, 15));
     lbBold.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    lbBold.setText("最低粗线坐标：");
+    lbBold.setText(ETRC.getString("Highest station level to show blod line:"));
 
     tfBold.setText(chart.boldLevel+"");
     tfBold.setPreferredSize(new Dimension(20, 22));
     tfBold.setMinimumSize(new Dimension(24, 22));
 
-    jLabel3.setText("等站");
+    jLabel3.setText(" ");
     jLabel3.setHorizontalAlignment(SwingConstants.LEFT);
     jLabel3.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
     getContentPane().add(panel);
@@ -227,7 +227,7 @@ MainFrame mainFrame = null;
            &&(bold >=0 && bold <= 6)
            &&(bold <= display))){
 
-        this.statusBar.setText("输入数据超出范围！");
+        this.statusBar.setText(ETRC.getString("Input data out of range."));
       }
       else{
         if(this.mainFrame != null) {
@@ -243,7 +243,7 @@ MainFrame mainFrame = null;
       }
     }
     catch(NumberFormatException e) {
-      this.statusBar.setText("输入数据格式错！");
+      this.statusBar.setText(ETRC.getString("Invalid input"));
     }
   }
 }

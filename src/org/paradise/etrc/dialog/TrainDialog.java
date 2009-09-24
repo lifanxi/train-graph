@@ -210,11 +210,11 @@ public class TrainDialog extends JDialog {
 		buttonPanel.add(btApp);
 		buttonPanel.add(btDel);
 		
-		JLabel lbNameU = new JLabel("上行车次：");
+		JLabel lbNameU = new JLabel(ETRC.getString("Up-going:"));
 		lbNameU.setFont(new Font("dialog", 0, 12));
-		JLabel lbNameD = new JLabel("本区间下行车次：");
+		JLabel lbNameD = new JLabel(ETRC.getString("Down-going"));
 		lbNameD.setFont(new Font("dialog", 0, 12));
-		JLabel lbName = new JLabel("车次：");
+		JLabel lbName = new JLabel(ETRC.getString("Train number:"));
 		lbName.setFont(new Font("dialog", 0, 12));
 		
 		tfNameU = new JTextField(4);
@@ -251,13 +251,13 @@ public class TrainDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("保存车次");
+		chooser.setDialogTitle(ETRC.getString("Save Train"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new TRFFilter());
 		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-		chooser.setApproveButtonText("保存");
+		chooser.setApproveButtonText(ETRC.getString("Save "));
 		
 		String savingName = savingTrain.getTrainName().replace('/', '_'); 
 		chooser.setSelectedFile(new File(savingName));
@@ -283,7 +283,7 @@ public class TrainDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle("载入车次");
+		chooser.setDialogTitle(ETRC.getString("Load Train Information"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
@@ -317,7 +317,7 @@ public class TrainDialog extends JDialog {
 		};
 
 		JDialog dialog = JColorChooser.createDialog(mainFrame,
-				"请选择行车线颜色", true, // modal
+				ETRC.getString("Select the color for the line"), true, // modal
 				colorChooser, listener, // OK button handler
 				null); // no CANCEL button handler
 		ETRC.setFont(dialog);
@@ -466,13 +466,13 @@ public class TrainDialog extends JDialog {
 		public String getColumnName(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return "车站";
+				return ETRC.getString("Station");
 			case 1:
-				return "到点";
+				return ETRC.getString("Arrival");
 			case 2:
-				return "发点";
+				return ETRC.getString("Leave");
 			case 3:
-				return "办客";
+				return ETRC.getString("Passenger");
 			default:
 				return null;
 			}

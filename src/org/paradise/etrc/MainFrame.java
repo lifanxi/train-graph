@@ -667,7 +667,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	/**
 	 * doExportChart
 	 */
-	private void doExportChart() {
+	public void doExportChart() {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
@@ -756,7 +756,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		return Printable.PAGE_EXISTS;
 	}
 
-	private void doSaveChart() {
+	public void doSaveChart() {
 		File savingFile = new File(prop.getProperty(Prop_Working_Chart));
 		
 		//如果是在Sample_Chart_File上操作的，则改调“另存为”
@@ -780,7 +780,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	/**
 	 * doSaveChartAs
 	 */
-	private void doSaveChartAs() {
+	public void doSaveChartAs() {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
@@ -814,7 +814,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	/**
 	 * doLoadChart
 	 */
-	private void doLoadChart() {
+	public void doLoadChart() {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
