@@ -21,6 +21,8 @@ public class XianluSelectDialog extends JDialog {
 	private ETRCLCB lcb;
 	
 	private JButton[] btChar;
+	private JButton btSearch;
+	
 	private JList xlList;
 	
 //	private Vector curXianlu;
@@ -54,9 +56,32 @@ public class XianluSelectDialog extends JDialog {
 			btChar[i] = buildCharButton((char) ('A' + i)); 
 			buttonPanel.add(btChar[i]);
 		}
+
 		btChar[26] = buildCharButton('*'); 
 		buttonPanel.setBorder(new EmptyBorder(5,2,5,2));
 		buttonPanel.add(btChar[26]);
+		
+		btSearch = new JButton(ETRC.getString("Search"));
+		btSearch.setFont(new Font(ETRC.getString("FONT_NAME"), 0, 12));
+		btSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				StationInputDialog dlg = new StationInputDialog(mainFrame);
+				Dimension dlgSize = dlg.getPreferredSize();
+				Dimension frmSize = getSize();
+				Point loc = getLocation();
+				dlg.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+						(frmSize.height - dlgSize.height) / 2 + loc.y);
+				dlg.setModal(true);
+				dlg.pack();
+				dlg.setVisible(true);
+				if (dlg.stationName != null)
+				{
+					XianluSelectDialog.this.xlList.setListData(lcb.findCircuitsByStation(dlg.stationName));
+				}
+			}
+		});
+		buttonPanel.add(btSearch);
 		
 		xlList = buildXianluList();
 		JScrollPane jsp = new JScrollPane(xlList);
