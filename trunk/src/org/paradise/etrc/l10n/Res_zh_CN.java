@@ -162,7 +162,7 @@ public class Res_zh_CN extends ListResourceBundle {
         { "%s is already in the graph. Overwrite?", "%已经在运行图中，是否覆盖？"},
         { "Middle", "中间站" },
         { "Station", "站名" },
-        
+      
         { " Must be a divider of 60", " 必须是60的约数" },
         { "Time for 0 pos:", "零坐标时刻：" },
         { "Pixel per min：", "每分钟像素：" },
@@ -207,6 +207,9 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Leave", "发点" },
         { "Passenger", "办客" },
         
+        { "Search", "查找" },
+        { "Station name:", "站名" },
+        { "Input Station Name", "输入车站名" },
     };
 
 	@Override

@@ -67,6 +67,20 @@ public class ETRCLCB {
 		
 		return xlFound;
 	}
+	
+	public Vector<String> findCircuitsByStation (String stationName) {
+		Vector<String> xlFound = new Vector<String>();
+		
+		for(int i=0; i<lc.size(); i++) {
+			LCBStation theStation = (LCBStation) lc.get(i);
+			if (theStation.name.equalsIgnoreCase(stationName))
+			{
+				xlFound.add(theStation.xianlu.substring(2, theStation.xianlu.length()));
+			}
+		}
+		
+		return xlFound;	
+	}
 
 	public Vector<LCBStation> findLCBStation(String xlName) {
 		Vector<LCBStation> stFound = new Vector<LCBStation>();
