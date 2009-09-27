@@ -66,9 +66,9 @@ public class WZTimeEdit extends WizardDialog {
 		btPane.setLayout(new BorderLayout());
 		btPane.add(right, BorderLayout.EAST);
 		
-		JButton addFButton = new JButton("加(前)");
-		JButton addBButton = new JButton("加(后)");
-		JButton delButton = new JButton(" 删除 ");
+		JButton addFButton = new JButton(ETRC.getString("Add(Before)"));
+		JButton addBButton = new JButton(ETRC.getString("Add(After)"));
+		JButton delButton = new JButton(ETRC.getString("Delete"));
 		
 		addFButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -76,7 +76,7 @@ public class WZTimeEdit extends WizardDialog {
 					table.getCellEditor().stopCellEditing();
 
 				int row = table.getSelectedRow();
-				model.myTrain.insertStop(new Stop("站名", "00:00", "00:00", false), row);
+				model.myTrain.insertStop(new Stop(ETRC.getString("Station"), "00:00", "00:00", false), row);
 				model.fireTableDataChanged();
 				
 				table.getSelectionModel().setSelectionInterval(row, row);
@@ -88,7 +88,7 @@ public class WZTimeEdit extends WizardDialog {
 					table.getCellEditor().stopCellEditing();
 
 				int row = table.getSelectedRow() + 1;
-				model.myTrain.insertStop(new Stop("站名", "00:00", "00:00", false), row);
+				model.myTrain.insertStop(new Stop(ETRC.getString("Station"), "00:00", "00:00", false), row);
 				model.fireTableDataChanged();
 				
 				table.getSelectionModel().setSelectionInterval(row, row);
@@ -119,7 +119,7 @@ public class WZTimeEdit extends WizardDialog {
 	private JComponent createInfoField() {
 		info = new JTextArea();
 		
-		info.setText("    时分间隔可以是空格、冒号、分号或者句点。也可以直接输入3位或者4位纯数字，如：凌晨1点23分可以直接输入123，用鼠标点击下一输入框结束输入。");
+		info.setText(ETRC.getString("  The separator between the hour and minute can be space, colon, comma or period. 3 or 4 digital number can also be accepted. Click on the next text box will complete the current input. "));
 		info.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 		info.setCaret(new DefaultCaret() {  
 			private static final long serialVersionUID = 1L;

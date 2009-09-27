@@ -207,11 +207,27 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Leave", "发点" },
         { "Passenger", "办客" },
         
+        // Wizard
+        { "Step %d: %s", "第%d步：%s" }, 
+        { "Finish", "完成" },
+        { "Next >", "下一步 >" },
+        { "< Previous", "< 上一步" },
+        
+        { "Add New Train", "添加新车" },
+        { "Input Train Number", "输入车次" },
+        { "Edit Time Table", "编辑点单" },
+        { "Select Start Station", "确定入图（始发）点" },
+        { "Select Terminal Station", "确定出图（终到）点" },
+        { "Automatically import train informtaion from build-in time table?", "是否查询内置时刻表获取点单数据？" },
+        { "Unable to find information for the train %s, please input manually.", "没有找到%s次列车的时刻表，请手工输入。" },
+        { "Find %d related information for the train %s, use the first record.", "找到%d条有关%s次列车的时刻表数据，选用第一条数据。" },
+        { "  The separator between the hour and minute can be space, colon, comma or period. 3 or 4 digital number can also be accepted. Click on the next text box will complete the current input. ", "    时分间隔可以是空格、冒号、分号或者句点。也可以直接输入3位或者4位纯数字，如：凌晨1点23分可以直接输入123，用鼠标点击下一输入框结束输入。" },
+
         { "Search", "查找" },
         { "Station name:", "站名" },
         { "Input Station Name", "输入车站名" },
     };
-
+    
 	@Override
 	protected Object[][] getContents() {
 		return contents;

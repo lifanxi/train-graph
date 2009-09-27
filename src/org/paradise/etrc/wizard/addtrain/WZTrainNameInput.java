@@ -137,11 +137,11 @@ public class WZTrainNameInput extends WizardDialog {
 			
 			JPanel down = new JPanel();
 			down.setLayout(new GridLayout(1,2));
-			down.add(createNamedPanel("下　行：", cbDown));
-			down.add(createNamedPanel("上　行：", cbUp));
+			down.add(createNamedPanel(ETRC.getString("Down-going"), cbDown));
+			down.add(createNamedPanel(ETRC.getString("Up-going"), cbUp));
 			
 			input.setLayout(new GridLayout(2,1));
-			input.add(createNamedPanel("全车次：", tfFull));
+			input.add(createNamedPanel(ETRC.getString("Train Number"), tfFull));
 			input.add(down);
 			
 			return input;

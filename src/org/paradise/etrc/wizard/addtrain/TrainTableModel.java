@@ -2,6 +2,7 @@ package org.paradise.etrc.wizard.addtrain;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 
@@ -21,13 +22,13 @@ public class TrainTableModel extends AbstractTableModel {
 	public String getColumnName(int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return "车站";
+			return ETRC.getString("Station");
 		case 1:
-			return "到点";
+			return ETRC.getString("Arrival");
 		case 2:
-			return "发点";
+			return ETRC.getString("Leave");
 		case 3:
-			return "图定办客";
+			return ETRC.getString("Passenger");
 		default:
 			return null;
 		}

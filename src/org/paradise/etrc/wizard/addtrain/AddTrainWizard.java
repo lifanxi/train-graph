@@ -2,6 +2,7 @@ package org.paradise.etrc.wizard.addtrain;
 
 import java.util.Vector;
 
+import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.dialog.MessageBox;
 import org.paradise.etrc.dialog.YesNoBox;
@@ -19,10 +20,10 @@ public class AddTrainWizard extends Wizard {
 	}
 	
 	public int doWizard() {
-		WZTrainNameInput step1 = new WZTrainNameInput(chartView.mainFrame, 1, "添加新车", "输入车次");
-		WZTimeEdit step2 = new WZTimeEdit(chartView.mainFrame, 2, "添加新车", "编辑点单");
-		WZInPointSet step3 = new WZInPointSet(chartView.mainFrame, 3, "添加新车", "确定入图（始发）点");
-		WZOutPointSet step4 = new WZOutPointSet(chartView.mainFrame, 4, "添加新车", "确定出图（终到）点");
+		WZTrainNameInput step1 = new WZTrainNameInput(chartView.mainFrame, 1, ETRC.getString("Add New Train"), ETRC.getString("Input Train Number"));
+		WZTimeEdit step2 = new WZTimeEdit(chartView.mainFrame, 2, ETRC.getString("Add New Train"), ETRC.getString("Edit Time Table"));
+		WZInPointSet step3 = new WZInPointSet(chartView.mainFrame, 3, ETRC.getString("Add New Train"), ETRC.getString("Select Start Station"));
+		WZOutPointSet step4 = new WZOutPointSet(chartView.mainFrame, 4, ETRC.getString("Add New Train"), ETRC.getString("Select Terminal Station"));
 		
 		String fullName;
 		String downName = null;
@@ -44,7 +45,7 @@ public class AddTrainWizard extends Wizard {
 					upName = step1.getUpName();
 					
 					
-					if(new YesNoBox(chartView.mainFrame, "是否查询内置时刻表获取点单数据？").askForYes()) {
+					if(new YesNoBox(chartView.mainFrame, ETRC.getString("Automatically import train informtaion from build-in time table?")).askForYes()) {
 						String[] names = fullName.split("/");
 						Vector<Train> trains = new Vector<Train>();
 						for(int i=0; i<names.length; i++) {
@@ -58,7 +59,7 @@ public class AddTrainWizard extends Wizard {
 						
 						//找到了几条数据，TODO 如果是多条的话应当选择。
 						if(trains.size() == 0) {
-							new MessageBox(chartView.mainFrame, "没有找到" + fullName + "次列车的时刻表，请手工输入。").showMessage();
+							new MessageBox(chartView.mainFrame, String.format(ETRC.getString("Unable to find information for the train %s, please input manually."), fullName)).showMessage();
 							train = new Train();
 							train.trainNameFull = fullName;
 							train.trainNameDown = downName;
@@ -70,9 +71,9 @@ public class AddTrainWizard extends Wizard {
 							train = (Train) trains.get(0);
 							String temp = ((Train) trains.get(0)).getTrainName();
 							for(int i=1; i<trains.size(); i++) {
-								temp = temp + "、" + ((Train) trains.get(i)).getTrainName();
+								temp = temp + ", " + ((Train) trains.get(i)).getTrainName();
 							}
-							new MessageBox(chartView.mainFrame, "找到" + trains.size() + "条" + fullName + "次列车的时刻表数据，选用第一条数据("+ train.getTrainName() + ")。（TODO: 请选择" + temp + "）。").showMessage();
+							new MessageBox(chartView.mainFrame, String.format(ETRC.getString("Find %d related information for the train %s, use the first record."), trains.size(), fullName)).showMessage();
 						}
 					}
 					else {

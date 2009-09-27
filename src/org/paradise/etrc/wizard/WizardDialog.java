@@ -51,7 +51,7 @@ public abstract class WizardDialog extends JDialog {
 		lbNumberPic.setVerticalAlignment(JLabel.TOP);
 		lbNumberPic.setBorder(BorderFactory.createEmptyBorder(20, 2, 20, 2));
 		
-		JLabel lbStepTitle = new JLabel("第" + step + "步：" + stepTitle);
+		JLabel lbStepTitle = new JLabel(String.format(ETRC.getString("Step %d: %s"), step, stepTitle));
 		lbStepTitle.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
 		lbStepTitle.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
@@ -101,10 +101,10 @@ public abstract class WizardDialog extends JDialog {
 		btPane.setLayout(new BorderLayout());
 		btPane.add(right, BorderLayout.EAST);
 		
-		finishButton = new JButton(" 完成 ");
-		cancelButton = new JButton(" 取消 ");
-		nextButton = new JButton("下一步");
-		prevButton = new JButton("上一步");
+		finishButton = new JButton(ETRC.getString("Finish"));
+		cancelButton = new JButton(ETRC.getString("Cancel"));
+		nextButton = new JButton(ETRC.getString("Next >"));
+		prevButton = new JButton(ETRC.getString("< Previous"));
 		
 		finishButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
