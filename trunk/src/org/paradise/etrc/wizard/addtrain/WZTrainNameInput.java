@@ -83,12 +83,12 @@ public class WZTrainNameInput extends WizardDialog {
 			if(src.equals(tfFull)) {
 				canNext = false;
 				updateButtonState();
-				info.setText("    请输入全车次，复车次的间隔符可以是左右斜杠，顿号，逗号，句号（点），后续车次可以只输入最后一位或者两位，Tab键结束输入。");
+				info.setText(ETRC.getString("  Please input full train number, the separator for the train number can be slash, comma or period, <Tab> to finish input"));
 				info.setForeground(new Color(40,80,40));
 			}
 			else if(src.equals(cbDown)) {
 				if(cbDown.getModel().getSize() >= 2) {
-					info.setText("    请选择在本线路所使用的下行车次，用鼠标 或者，上、下键选择，Tab键结束选择。");
+					info.setText(ETRC.getString("  Select the down-going train number for this circuit, use Mouse or Up/Down arrow key, <Tab> to finish selection."));
 					info.setForeground(new Color(80,40,40));
 				}
 				else
@@ -96,18 +96,18 @@ public class WZTrainNameInput extends WizardDialog {
 			}
 			else if(src.equals(cbUp)) {
 				if(cbUp.getModel().getSize() >= 2) {
-					info.setText("    请选择在本线路所使用的上行车次，用鼠标 或者，上、下键选择，Tab键结束选择。");
+					info.setText("  Select the up-going train number for this circuit, use Mouse or Up/Down arrow key, <Tab> to finish selection.");
 					info.setForeground(new Color(40,40,80));
 				}
 				else
 					nextButton.requestFocus();
 			}
 			else if(src.equals(nextButton)) {
-				info.setText("    下一步：从时刻表读入或者手工录入 " + tfFull.getText() + "次 列车的点单。（按回车或者空格键）");
+				info.setText(String.format(ETRC.getString("  Next Step: Input or read train information for the train %s. (Press Enter or Spacebar)"), tfFull.getText()));
 				info.setForeground(new Color(40,80,40));
 			}
 			else if(src.equals(cancelButton)) {
-				info.setText("    放弃添加车次。");
+				info.setText(ETRC.getString("  Cancel adding train."));
 				info.setForeground(new Color(40,80,40));
 			}
 		}

@@ -85,7 +85,7 @@ public class WZInPointSet extends WizardDialog {
 	private Component createTimePane() {
 		JPanel panel = new JPanel();
 		
-		JLabel lb = new JLabel("入图/始发时间：");
+		JLabel lb = new JLabel(ETRC.getString("Departure/Start Time:"));
 		tfTime = new JTextField();
 		tfTime.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent arg0) {
@@ -195,27 +195,24 @@ public class WZInPointSet extends WizardDialog {
 			while(strDist.length() < 4) {
 				strDist = " " + strDist;
 			}
-			dispNames[i] = " " + chart.circuit.name
-                         //+ ((train.isDownTrain(chart.circuit) == Train.DOWN_TRAIN) ? " 下行" : " 上行")
-			             + " 下行" 
-			             + " 距" + chart.circuit.stations[0].name + "站 " 
-			             + strDist + "公里 " + chart.circuit.stations[i].name + "站 ";
+			dispNames[i] = String.format(ETRC.getString(" %s down-going direction %s km from %s station: %s station"), 
+					chart.circuit.name, strDist, chart.circuit.stations[0].name,   chart.circuit.stations[i].name); 
+			
 		}
 		circuitList.setListData(dispNames);
 
 		//设置当前选中的车站
 		if(chart.circuit.isStartInsideMe(train)) {
-			info.setText("    " + train.getTrainName() + "次 由本区间内的 " + train.getStartStation() + "站 始发，不需要设置入图点");
-
+			info.setText(String.format(ETRC.getString("  Train %s departures from %s station in this section, no need to set start point"), train.getTrainName(), train.getStartStation()));
 			curStation = chart.circuit.getStation(train.getStartStation());
 		}
 		else {
 			curStation = chart.circuit.getFirstStopOnMe(train);
 			if(curStation != null) {
-				info.setText("    " + train.getTrainName() + "次 在本区间内的第一个停站是 " + curStation.name + "站 如果该站非实际入图点，请另行选择，若系统推算入图时间有误请自行更正");
+				info.setText(String.format(ETRC.getString("  The first stop of train %s in this section is %s, change the station and time if this is not correct."), train.getTrainName(), curStation.name));
 			}
 			else {
-				info.setText("    " + train.getTrainName() + "次 跨越本区间（在本区间内无图定办客停点），无法推算入图点，请选择入图车站，并手工设定入图时间");
+				info.setText(String.format(ETRC.getString("  The train %s passes this section, set the start point manually."), train.getTrainName()));
 			}
 		}
 
