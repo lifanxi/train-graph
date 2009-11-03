@@ -806,7 +806,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		};
 
 		JDialog dialog = JColorChooser.createDialog(chartView.mainFrame,
-				"请选择行车线颜色", true, // modal
+				ETRC.getString("Select the color for the line"), true, // modal
 				colorChooser, listener, // OK button handler
 				null); // no CANCEL button handler
 		colorChooser.setColor(chartView.activeTrainDrawing.train.color);

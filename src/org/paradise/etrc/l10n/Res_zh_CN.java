@@ -226,6 +226,42 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Search", "查找" },
         { "Station name:", "站名" },
         { "Input Station Name", "输入车站名" },
+        
+        { "Departure/Start Time:", "入图/始发时间：" }, 
+        { "Termial/End Time:", "出图/终到时间：" },
+        { "  Input full train number, the separator for the train number can be slash, comma or period, <Tab> to finish input.",
+          "    请输入全车次，复车次的间隔符可以是左右斜杠，顿号，逗号，句号（点），后续车次可以只输入最后一位或者两位，Tab键结束输入。" },  
+        { "  Select the down-going train number for this circuit, use Mouse or Up/Down arrow key, <Tab> to finish selection.",
+          "    请选择在本线路所使用的下行车次，用鼠标 或者，上、下键选择，Tab键结束选择。"
+        },
+        { "  Select the up-going train number for this circuit, use Mouse or Up/Down arrow key, <Tab> to finish selection.",
+          "    请选择在本线路所使用的上行车次，用鼠标 或者，上、下键选择，Tab键结束选择。"
+        },
+        { "  Cancel adding train.", "    放弃添加车次。" },
+        { "  Next Step: Input or read train information for the train %s. (Press Enter or Spacebar)",
+          "    下一步：从时刻表读入或者手工录入 %s次 列车的点单。（按回车或者空格键）"
+        },
+        { " %s down-going direction %s km from %s station: %s station",
+          "%s下行%s公里(距离%s站): %s站"
+        },
+        { "  Train %s departures from %s station in this section, no need to set start point",
+          "  %次列车由本区间内的%s站始发，不需要设置入图点"
+        },
+        { "  The first stop of train %s in this section is %s, change the station and time if this is not correct.",
+          "  %s次 在本区间内的第一个停站是 %s站 如果该站非实际入图点，请另行选择，若系统推算入图时间有误请自行更正"
+        },
+        { "  The train %s passes this section, set the start point manually.",
+          "%s次 跨越本区间（在本区间内无图定办客停点），无法推算入图点，请选择入图车站，并手工设定入图时间"
+        },
+        { "  Train %s terminates at %s station in this section, no need to set end point",
+          "  %次列车由本区间内的%s站终到，不需要设置出图点"
+        },   
+        { "  The last stop of train %s in this section is %s, change the station and time if this is not correct.",
+          "  %s次 在本区间内的最后一个停站是 %s站 如果该站非实际出图点，请另行选择，若系统推算出图时间有误请自行更正"
+        },
+        { "  The train %s passes this section, set the ends point manually.",
+          "%s次 跨越本区间（在本区间内无图定办客停点），无法推算入图点，请选择入图车站，并手工设定入图时间"
+        },     
     };
     
 	@Override
