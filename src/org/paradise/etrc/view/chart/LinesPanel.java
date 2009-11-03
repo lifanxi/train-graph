@@ -44,6 +44,15 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 
 	private ChartView chartView;
 
+	private Image bufferedImage = null;
+	private Graphics backendGraphics = null; 
+	private boolean isInvalid = false;
+	public void Invalidate()
+	{
+		isInvalid = true;
+		repaint();
+	}
+	
 	public LinesPanel(ChartView _mainView) {
 		chartView = _mainView;
 		
@@ -209,6 +218,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	}
 	
 	void jbInit() throws Exception {
+		this.setDoubleBuffered(false);
 		this.setBackground(Color.white);
 		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		this.setDebugGraphicsOptions(0);
@@ -220,18 +230,32 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 	public void paint(Graphics g) {
 		super.paint(g);
 
-		for (int i = 0; i < 24; i++) {
-			drawClockLine(g, i);
-		}
-
-		Chart chart = chartView.mainFrame.chart;
-		if (chart.circuit != null) {
-			for (int i = 0; i < chart.circuit.stationNum; i++) {
-				drawStationLine(g, chart.circuit.stations[i], chart.distScale);
+		if ((bufferedImage == null) || (isInvalid))
+		{
+			bufferedImage = createImage(getSize().width, getSize().height);
+			backendGraphics = bufferedImage.getGraphics();
+			
+			for (int i = 0; i < 24; i++) {
+				drawClockLine(backendGraphics, i);
 			}
-		}
 
-		drawTrains(g);
+			Chart chart = chartView.mainFrame.chart;
+			if (chart.circuit != null) {
+				for (int i = 0; i < chart.circuit.stationNum; i++) {
+					drawStationLine(backendGraphics, chart.circuit.stations[i], chart.distScale);
+				}
+			}
+
+			drawTrains(backendGraphics);
+			System.out.println("Updated drawing");
+			isInvalid = false;
+		}
+		Rectangle box = g.getClipBounds();
+		//int x = chartView.spLines.getHorizontalScrollBar().getValue();
+		//int y = chartView.spLines.getVerticalScrollBar().getValue();
+		g.drawImage(bufferedImage, box.x, box.y, box.x + box.width, box.y + box.height, box.x, box.y, box.x + box.width, box.y + box.height, this);
+		//g.drawImage(bufferedImage, x, y, box.width, box.height, x, y, box.width, box.height, this);
+		//System.out.printf("%d,%d,%d,%d,%d,%d,%d,%d\n", x, y, box.width, box.height, x, y, box.width, box.height);
 		
 //		if(chartView.activeTrainDrawing!= null)
 //			moveToTrainDrawing(chartView.activeTrainDrawing);
@@ -424,7 +448,12 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 					nearTrain[i].getTrainName(chartView.mainFrame.chart.circuit) + "次 " 
 					+ chartView.mainFrame.statusBarMain.getText());
 	}
-
+	public void setSize(Dimension d)
+	{
+		super.setSize(d);
+		bufferedImage = null;
+		backendGraphics = null;
+	}
 	/**
 	 * findTrain
 	 * 

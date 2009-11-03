@@ -23,6 +23,14 @@ public class ClockPanel extends JPanel {
 	private Chart chart;
 	private ChartView chartView;
 
+	private Image bufferedImage = null;
+	private Graphics backendGraphics = null; 
+	private boolean isInvalid = false;
+	public void Invalidate()
+	{
+		isInvalid = true;
+		repaint();
+	}
 	public ClockPanel(Chart _chart, ChartView _view) {
 		chart = _chart;
 		chartView = _view;
@@ -34,6 +42,7 @@ public class ClockPanel extends JPanel {
 	}
 
 	void jbInit() throws Exception {
+		this.setDoubleBuffered(false);
 		this.setLayout(new BorderLayout());
 		
 		JPanel scalePanel = new JPanel();
@@ -107,24 +116,36 @@ public class ClockPanel extends JPanel {
 		chartView.mainFrame.chart.timeInterval = minuteGrids[chartView.mainFrame.chart.minuteScale-1];
 		chartView.resetSize();
 	}
-
+	public void setSize(Dimension d)
+	{
+		super.setSize(d);
+		bufferedImage = null;
+		backendGraphics = null;
+	}
 	public void paint(Graphics g) {
 		super.paint(g);
+		if ((bufferedImage == null) || (isInvalid))
+		{
+			bufferedImage = createImage(getSize().width, getSize().height);
+			backendGraphics = bufferedImage.getGraphics();
+			
+			int h = chart.startHour;
+			for (int i = 0; i < 24; i++) {
+				if (h >= 24)
+					h -= 24;
 
-		int h = chart.startHour;
-		for (int i = 0; i < 24; i++) {
-			if (h >= 24)
-				h -= 24;
+				DrawHour(backendGraphics, h);
+				h++;
+			}
 
-			//System.out.println("Clock: " + h);
-			DrawHour(g, h);
-			h++;
+			if (chart.startHour == 0)
+				DrawEndHour(backendGraphics, 24);
+			else
+				DrawEndHour(backendGraphics, chart.startHour);
+			isInvalid = false;
 		}
+		g.drawImage(bufferedImage, 0, 0, this);
 
-		if (chart.startHour == 0)
-			DrawEndHour(g, 24);
-		else
-			DrawEndHour(g, chart.startHour);
 	}
 
 	public Dimension getPreferredSize() {

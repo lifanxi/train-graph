@@ -31,6 +31,7 @@ public class ControlPanel extends JPanel {
 	}
 
 	void jbInit() throws Exception {
+		this.setDoubleBuffered(false);
 		this.setLayout(new GridLayout(1, 5));
 		
 		setBorder(BorderFactory.createCompoundBorder(

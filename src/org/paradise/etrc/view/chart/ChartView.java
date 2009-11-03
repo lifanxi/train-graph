@@ -56,7 +56,7 @@ public class ChartView extends JPanel {
 	public LinesPanel panelLines;
 	public ClockPanel panelClock;
 
-	private JScrollPane spLines = new JScrollPane();
+	public JScrollPane spLines = new JScrollPane();
 
 	public Color gridColor = Color.GRAY;
 	public Color activeGridColor = Color.DARK_GRAY;
@@ -129,7 +129,17 @@ public class ChartView extends JPanel {
 			}
 		}
 	}
-	
+	enum PanelType
+	{
+		
+	};
+	public void Repaint()
+	{
+		panelLines.Invalidate();
+		panelCircuit.Invalidate();
+		panelClock.Invalidate();
+		repaint();
+	}
 	public void setActiveTrain(Train train) {
 		activeTrain = train;
 		
@@ -147,7 +157,7 @@ public class ChartView extends JPanel {
 		}
 
 		// 重绘
-		repaint();
+		Repaint();
 	}
 
 	public void buildTrainDrawings() {
@@ -340,7 +350,7 @@ public class ChartView extends JPanel {
 			mainFrame.prop.setProperty(MainFrame.Prop_Show_UP, "N");
 			break;
 		}
-		panelLines.repaint();
+		panelLines.Invalidate();
 	}
 
 	public int distUpDownState = SHOW_DOWN;
@@ -355,7 +365,7 @@ public class ChartView extends JPanel {
 			cornerCoordinate.setForeground(downDistColor);
 		else
 			cornerCoordinate.setForeground(upDistColor);
-		panelCircuit.repaint();
+		panelCircuit.Invalidate();
 	}
 
 	public void setCoordinateCorner(Point p) {
@@ -551,14 +561,14 @@ public class ChartView extends JPanel {
 	
 	public void setActiveStation(Station station) {
 		activeStation = station;
-		repaint();
+		Repaint();
 		mainFrame.sheetView.selectStation(station);
 	}
 
 	public void updateData() {
 		activeTrain = null;
 		activeStation = null;
-		repaint();
+		Repaint();
 	}
 
 	public void scrollToLeft() {

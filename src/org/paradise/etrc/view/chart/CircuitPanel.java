@@ -24,6 +24,16 @@ public class CircuitPanel extends JPanel {
 	private Chart chart;
 	private ChartView chartView;
 
+	private Image bufferedImage = null;
+	private Graphics backendGraphics = null; 
+	private boolean isInvalid = false;
+	
+	public void Invalidate()
+	{
+		isInvalid = true;
+		repaint();
+	}
+
 	public CircuitPanel(Chart _chart, ChartView _mainView) {
 		chart = _chart;
 		chartView = _mainView;
@@ -36,6 +46,7 @@ public class CircuitPanel extends JPanel {
 	}
 
 	void jbInit() throws Exception {
+		this.setDoubleBuffered(false);
 		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
 		this.setLayout(borderLayout1);
 		this.addMouseListener(new MouseAdapter() {
@@ -51,17 +62,31 @@ public class CircuitPanel extends JPanel {
 			}
 		});
 	}
-
+	public void setSize(Dimension d)
+	{
+		super.setSize(d);
+		bufferedImage = null;
+		backendGraphics = null;
+	}
+	
 	public void paint(Graphics g) {
 		super.paint(g);
 
 		if (chart == null)
 			return;
-
-		if (chart.circuit != null)
-			for (int i = 0; i < chart.circuit.stationNum; i++) {
-				DrawStation(g, chart.circuit.stations[i]);
-			}
+		if ((bufferedImage == null) || (isInvalid))
+		{
+			bufferedImage = createImage(getSize().width, getSize().height);
+			backendGraphics = bufferedImage.getGraphics();
+			
+			if (chart.circuit != null)
+				for (int i = 0; i < chart.circuit.stationNum; i++) {
+					DrawStation(backendGraphics, chart.circuit.stations[i]);
+				}
+			isInvalid = false;
+		}
+		g.drawImage(bufferedImage, 0, 0, this);
+		
 	}
 
 	public Dimension getPreferredSize() {
