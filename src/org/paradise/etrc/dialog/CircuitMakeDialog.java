@@ -107,6 +107,11 @@ public class CircuitMakeDialog extends JDialog {
 				String name1 = (String) list1.getSelectedValue();
 				String name2 = (String) list2.getSelectedValue();
 				
+				if ((name1 == null) || (name2 == null))
+				{
+					(new MessageBox(String.format(ETRC.getString("Please select both the begin station and end station.")))).showMessage();
+					return;
+				}
 				if(new YesNoBox(String.format(ETRC.getString("Please confirm the down-going direction for circuit %s is from %s to %s"), xianlu, name1, name2)).askForYes()) {
 					Vector<LCBStation> selectedStations = new Vector<LCBStation>();
 					int index1 = list1.getSelectedIndex();
