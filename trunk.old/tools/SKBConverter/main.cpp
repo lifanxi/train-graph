@@ -67,7 +67,8 @@ bool SubmitQuery(HWND hInput, int number, HWND hSubmit)
 bool GetList(HANDLE hProcess, HWND hTable)
 {
 	int count = SendMessage(hTable, LVM_GETITEMCOUNT, 0, 0);
-	assert(count != 0);
+	if (count == 0) 
+		return true;
 
 	const int MAX_CHAR_LEN = 50;
 	LVITEM * pItem = (LVITEM *) VirtualAllocEx(hProcess, NULL, sizeof(LVITEM), MEM_COMMIT, PAGE_READWRITE);
@@ -255,12 +256,24 @@ int main(int argc, char * argv[])
 
 	// Find SMSKB windows
 	TCHAR * title = 0;
-	title = TEXT("盛名旅行助手:");
+	title = TEXT("最准确、最好用的列车时刻表软件");
 
 	HWND hMain = MyFindWindow(title);	
 	HWND hTable = NULL, hInput = NULL, hSubmit = NULL;
 	if (hMain != 0)
 	{
+		hMain = ::FindWindowEx(hMain, NULL, TEXT("SysTabControl32"), TEXT("Tab1"));
+		if (!hMain)
+		{
+			MessageBox(NULL,TEXT("Tab1 not found"),TEXT("Error"), MB_OK);
+			return 1;
+		}
+		hMain = ::FindWindowEx(hMain, NULL,TEXT("#32770"), TEXT(""));
+		if (!hMain)
+		{
+			MessageBox(NULL,TEXT("child dialog not found"),TEXT("Error"), MB_OK);
+			return 1;
+		}
 		hTable = ::FindWindowEx(hMain, NULL, TEXT("SysListView32"), TEXT("List1"));
 		if (hTable == 0)
 		{
