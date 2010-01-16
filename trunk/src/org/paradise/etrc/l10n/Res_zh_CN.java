@@ -68,7 +68,7 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Error reading color settings for the train %s.", "%s次颜色读取错误" },
 
         { "Error reading circuit name.", "线路名读取错" },
-        { "Error in circuit lenght format.", "线路总长数据格式错" },
+        { "Error in circuit length format.", "线路总长数据格式错" },
         { "Error reading circuit length.", "线路总长读取错" },
 
         { "Near %s Station", "%s站附近" },

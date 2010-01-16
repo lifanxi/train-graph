@@ -381,6 +381,8 @@ public class CircuitEditDialog extends JDialog {
 				break;
 			case 1:
 				circuit.stations[rowIndex].dist = ((Integer) aValue).intValue();
+				if (rowIndex == circuit.stationNum - 1)
+					circuit.length = ((Integer) aValue).intValue();
 				break;
 			case 2:
 				circuit.stations[rowIndex].level = ((Integer) aValue).intValue();
@@ -390,6 +392,7 @@ public class CircuitEditDialog extends JDialog {
 				break;
 			default:
 			}
+			
 			fireTableCellUpdated(rowIndex, columnIndex);
 		}
 

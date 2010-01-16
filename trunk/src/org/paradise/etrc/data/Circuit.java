@@ -63,6 +63,11 @@ public class Circuit {
 
 		stations = newStations;
 		stationNum++;
+		
+		if (stationNum != 0)
+			this.length = stations[stationNum - 1].dist;
+		else
+			this.length = 0;
 	}
 
 	/**
@@ -81,6 +86,11 @@ public class Circuit {
 
 		stations = newStations;
 		stationNum++;
+		
+		if (stationNum != 0)
+			this.length = stations[stationNum - 1].dist;
+		else
+			this.length = 0;
 	}
 
 	public void delStation(int index) {
@@ -100,6 +110,11 @@ public class Circuit {
 
 		stations = newStations;
 		stationNum--;
+		
+		if (stationNum != 0)
+			this.length = stations[stationNum - 1].dist;
+		else
+			this.length = 0;
 	}
 
 	public void delStation(String name) {
@@ -117,6 +132,11 @@ public class Circuit {
 
 		stations = newStations;
 		stationNum--;
+		
+		if (stationNum != 0)
+			this.length = stations[stationNum - 1].dist;
+		else
+			this.length = 0;
 	}
 	
 	public boolean haveTheStation(String theName) {
@@ -260,7 +280,7 @@ public class Circuit {
 			try {
 				this.length = Integer.parseInt(stLength);
 			} catch (NumberFormatException e) {
-				throw new IOException(ETRC.getString("Error in circuit lenght format."));
+				throw new IOException(ETRC.getString("Error in circuit length format."));
 			}
 		} else {
 			throw new IOException(ETRC.getString("Error reading circuit length."));
