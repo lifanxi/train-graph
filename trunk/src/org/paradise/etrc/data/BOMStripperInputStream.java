@@ -1,5 +1,7 @@
-package org.paradise.etrc.data;
+// This helper class was written by sabre150 and published on 
+// http://forums.sun.com/thread.jspa?threadID=5310966
 
+package org.paradise.etrc.data;
 
 import java.io.InputStream;
 import java.io.PushbackInputStream;
