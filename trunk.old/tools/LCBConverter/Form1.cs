@@ -30,6 +30,8 @@ namespace LCBConvertor
                 return "S";
             if (c == "甬")
                 return "Y";
+            if (c == "滠")
+                return "S";
 
             byte[] array = new byte[2];
             array = System.Text.Encoding.Default.GetBytes(c);
@@ -281,8 +283,8 @@ namespace LCBConvertor
                                     datum[0] = "思濛";
                                 else if (datum[0] == "弯")
                                     datum[0] = "弯坵";
-                                else if (datum[0] == "汨罗东")
-                                    datum[0] = "汩罗东";
+                                //else if (datum[0] == "汨罗东")
+                                //    datum[0] = "汩罗东";
 
                                 System.Diagnostics.Debug.Assert(datum.Length == 3);
                                 try
@@ -313,6 +315,7 @@ namespace LCBConvertor
                     MessageBox.Show(f.Name);
                 }
             }
+            MessageBox.Show("success");
             sw2.Close();
             fs2.Close();
             sw.Close();
