@@ -187,7 +187,7 @@ public class Res_zh_CN extends ListResourceBundle {
         { "From:", "起点：" },
         { "To:", "终点：" },
         { " Section", "段" },
-        { "Please confirm the down-going direction for circuit %s is from %s to %s.", "请确认%s %s 至 %2 为下行方向！" },
+        { "Please confirm the down-going direction for circuit %s is from %s to %s.", "请确认%s %s 至 %s 为下行方向！" },
         
         { "Always highlight termials", "始终突出画到发点" },
         { "Enable watermark display", "开启反向水印显示" },
