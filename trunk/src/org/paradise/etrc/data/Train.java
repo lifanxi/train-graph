@@ -195,11 +195,11 @@ public class Train {
 		}
 
 		if (stopNum < 2)
-			throw new IOException(ETRC.getString("Data incomplete."));
+			throw new IOException(ETRC.getString("Data incomplete in:" + file ));
 	}
 	
 	public void writeTo(String fileName) throws IOException {
-		BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
 		
 		this.writeTo(out);
 		

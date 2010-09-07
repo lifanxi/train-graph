@@ -82,7 +82,7 @@ public class Res_zh_CN extends ListResourceBundle {
         { "Error reading train number.", "车次读取错" },
         { "Error reading departure station.", "始发站读取错" },
         { "Error reading terminal station.", "终到读取错" },
-        { "Data incomplete.", "车次不完整" },
+        { "Data incomplete in:", "车次不完整:" },
 
         { "Station %d data error in line %s", "%s第%d站数据有误" },
         
