@@ -38,6 +38,9 @@ public class ETRC {
 		  if (str == "FONT_NAME") {
 		  	  return "Dialog";
 		  }
+		  else if (str == "FONT_NAME_FIXED") {
+			  return "Monospace";
+		  }
 		  else {
 			  try
 			  {
