@@ -156,7 +156,7 @@ public class Res_zh_CN extends ListResourceBundle {
         
         { "Number", "车次" },
         { "Departure", "起始站" },
-        { "Termial", "终点站" },
+        { "Terminal", "终点站" },
         { "Color", "颜色" },
         { "Select the color for the line", "请选择行车线颜色" },
         { "%s is already in the graph. Overwrite?", "%已经在运行图中，是否覆盖？"},
