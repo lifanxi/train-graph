@@ -98,7 +98,7 @@ public class FindTrainsDialog extends JDialog {
 			for(int i=0; i<trains.size(); i++) {
 				Train loadingTrain = (Train) (trains.get(i));
 				
-				if(loadingTrain.isDownTrain(mainFrame.chart.circuit) > 0) {
+				if(loadingTrain.isDownTrain(mainFrame.chart.circuit, false) > 0) {
 					mainFrame.chart.addTrain(loadingTrain);
 					
 					msgLabel.setText(String.format(ETRC.getString("Importing train information %s"), loadingTrain.getTrainName()));
