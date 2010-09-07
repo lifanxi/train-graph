@@ -9,8 +9,10 @@ import javax.swing.event.TableModelListener;
 import java.awt.event.*;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
@@ -269,7 +271,7 @@ public class TrainDialog extends JDialog {
 				f += ".trf";
 
 			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter(f));
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8"));
 				savingTrain.writeTo(out);
 				
 				out.close();
