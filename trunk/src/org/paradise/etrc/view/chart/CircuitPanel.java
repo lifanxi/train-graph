@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.JPanel;
 import java.awt.event.*;
 
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.slice.ChartSlice;
 
@@ -36,7 +36,7 @@ public class CircuitPanel extends JPanel {
 	}
 
 	void jbInit() throws Exception {
-		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		this.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 		this.setLayout(borderLayout1);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {

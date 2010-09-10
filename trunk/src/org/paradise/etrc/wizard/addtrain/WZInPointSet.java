@@ -10,7 +10,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DefaultCaret;
 
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.Stop;
@@ -19,6 +18,8 @@ import org.paradise.etrc.slice.ChartEvent;
 import org.paradise.etrc.slice.ChartSlice;
 import org.paradise.etrc.slice.TrainSlice;
 import org.paradise.etrc.wizard.WizardDialog;
+
+import static org.paradise.etrc.ETRC._;
 
 public class WZInPointSet extends WizardDialog {
 	private static final long serialVersionUID = 1558550027322954767L;
@@ -85,7 +86,7 @@ public class WZInPointSet extends WizardDialog {
 	private Component createTimePane() {
 		JPanel panel = new JPanel();
 		
-		JLabel lb = new JLabel(ETRC.getString("Departure/Start Time:"));
+		JLabel lb = new JLabel(_("Departure/Start Time:"));
 		tfTime = new JTextField();
 		tfTime.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent arg0) {
@@ -170,7 +171,7 @@ public class WZInPointSet extends WizardDialog {
 	private JComponent createInfoField() {
 		info = new JTextArea();
 		
-		info.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
+		info.setFont(new Font(_("FONT_NAME"), Font.PLAIN, 12));
 		info.setCaret(new DefaultCaret() {  
 			private static final long serialVersionUID = 1L;
 			public boolean isVisible() {  
@@ -195,7 +196,7 @@ public class WZInPointSet extends WizardDialog {
 			while(strDist.length() < 4) {
 				strDist = " " + strDist;
 			}
-			dispNames[i] = String.format(ETRC.getString(" %s down-going direction %s km from %s station: %s station"), 
+			dispNames[i] = String.format(_(" %s down-going direction %s km from %s station: %s station"), 
 					chart.circuit.name, strDist, chart.circuit.stations[0].name,   chart.circuit.stations[i].name); 
 			
 		}
@@ -203,16 +204,16 @@ public class WZInPointSet extends WizardDialog {
 
 		//设置当前选中的车站
 		if(chart.circuit.isStartInsideMe(train)) {
-			info.setText(String.format(ETRC.getString("  Train %s departures from %s station in this section, no need to set start point"), train.getTrainName(), train.getStartStation()));
+			info.setText(String.format(_("  Train %s departures from %s station in this section, no need to set start point"), train.getTrainName(), train.getStartStation()));
 			curStation = chart.circuit.getStation(train.getStartStation());
 		}
 		else {
 			curStation = chart.circuit.getFirstStopOnMe(train);
 			if(curStation != null) {
-				info.setText(String.format(ETRC.getString("  The first stop of train %s in this section is %s, change the station and time if this is not correct."), train.getTrainName(), curStation.name));
+				info.setText(String.format(_("  The first stop of train %s in this section is %s, change the station and time if this is not correct."), train.getTrainName(), curStation.name));
 			}
 			else {
-				info.setText(String.format(ETRC.getString("  The train %s passes this section, set the start point manually."), train.getTrainName()));
+				info.setText(String.format(_("  The train %s passes this section, set the start point manually."), train.getTrainName()));
 			}
 		}
 

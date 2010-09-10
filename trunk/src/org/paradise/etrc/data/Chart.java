@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
 
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 
 public class Chart {
 	//Y轴（距离）显示参数
@@ -311,7 +311,7 @@ public class Chart {
 			timeInterval = Integer.parseInt(setup[5]);
 
 		} catch (Exception e) {
-			throw new IOException(ETRC.getString("Unable to read chart settings."));
+			throw new IOException(_("Unable to read chart settings."));
 		}
 	}
 	
@@ -325,7 +325,7 @@ public class Chart {
 		String colorLine[] = line.split(",");
 
 		if (colorLine.length < 4)
-			throw new IOException(ETRC.getString("Error reading color."));
+			throw new IOException(_("Error reading color."));
 
 		int r = 255;
 		int g = 255;
@@ -335,7 +335,7 @@ public class Chart {
 			g = Integer.parseInt(colorLine[2]);
 			b = Integer.parseInt(colorLine[3]);
 		} catch (Exception e) {
-			throw new IOException(String.format(ETRC.getString("Error reading color settings for the train %s."), colorLine[0]));
+			throw new IOException(String.format(_("Error reading color settings for the train %s."), colorLine[0]));
 		}
 
 		for (int i = 0; i < readTrainNum; i++) {

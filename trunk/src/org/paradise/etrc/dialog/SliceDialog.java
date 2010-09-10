@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 
 /**
  * @author lguo@sina.com
@@ -24,9 +25,9 @@ public class SliceDialog extends JDialog implements ActionListener {
 
 	ImageIcon image1 = new ImageIcon();
 
-	String msg = ETRC.getString("Message Content");
+	String msg = _("Message Content");
 
-	String title = ETRC.getString("Slice Output");
+	String title = _("Slice Output");
 	
 	String name;
 	
@@ -51,7 +52,7 @@ public class SliceDialog extends JDialog implements ActionListener {
 		super(ETRC.getInstance().getMainFrame());
 		name = _name;
 		msg = _msg;
-		title = ETRC.getString("Slice Output");
+		title = _("Slice Output");
 		frame = ETRC.getInstance().getMainFrame();
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		try {
@@ -72,7 +73,7 @@ public class SliceDialog extends JDialog implements ActionListener {
 		mainPanel.setLayout(borderLayout1);
 		button1.setFont(new java.awt.Font("Dialog", 0, 12));
 		button1.setActionCommand("Ok");
-		button1.setText(ETRC.getString("OK"));
+		button1.setText(_("OK"));
 		button1.addActionListener(this);
 
 		msgLabel = new JLabel(name, image1, JLabel.LEFT);
@@ -100,7 +101,7 @@ public class SliceDialog extends JDialog implements ActionListener {
 
 	private void buildSliceText() {
 		taSlice.setEditable(false);
-		taSlice.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
+		taSlice.setFont(new Font(_("FONT_NAME"), Font.PLAIN, 12));
 		taSlice.setText(msg);
 //		taSlice.selectAll();
 	}

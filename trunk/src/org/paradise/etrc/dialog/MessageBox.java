@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 
 /**
  * @author lguo@sina.com
@@ -24,9 +25,9 @@ public class MessageBox extends JDialog implements ActionListener {
 
 	ImageIcon image1 = new ImageIcon();
 
-	String msg = ETRC.getString("Message Content");
+	String msg = _("Message Content");
 
-	String title = ETRC.getString("Message");
+	String title = _("Message");
 
 	BorderLayout borderLayout1 = new BorderLayout();
 
@@ -50,11 +51,11 @@ public class MessageBox extends JDialog implements ActionListener {
 	}
 
 	public MessageBox(Frame parent, String _msg) {
-		this(parent, _msg, ETRC.getString("Message"));
+		this(parent, _msg, _("Message"));
 	}
 
 	public MessageBox(String _msg) {
-		this(ETRC.getInstance().getMainFrame(), _msg, ETRC.getString("Message"));
+		this(ETRC.getInstance().getMainFrame(), _msg, _("Message"));
 	}
 
 	//Component initialization

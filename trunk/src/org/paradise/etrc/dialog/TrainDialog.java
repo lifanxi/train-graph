@@ -20,6 +20,8 @@ import org.paradise.etrc.data.*;
 import org.paradise.etrc.filter.CSVFilter;
 import org.paradise.etrc.filter.TRFFilter;
 
+import static org.paradise.etrc.ETRC._;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -67,7 +69,7 @@ public class TrainDialog extends JDialog {
 		table.setFont(new Font("Dialog", 0, 12));
 		table.getTableHeader().setFont(new Font("Dialog", 0, 12));
 		
-		JButton btColor = new JButton(ETRC.getString("Color")); 
+		JButton btColor = new JButton(_("Color")); 
 		btColor.setFont(new Font("dialog", 0, 12));
 		btColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -78,7 +80,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btLoad = new JButton(ETRC.getString("Load"));
+		JButton btLoad = new JButton(_("Load"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +102,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btSave = new JButton(ETRC.getString("Save"));
+		JButton btSave = new JButton(_("Save"));
 		btSave.setFont(new Font("dialog", 0, 12));
 		btSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -116,7 +118,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btOK = new JButton(ETRC.getString("OK"));
+		JButton btOK = new JButton(_("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,7 +136,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton(ETRC.getString("Cancel"));
+		JButton btCancel = new JButton(_("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -161,7 +163,7 @@ public class TrainDialog extends JDialog {
 	}
 	
 	private JPanel buildTrainPanel() {
-		JButton btDel = new JButton(ETRC.getString("Delete"));
+		JButton btDel = new JButton(_("Delete"));
 		btDel.setFont(new Font("dialog", 0, 12));
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -174,12 +176,12 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btAdd = new JButton(ETRC.getString("Add(Before)"));
+		JButton btAdd = new JButton(_("Add(Before)"));
 		btAdd.setFont(new Font("dialog", 0, 12));
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
-				String name = ETRC.getString("Station");
+				String name = _("Station");
 				String arrive = "00:00";
 				String leave = "00:00";
 				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), 
@@ -189,7 +191,7 @@ public class TrainDialog extends JDialog {
 			}
 		});
 
-		JButton btApp = new JButton(ETRC.getString("Add(After)"));
+		JButton btApp = new JButton(_("Add(After)"));
 		btApp.setFont(new Font("dialog", 0, 12));
 		btApp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -198,7 +200,7 @@ public class TrainDialog extends JDialog {
 				if(curIndex<0)
 					return;
 				
-				String name = ETRC.getString("Station");
+				String name = _("Station");
 				String arrive = "00:00";
 				String leave = "00:00";
 				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), curIndex+1);
@@ -212,11 +214,11 @@ public class TrainDialog extends JDialog {
 		buttonPanel.add(btApp);
 		buttonPanel.add(btDel);
 		
-		JLabel lbNameU = new JLabel(ETRC.getString("Up-going:"));
+		JLabel lbNameU = new JLabel(_("Up-going:"));
 		lbNameU.setFont(new Font("dialog", 0, 12));
-		JLabel lbNameD = new JLabel(ETRC.getString("Down-going"));
+		JLabel lbNameD = new JLabel(_("Down-going"));
 		lbNameD.setFont(new Font("dialog", 0, 12));
-		JLabel lbName = new JLabel(ETRC.getString("Train number:"));
+		JLabel lbName = new JLabel(_("Train number:"));
 		lbName.setFont(new Font("dialog", 0, 12));
 		
 		tfNameU = new JTextField(4);
@@ -253,13 +255,13 @@ public class TrainDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle(ETRC.getString("Save Train"));
+		chooser.setDialogTitle(_("Save Train"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new TRFFilter());
-		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-		chooser.setApproveButtonText(ETRC.getString("Save "));
+		chooser.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+		chooser.setApproveButtonText(_("Save "));
 		
 		String savingName = savingTrain.getTrainName().replace('/', '_'); 
 		chooser.setSelectedFile(new File(savingName));
@@ -285,12 +287,12 @@ public class TrainDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle(ETRC.getString("Load Train Information"));
+		chooser.setDialogTitle(_("Load Train Information"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new TRFFilter());
-		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		chooser.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -319,7 +321,7 @@ public class TrainDialog extends JDialog {
 		};
 
 		JDialog dialog = JColorChooser.createDialog(mainFrame,
-				ETRC.getString("Select the color for the line"), true, // modal
+				_("Select the color for the line"), true, // modal
 				colorChooser, listener, // OK button handler
 				null); // no CANCEL button handler
 		ETRC.setFont(dialog);
@@ -468,13 +470,13 @@ public class TrainDialog extends JDialog {
 		public String getColumnName(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return ETRC.getString("Station");
+				return _("Station");
 			case 1:
-				return ETRC.getString("Arrival");
+				return _("Arrival");
 			case 2:
-				return ETRC.getString("Leave");
+				return _("Leave");
 			case 3:
-				return ETRC.getString("Passenger");
+				return _("Passenger");
 			default:
 				return null;
 			}

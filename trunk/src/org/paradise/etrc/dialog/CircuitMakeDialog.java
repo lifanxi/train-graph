@@ -22,7 +22,7 @@ import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.skb.ETRCLCB;
 import org.paradise.etrc.data.skb.LCBStation;
 
-//import com.borland.jbcl.layout.VerticalFlowLayout;
+import static org.paradise.etrc.ETRC._;
 
 public class CircuitMakeDialog extends JDialog {
 	private static final long serialVersionUID = -5891299808461231142L;
@@ -82,7 +82,7 @@ public class CircuitMakeDialog extends JDialog {
 			cir.name = xianlu;
 		else
 			cir.name = xianlu + firstStation.getOneName()
-			           + lastStation.getOneName() + ETRC.getString(" Section");
+			           + lastStation.getOneName() + _(" Section");
 		
 		cir.length = cir.stations[cir.stationNum - 1].dist;
 
@@ -100,7 +100,7 @@ public class CircuitMakeDialog extends JDialog {
 	}
 
 	private void jbInit() throws Exception {
-		JButton btOK = new JButton(ETRC.getString("OK"));
+		JButton btOK = new JButton(_("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -109,10 +109,10 @@ public class CircuitMakeDialog extends JDialog {
 				
 				if ((name1 == null) || (name2 == null))
 				{
-					(new MessageBox(String.format(ETRC.getString("Please select both the begin station and end station.")))).showMessage();
+					(new MessageBox(String.format(_("Please select both the begin station and end station.")))).showMessage();
 					return;
 				}
-				if(new YesNoBox(String.format(ETRC.getString("Please confirm the down-going direction for circuit %s is from %s to %s."), xianlu, name1, name2)).askForYes()) {
+				if(new YesNoBox(String.format(_("Please confirm the down-going direction for circuit %s is from %s to %s."), xianlu, name1, name2)).askForYes()) {
 					Vector<LCBStation> selectedStations = new Vector<LCBStation>();
 					int index1 = list1.getSelectedIndex();
 					int index2 = list2.getSelectedIndex();
@@ -135,7 +135,7 @@ public class CircuitMakeDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton(ETRC.getString("Cancel"));
+		JButton btCancel = new JButton(_("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -162,13 +162,13 @@ public class CircuitMakeDialog extends JDialog {
 			allNames.add(sta.name);
 		}
 
-		JLabel lb1 = new JLabel(ETRC.getString("From:"));
+		JLabel lb1 = new JLabel(_("From:"));
 		lb1.setFont(new Font("dialog", 0, 12));
 		list1 = new JList(allNames);
 		list1.setFont(new Font("dialog", 0, 12));
 		JScrollPane jsp1 = new JScrollPane(list1);
 		
-		JLabel lb2 = new JLabel(ETRC.getString("To:"));
+		JLabel lb2 = new JLabel(_("To:"));
 		lb2.setFont(new Font("dialog", 0, 12));
 		list2 = new JList(allNames);
 		list2.setFont(new Font("dialog", 0, 12));

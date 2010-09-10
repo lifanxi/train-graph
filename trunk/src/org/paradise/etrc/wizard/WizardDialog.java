@@ -9,6 +9,8 @@ import javax.swing.*;
 
 import org.paradise.etrc.ETRC;
 
+import static org.paradise.etrc.ETRC._;
+
 public abstract class WizardDialog extends JDialog {
 	private static final long serialVersionUID = -5409636948664788767L;
 
@@ -51,8 +53,8 @@ public abstract class WizardDialog extends JDialog {
 		lbNumberPic.setVerticalAlignment(JLabel.TOP);
 		lbNumberPic.setBorder(BorderFactory.createEmptyBorder(20, 2, 20, 2));
 		
-		JLabel lbStepTitle = new JLabel(String.format(ETRC.getString("Step %d: %s"), step, stepTitle));
-		lbStepTitle.setFont(new Font(ETRC.getString("FONT_NAME"), Font.PLAIN, 12));
+		JLabel lbStepTitle = new JLabel(String.format(_("Step %d: %s"), step, stepTitle));
+		lbStepTitle.setFont(new Font(_("FONT_NAME"), Font.PLAIN, 12));
 		lbStepTitle.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		JPanel right = new JPanel();
@@ -101,10 +103,10 @@ public abstract class WizardDialog extends JDialog {
 		btPane.setLayout(new BorderLayout());
 		btPane.add(right, BorderLayout.EAST);
 		
-		finishButton = new JButton(ETRC.getString("Finish"));
-		cancelButton = new JButton(ETRC.getString("Cancel"));
-		nextButton = new JButton(ETRC.getString("Next >"));
-		prevButton = new JButton(ETRC.getString("< Previous"));
+		finishButton = new JButton(_("Finish"));
+		cancelButton = new JButton(_("Cancel"));
+		nextButton = new JButton(_("Next >"));
+		prevButton = new JButton(_("< Previous"));
 		
 		finishButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

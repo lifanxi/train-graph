@@ -2,7 +2,8 @@ package org.paradise.etrc;
 
 import javax.swing.UIManager;
 import java.awt.*;
-import java.util.*;
+import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -20,7 +21,6 @@ public class ETRC {
   private MainFrame frame;
   
   public static ResourceBundle res;
-  
 
   public static ETRC getInstance() {
 	  return instance;
@@ -30,7 +30,7 @@ public class ETRC {
 	  return frame;
   }
   
-  public static String getString(String str) {
+  public static String _(String str) {
 	  if (res == null) {
 		  return str; 
 	  }
@@ -59,7 +59,7 @@ public class ETRC {
   public ETRC() {
 	instance = this;
 	try	{
-		res = ResourceBundle.getBundle("org.paradise.etrc.l10n.Res");
+		res = ResourceBundle.getBundle("resources.Messages");
 	}
 	catch (MissingResourceException ex)	{
 		res = null;

@@ -10,6 +10,8 @@ import org.paradise.etrc.view.chart.ChartView;
 import org.paradise.etrc.wizard.Wizard;
 import org.paradise.etrc.wizard.WizardDialog;
 
+import static org.paradise.etrc.ETRC._;
+
 public class AddTrainWizard extends Wizard {
 	private Train train;
 	private ChartView chartView;
@@ -20,10 +22,10 @@ public class AddTrainWizard extends Wizard {
 	}
 	
 	public int doWizard() {
-		WZTrainNameInput step1 = new WZTrainNameInput(chartView.mainFrame, 1, ETRC.getString("Add New Train"), ETRC.getString("Input Train Number"));
-		WZTimeEdit step2 = new WZTimeEdit(chartView.mainFrame, 2, ETRC.getString("Add New Train"), ETRC.getString("Edit Time Table"));
-		WZInPointSet step3 = new WZInPointSet(chartView.mainFrame, 3, ETRC.getString("Add New Train"), ETRC.getString("Select Start Station"));
-		WZOutPointSet step4 = new WZOutPointSet(chartView.mainFrame, 4, ETRC.getString("Add New Train"), ETRC.getString("Select Terminal Station"));
+		WZTrainNameInput step1 = new WZTrainNameInput(chartView.mainFrame, 1, _("Add New Train"), _("Input Train Number"));
+		WZTimeEdit step2 = new WZTimeEdit(chartView.mainFrame, 2, _("Add New Train"), _("Edit Time Table"));
+		WZInPointSet step3 = new WZInPointSet(chartView.mainFrame, 3, _("Add New Train"), _("Select Start Station"));
+		WZOutPointSet step4 = new WZOutPointSet(chartView.mainFrame, 4, _("Add New Train"), _("Select Terminal Station"));
 		
 		String fullName;
 		String downName = null;
@@ -45,7 +47,7 @@ public class AddTrainWizard extends Wizard {
 					upName = step1.getUpName();
 					
 					
-					if(new YesNoBox(chartView.mainFrame, ETRC.getString("Automatically import train informtaion from build-in time table?")).askForYes()) {
+					if(new YesNoBox(chartView.mainFrame, _("Automatically import train informtaion from build-in time table?")).askForYes()) {
 						String[] names = fullName.split("/");
 						Vector<Train> trains = new Vector<Train>();
 						for(int i=0; i<names.length; i++) {
@@ -59,7 +61,7 @@ public class AddTrainWizard extends Wizard {
 						
 						//找到了几条数据，TODO 如果是多条的话应当选择。
 						if(trains.size() == 0) {
-							new MessageBox(chartView.mainFrame, String.format(ETRC.getString("Unable to find information for the train %s, please input manually."), fullName)).showMessage();
+							new MessageBox(chartView.mainFrame, String.format(_("Unable to find information for the train %s, please input manually."), fullName)).showMessage();
 							train = new Train();
 							train.trainNameFull = fullName;
 							train.trainNameDown = downName;
@@ -73,7 +75,7 @@ public class AddTrainWizard extends Wizard {
 							for(int i=1; i<trains.size(); i++) {
 								temp = temp + ", " + ((Train) trains.get(i)).getTrainName();
 							}
-							new MessageBox(chartView.mainFrame, String.format(ETRC.getString("Find %d related information for the train %s, use the first record."), trains.size(), fullName)).showMessage();
+							new MessageBox(chartView.mainFrame, String.format(_("Find %d related information for the train %s, use the first record."), trains.size(), fullName)).showMessage();
 						}
 					}
 					else {

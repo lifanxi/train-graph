@@ -1,7 +1,7 @@
 package org.paradise.etrc.filter;
 
 import java.io.File;
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 
 public class CSVFilter extends javax.swing.filechooser.FileFilter {
 
@@ -19,6 +19,6 @@ public class CSVFilter extends javax.swing.filechooser.FileFilter {
 	}
 
 	public String getDescription() {
-		return ETRC.getString("Excel CSV File (*.csv)");
+		return _("Excel CSV File (*.csv)");
 	}
 }

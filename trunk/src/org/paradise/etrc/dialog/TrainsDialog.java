@@ -16,6 +16,8 @@ import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.view.chart.ChartView;
 
+import static org.paradise.etrc.ETRC._;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -33,7 +35,7 @@ public class TrainsDialog extends JDialog {
 	JCheckBox cbUnderColor;
 
 	public TrainsDialog(MainFrame _mainFrame) {
-		super(_mainFrame, ETRC.getString("Train Information"), true);
+		super(_mainFrame, _("Train Information"), true);
 		
 		mainFrame = _mainFrame;
 		chart = mainFrame.chart;
@@ -59,7 +61,7 @@ public class TrainsDialog extends JDialog {
 
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText(ETRC.getString("Display opposite direction train using watermark"));
+		cbUnderColor.setText(_("Display opposite direction train using watermark"));
 		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -81,7 +83,7 @@ public class TrainsDialog extends JDialog {
 		colorPanel.add(spColorTable, BorderLayout.CENTER);
 		colorPanel.add(underColorPanel, BorderLayout.SOUTH);
 
-		JButton btOK = new JButton(ETRC.getString("OK"));
+		JButton btOK = new JButton(_("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -98,7 +100,7 @@ public class TrainsDialog extends JDialog {
 //			}
 //		});
 
-		JButton btAdd = new JButton(ETRC.getString("Add"));
+		JButton btAdd = new JButton(_("Add"));
 		btAdd.setFont(new Font("dialog", 0, 12));
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -106,7 +108,7 @@ public class TrainsDialog extends JDialog {
 			}
 		});
 		
-		JButton btLoad = new JButton(ETRC.getString("Load"));
+		JButton btLoad = new JButton(_("Load"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -114,7 +116,7 @@ public class TrainsDialog extends JDialog {
 			}
 		});
 		
-		JButton btEdit = new JButton(ETRC.getString("Edit"));
+		JButton btEdit = new JButton(_("Edit"));
 		btEdit.setFont(new Font("dialog", 0, 12));
 		btEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,7 +127,7 @@ public class TrainsDialog extends JDialog {
 			}
 		});
 		
-		JButton btDel = new JButton(ETRC.getString("Delete"));
+		JButton btDel = new JButton(_("Delete"));
 		btDel.setFont(new Font("dialog", 0, 12));
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -184,9 +186,9 @@ public class TrainsDialog extends JDialog {
 		newTrain.trainNameDown = "DDDD";
 		newTrain.trainNameUp   = "UUUU";
 		newTrain.stopNum = 3;
-		newTrain.stops[0] = new Stop(ETRC.getString("Departure"), "00:00", "00:00", false);
-		newTrain.stops[1] = new Stop(ETRC.getString("Middle"), "00:00", "00:00", false);
-		newTrain.stops[2] = new Stop(ETRC.getString("Terminal"), "00:00", "00:00", false);
+		newTrain.stops[0] = new Stop(_("Departure"), "00:00", "00:00", false);
+		newTrain.stops[1] = new Stop(_("Middle"), "00:00", "00:00", false);
+		newTrain.stops[2] = new Stop(_("Terminal"), "00:00", "00:00", false);
 		TrainDialog dialog = new TrainDialog(mainFrame, newTrain);
 
 		dialog.editTrain();
@@ -194,7 +196,7 @@ public class TrainsDialog extends JDialog {
 		if(!dialog.isCanceled) {
 			Train addingTrain = dialog.getTrain();
 			if(chart.isLoaded(addingTrain)) {
-				if(new YesNoBox(mainFrame, String.format(ETRC.getString("%s is already in the graph. Overwrite?"), addingTrain.getTrainName())).askForYes())
+				if(new YesNoBox(mainFrame, String.format(_("%s is already in the graph. Overwrite?"), addingTrain.getTrainName())).askForYes())
 					chart.updateTrain(addingTrain);
 			}
 			else {
@@ -449,13 +451,13 @@ public class TrainsDialog extends JDialog {
 		public String getColumnName(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return ETRC.getString("Number");
+				return _("Number");
 			case 1:
-				return ETRC.getString("Departure");
+				return _("Departure");
 			case 2:
-				return ETRC.getString("Terminal");
+				return _("Terminal");
 			case 3:
-				return ETRC.getString("Color");
+				return _("Color");
 			default:
 				return null;
 			}

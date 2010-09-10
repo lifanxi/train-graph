@@ -21,7 +21,7 @@ public class GIFTest {
 			Graphics2D g = image.createGraphics();// 得到图形上下文
 			g.setColor(Color.BLACK); // 设置画笔颜色
 			// 设置字体
-			g.setFont(new Font(ETRC.getString("FONT_NAME"), Font.LAYOUT_LEFT_TO_RIGHT, 15));// 写入签名
+			g.setFont(new Font(_("FONT_NAME"), Font.LAYOUT_LEFT_TO_RIGHT, 15));// 写入签名
 			g.drawString("很好吃诶，要不要也来一口？好吧! ", 43, image.getHeight() - 10);
 			g.dispose();
 			FileOutputStream out = new FileOutputStream("c:\\3.jpg");
