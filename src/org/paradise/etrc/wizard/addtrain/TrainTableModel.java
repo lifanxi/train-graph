@@ -2,7 +2,6 @@ package org.paradise.etrc.wizard.addtrain;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 
