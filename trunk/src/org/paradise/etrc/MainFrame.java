@@ -71,7 +71,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		defaultProp = new Properties();
 		defaultProp.setProperty(Prop_Working_Chart, Sample_Chart_File);
 		defaultProp.setProperty(Prop_Show_UP, "Y");
-		defaultProp.setProperty(Prop_Show_Down, "N");
+		defaultProp.setProperty(Prop_Show_Down, "Y");
 		defaultProp.setProperty(Prop_Show_Run, "Y");
 		
 		prop = new Properties(defaultProp);
@@ -82,7 +82,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		try {
 			prop.load(new FileInputStream(Properties_File));
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Unable to load prop file. Use default value.");
 		}
 				
 		initChart();
