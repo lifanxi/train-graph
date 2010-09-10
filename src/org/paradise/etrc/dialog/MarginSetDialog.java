@@ -5,11 +5,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-//import com.borland.jbcl.layout.*;
-
-import org.paradise.etrc.*;
+import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.view.chart.ChartView;
 
+import static org.paradise.etrc.ETRC._;
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -41,7 +40,7 @@ MainFrame mainFrame = null;
   JButton btTest = new JButton();
 
   public MarginSetDialog(Frame frame) {
-    super(frame, ETRC.getString("Margin Settings"), false);
+    super(frame, _("Margin Settings"), false);
 
     if(frame instanceof MainFrame) {
       mainFrame = (MainFrame) frame;
@@ -60,21 +59,21 @@ MainFrame mainFrame = null;
     titledBorder1 = new TitledBorder("");
     panel.setLayout(verticalFlowLayout1);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    this.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-    lbRight.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    lbRight.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     lbRight.setPreferredSize(new Dimension(8, 15));
     lbRight.setHorizontalAlignment(SwingConstants.RIGHT);
-    lbRight.setText(ETRC.getString("Right:"));
+    lbRight.setText(_("Right:"));
 
     tfRight.setMinimumSize(new Dimension(12, 22));
     tfRight.setPreferredSize(new Dimension(20, 22));
     tfRight.setText(mainFrame.chartView.rightMargin+"");
 
-    lbLeft.setText(ETRC.getString("Left:"));
-    lbLeft.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    lbLeft.setText(_("Left:"));
+    lbLeft.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     lbLeft.setPreferredSize(new Dimension(8, 15));
     lbLeft.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -83,8 +82,8 @@ MainFrame mainFrame = null;
     tfLeft.setPreferredSize(new Dimension(20, 22));
     tfLeft.setText(mainFrame.chartView.leftMargin+"");
 
-    lbDown.setText(ETRC.getString("Bottom:"));
-    lbDown.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    lbDown.setText(_("Bottom:"));
+    lbDown.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     lbDown.setPreferredSize(new Dimension(8, 15));
     lbDown.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -92,8 +91,8 @@ MainFrame mainFrame = null;
     tfDown.setPreferredSize(new Dimension(20, 22));
     tfDown.setText(mainFrame.chartView.bottomMargin+"");
 
-    lbUp.setText(ETRC.getString("Top:"));
-    lbUp.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    lbUp.setText(_("Top:"));
+    lbUp.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     lbUp.setPreferredSize(new Dimension(8, 15));
     lbUp.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -101,20 +100,20 @@ MainFrame mainFrame = null;
     tfUp.setPreferredSize(new Dimension(20, 22));
     tfUp.setText(mainFrame.chartView.topMargin+"");
 
-    btOK.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btOK.setText(ETRC.getString("Set"));
+    btOK.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+    btOK.setText(_("Set"));
     btOK.setActionCommand("Button_OK");
     btOK.addActionListener(this);
 
-    btDefault.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btDefault.setText(ETRC.getString("Default"));
+    btDefault.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+    btDefault.setText(_("Default"));
     btDefault.setActionCommand("Button_Default");
     btDefault.addActionListener(this);
 
     btTest.addActionListener(this);
     btTest.setActionCommand("Button_Test");
-    btTest.setText(ETRC.getString("Test"));
-    btTest.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    btTest.setText(_("Test"));
+    btTest.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 
     jPanel1.setLayout(gridBagLayout1);
 
@@ -122,17 +121,17 @@ MainFrame mainFrame = null;
     lbCenter.setPreferredSize(new Dimension(64, 48));
     lbCenter.setText("");
 
-    jPanel1.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    jPanel1.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     jPanel1.setAlignmentY((float) 0.5);
     jPanel1.setBorder(titledBorder1);
 
     titledBorder1.setTitlePosition(2);
-    titledBorder1.setTitleFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    titledBorder1.setTitle(ETRC.getString("Graph Margin"));
+    titledBorder1.setTitleFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+    titledBorder1.setTitle(_("Graph Margin"));
 
-    statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    statusBar.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-    statusBar.setText(ETRC.getString("Set Graph Margin"));
+    statusBar.setText(_("Set Graph Margin"));
     verticalFlowLayout1.setHgap(2);
     verticalFlowLayout1.setVgap(2);
 
@@ -202,7 +201,7 @@ MainFrame mainFrame = null;
     this.tfDown.setText(ChartView.DEFAULT_BOTTOM_MARGIN+"");
     this.tfLeft.setText(ChartView.DEFAULT_LEFT_MARGIN+"");
     this.tfRight.setText(ChartView.DEFAULT_RIGHT_MARGIN+"");
-    this.statusBar.setText(ETRC.getString("Set Graph Margin"));
+    this.statusBar.setText(_("Set Graph Margin"));
   }
 
   /**
@@ -228,7 +227,7 @@ MainFrame mainFrame = null;
           && (down >= 0 && down <= 200)
           && (left >= 0 && left <= 200)
           && (right >= 0 && right <= 200))) {
-          this.statusBar.setText(String.format(ETRC.getString("Input data out of range (%d-%d)."), 0, 200));
+          this.statusBar.setText(String.format(_("Input data out of range (%d-%d)."), 0, 200));
       }
       else{
         if(this.mainFrame != null) {
@@ -240,11 +239,11 @@ MainFrame mainFrame = null;
           mainFrame.chartView.repaint();
           mainFrame.validate();
         }
-        this.statusBar.setText(ETRC.getString("Set Graph Margin"));
+        this.statusBar.setText(_("Set Graph Margin"));
       }
     }
     catch(NumberFormatException e) {
-      this.statusBar.setText(ETRC.getString("Invalid input"));
+      this.statusBar.setText(_("Invalid input"));
     }
   }
 }

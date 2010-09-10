@@ -15,6 +15,8 @@ import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.skb.ETRCLCB;
 
+import static org.paradise.etrc.ETRC._;
+
 public class XianluSelectDialog extends JDialog {
 	private static final long serialVersionUID = 1389706992939223725L;
 	
@@ -33,7 +35,7 @@ public class XianluSelectDialog extends JDialog {
 	public boolean isCanceled = false;
 	
 	public XianluSelectDialog(MainFrame _mainFrame){
-		super(_mainFrame, ETRC.getString("Circuit Selection"), true);
+		super(_mainFrame, _("Circuit Selection"), true);
 		
 		mainFrame = _mainFrame;
 		lcb = mainFrame.getLCB();
@@ -47,7 +49,7 @@ public class XianluSelectDialog extends JDialog {
 	}
 	
 	private void jbInit() throws Exception {
-		this.setTitle(ETRC.getString("Circuit Selection"));
+		this.setTitle(_("Circuit Selection"));
 		btChar = new JButton[27];
 		
 		JPanel buttonPanel = new JPanel();
@@ -61,8 +63,8 @@ public class XianluSelectDialog extends JDialog {
 		buttonPanel.setBorder(new EmptyBorder(5,2,5,2));
 		buttonPanel.add(btChar[26]);
 		
-		btSearch = new JButton(ETRC.getString("Search"));
-		btSearch.setFont(new Font(ETRC.getString("FONT_NAME"), 0, 12));
+		btSearch = new JButton(_("Search"));
+		btSearch.setFont(new Font(_("FONT_NAME"), 0, 12));
 		btSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -86,7 +88,7 @@ public class XianluSelectDialog extends JDialog {
 		xlList = buildXianluList();
 		JScrollPane jsp = new JScrollPane(xlList);
 
-		JButton btOK = new JButton(ETRC.getString("OK"));
+		JButton btOK = new JButton(_("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -95,7 +97,7 @@ public class XianluSelectDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton(ETRC.getString("Cancel"));
+		JButton btCancel = new JButton(_("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

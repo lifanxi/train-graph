@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.view.chart.ChartView;
 
@@ -302,7 +302,7 @@ public class TrainNameRect {
       g.setColor(Color.white);
       g.fillRect(x, y, 10, ChartView.trainNameRecHeight);
       g.setColor(oldColor);
-      g.setFont(new Font(ETRC.getString("FONT_NAME_FIXED"), 0, 10));
+      g.setFont(new Font(_("FONT_NAME_FIXED"), 0, 10));
       g.drawRect(x, y, 10, ChartView.trainNameRecHeight);
 
       int h = g.getFontMetrics().getHeight() - 5;

@@ -12,7 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.data.Station;
 import org.paradise.etrc.data.Train;
@@ -41,7 +41,7 @@ public class RunningPanel extends JPanel {
 	void jbInit() throws Exception {
 		this.setBackground(Color.white);
 		this.setLayout(new BorderLayout());
-		this.setFont(new Font(ETRC.getString("FONT_NAME"), 0, 12));
+		this.setFont(new Font(_("FONT_NAME"), 0, 12));
 	}
 
 	public void paint(Graphics g) {

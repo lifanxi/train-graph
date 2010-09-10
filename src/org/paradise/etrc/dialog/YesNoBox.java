@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 
 /**
  * @author lguo@sina.com
@@ -26,8 +27,8 @@ public class YesNoBox extends JDialog implements ActionListener {
 
 	ImageIcon image1 = new ImageIcon();
 
-	String msg = ETRC.getString("Message Content");
-	String title = ETRC.getString("Message");
+	String msg = _("Message Content");
+	String title = _("Message");
 
 	BorderLayout borderLayout1 = new BorderLayout();
 
@@ -50,11 +51,11 @@ public class YesNoBox extends JDialog implements ActionListener {
 	}
 
 	public YesNoBox(Frame parent, String _msg) {
-		this(parent, _msg, ETRC.getString("Question"));
+		this(parent, _msg, _("Question"));
 	}
 
 	public YesNoBox(String _msg) {
-		this(ETRC.getInstance().getMainFrame(), _msg, ETRC.getString("Question"));
+		this(ETRC.getInstance().getMainFrame(), _msg, _("Question"));
 	}
 
 	//Component initialization
@@ -67,12 +68,12 @@ public class YesNoBox extends JDialog implements ActionListener {
 		
 		buttonYes.setFont(new java.awt.Font("Dialog", 0, 12));
 		buttonYes.setActionCommand("Yes");
-		buttonYes.setText(ETRC.getString("Yes"));
+		buttonYes.setText(_("Yes"));
 		buttonYes.addActionListener(this);
 		
 		buttonNo.setFont(new java.awt.Font("Dialog", 0, 12));
 		buttonNo.setActionCommand("No");
-		buttonNo.setText(ETRC.getString("No"));
+		buttonNo.setText(_("No"));
 		buttonNo.addActionListener(this);
 
 		msgLabel.setFont(new java.awt.Font("Dialog", 0, 12));

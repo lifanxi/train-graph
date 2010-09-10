@@ -6,6 +6,8 @@ import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 
+import static org.paradise.etrc.ETRC._;
+
 public class TrainTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1014817974495127589L;
 
@@ -22,13 +24,13 @@ public class TrainTableModel extends AbstractTableModel {
 	public String getColumnName(int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return ETRC.getString("Station");
+			return _("Station");
 		case 1:
-			return ETRC.getString("Arrival");
+			return _("Arrival");
 		case 2:
-			return ETRC.getString("Leave");
+			return _("Leave");
 		case 3:
-			return ETRC.getString("Passenger");
+			return _("Passenger");
 		default:
 			return null;
 		}

@@ -9,6 +9,8 @@ import javax.swing.*;
 import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 
+import static org.paradise.etrc.ETRC._;
+
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -40,19 +42,19 @@ public class StationInputDialog extends JDialog implements ActionListener {
 	}
 
 	public StationInputDialog(MainFrame frame) {
-		this(frame, ETRC.getString("Input Station Name"), false);
+		this(frame, _("Input Station Name"), false);
 		mainFrame = frame;
 	}
 
 	private void jbInit() throws Exception {
 		panel.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-		this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		this.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 		panel.setFont(new java.awt.Font("Dialog", 0, 12));
 		panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-		lbStationName.setText(ETRC.getString("Station name:"));
-		lbStationName.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		lbStationName.setText(_("Station name:"));
+		lbStationName.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 		lbStationName.setPreferredSize(new Dimension(8, 15));
 		lbStationName.setToolTipText("");
 		lbStationName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -64,14 +66,14 @@ public class StationInputDialog extends JDialog implements ActionListener {
 		tfStationName.setActionCommand("Button_Find");
 		tfStationName.addActionListener(this);
 
-		btFind.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-		btFind.setText(ETRC.getString("Find"));
+		btFind.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+		btFind.setText(_("Find"));
 		btFind.setActionCommand("Button_Find");
 		btFind.addActionListener(this);
 		btFind.requestFocus(false);
 
-		btCancel.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-		btCancel.setText(ETRC.getString("Cancel"));
+		btCancel.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+		btCancel.setText(_("Cancel"));
 		btCancel.setActionCommand("Button_Cancel");
 		btCancel.addActionListener(this);
 

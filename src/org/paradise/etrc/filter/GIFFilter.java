@@ -3,7 +3,7 @@ package org.paradise.etrc.filter;
 import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 
 public class GIFFilter extends FileFilter {
 
@@ -17,7 +17,7 @@ public class GIFFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return ETRC.getString("GIF File (*.gif)");
+		return _("GIF File (*.gif)");
 	}
 
 }

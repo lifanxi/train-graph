@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.paradise.etrc.ETRC;
+import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Chart;
 import org.paradise.etrc.view.chart.ChartView;
@@ -28,10 +28,10 @@ public class ChartSetDialog extends JDialog {
 	private JTextField t1;
 	private JTextField t2;
 	
-	private static String defaultStatus = ETRC.getString("Settings for Train Graph");
+	private static String defaultStatus = _("Settings for Train Graph");
 
 	public ChartSetDialog(MainFrame _mainFrame) {
-		super(_mainFrame, ETRC.getString("Settings for Train Graph"), false);
+		super(_mainFrame, _("Settings for Train Graph"), false);
 		mainFrame = _mainFrame;
 
 		init();
@@ -51,20 +51,20 @@ public class ChartSetDialog extends JDialog {
 		t2 = createJTextField("" + chart.timeInterval);
 		
 		JPanel distPanel = creatJPanel(
-                createJLabelL(ETRC.getString("Pixels per km:")), d0, createJLabelR(" "),
-				createJLabelL(ETRC.getString("Display level:")), d1, createJLabelR(" "),
-				createJLabelL(ETRC.getString("Bold line level:")), d2, createJLabelR(" "),
-                createJLabelM(ETRC.getString(" The highest station level is 0")));
+                createJLabelL(_("Pixels per km:")), d0, createJLabelR(" "),
+				createJLabelL(_("Display level:")), d1, createJLabelR(" "),
+				createJLabelL(_("Bold line level:")), d2, createJLabelR(" "),
+                createJLabelM(_(" The highest station level is 0")));
 		
 		JPanel timePanel = creatJPanel(				
-				createJLabelL(ETRC.getString("Time for 0 pos:")), t0, createJLabelR(" "),
-				createJLabelL(ETRC.getString("Pixel per min：")), t1, createJLabelR(" "),
-				createJLabelL(ETRC.getString("Y-axis gap:")), t2, createJLabelR("min"),
-				createJLabelM(ETRC.getString(" Must be a divider of 60")));
+				createJLabelL(_("Time for 0 pos:")), t0, createJLabelR(" "),
+				createJLabelL(_("Pixel per min:")), t1, createJLabelR(" "),
+				createJLabelL(_("Y-axis gap:")), t2, createJLabelR("min"),
+				createJLabelM(_(" Must be a divider of 60")));
 
 
-        tbPane.add(ETRC.getString("Distance bar"), distPanel);
-		tbPane.add(ETRC.getString("Timeline"), timePanel);
+        tbPane.add(_("Distance bar"), distPanel);
+		tbPane.add(_("Timeline"), timePanel);
 
 	    statusBar = new JLabel(defaultStatus);
 	    statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -100,7 +100,7 @@ public class ChartSetDialog extends JDialog {
 		JCheckBox cbDrawPoint;
 		cbDrawPoint = new JCheckBox();
 		cbDrawPoint.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbDrawPoint.setText(ETRC.getString("Always highlight termials"));
+		cbDrawPoint.setText(_("Always highlight termials"));
 		cbDrawPoint.setSelected(mainFrame.chartView.isDrawNormalPoint);
 		cbDrawPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -116,7 +116,7 @@ public class ChartSetDialog extends JDialog {
 		JCheckBox cbUnderColor;
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText(ETRC.getString("Enable watermark display"));
+		cbUnderColor.setText(_("Enable watermark display"));
 		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -148,7 +148,7 @@ public class ChartSetDialog extends JDialog {
 		bt.setPreferredSize(new Dimension(62, 24));
 		bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				if(ae.getActionCommand().equals(ETRC.getString("Default")))
+				if(ae.getActionCommand().equals(_("Default")))
 					setDefault();
 				else
 					setValues();
@@ -317,7 +317,7 @@ public class ChartSetDialog extends JDialog {
     	              || (interval == 60))))	           
 	        ){
 
-	        this.statusBar.setText(ETRC.getString("Input data out of range."));
+	        this.statusBar.setText(_("Input data out of range."));
 	      }
 	      
 	      else{
@@ -336,7 +336,7 @@ public class ChartSetDialog extends JDialog {
 	      }
 	    }
 	    catch(NumberFormatException e) {
-	      this.statusBar.setText(ETRC.getString("Invalid input"));
+	      this.statusBar.setText(_("Invalid input"));
 	    }
 	  }
 }

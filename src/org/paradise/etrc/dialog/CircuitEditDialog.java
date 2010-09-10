@@ -26,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
+import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Circuit;
@@ -64,12 +65,12 @@ public class CircuitEditDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle(ETRC.getString("Load Circuit"));
+		chooser.setDialogTitle(_("Load Circuit"));
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CSVFilter());
 		chooser.addChoosableFileFilter(new CIRFilter());
-		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		chooser.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -95,12 +96,12 @@ public class CircuitEditDialog extends JDialog {
 		JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
-		chooser.setDialogTitle(ETRC.getString("Save Circuit"));
-		chooser.setApproveButtonText(ETRC.getString("Save"));
+		chooser.setDialogTitle(_("Save Circuit"));
+		chooser.setApproveButtonText(_("Save"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setMultiSelectionEnabled(false);
 		chooser.addChoosableFileFilter(new CIRFilter());
-		chooser.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+		chooser.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
 		chooser.setSelectedFile(new File(circuit.name));
 
 		int returnVal = chooser.showOpenDialog(this);
@@ -129,7 +130,7 @@ public class CircuitEditDialog extends JDialog {
 //		JPanel circuitPanel = new JPanel();
 		//trainPanel.add(underColorPanel,  BorderLayout.SOUTH);
 
-		JButton btOK = new JButton(ETRC.getString("OK"));
+		JButton btOK = new JButton(_("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
 		btOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -143,7 +144,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btCancel = new JButton(ETRC.getString("Cancel"));
+		JButton btCancel = new JButton(_("Cancel"));
 		btCancel.setFont(new Font("dialog", 0, 12));
 		btCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -151,7 +152,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btLoad = new JButton(ETRC.getString("Load"));
+		JButton btLoad = new JButton(_("Load"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -165,7 +166,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btSave = new JButton(ETRC.getString("Save"));
+		JButton btSave = new JButton(_("Save"));
 		btSave.setFont(new Font("dialog", 0, 12));
 		btSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -188,7 +189,7 @@ public class CircuitEditDialog extends JDialog {
 	}
 	
 	private JPanel buildCircuitPanel() {
-		JButton btDel = new JButton(ETRC.getString("Delete"));
+		JButton btDel = new JButton(_("Delete"));
 		btDel.setFont(new Font("dialog", 0, 12));
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -202,14 +203,14 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btAdd = new JButton(ETRC.getString("Add(Before)"));
+		JButton btAdd = new JButton(_("Add(Before)"));
 		btAdd.setFont(new Font("dialog", 0, 12));
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
 				Circuit cir = ((StationTableModel)table.getModel()).circuit;
 				
-				String name = ETRC.getString("Station");
+				String name = _("Station");
 				int dist = 0;
 				int level = 2;
 				boolean hide = false;
@@ -220,13 +221,13 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btApp = new JButton(ETRC.getString("Add(After)"));
+		JButton btApp = new JButton(_("Add(After)"));
 		btApp.setFont(new Font("dialog", 0, 12));
 		btApp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//        table.getCellEditor().stopCellEditing();
 				
-				String name = ETRC.getString("Station");
+				String name = _("Station");
 				int dist = 0;
 				int level = 2;
 				boolean hide = false;
@@ -244,7 +245,7 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JLabel lbName = new JLabel(ETRC.getString("Circuit Name:"));
+		JLabel lbName = new JLabel(_("Circuit Name:"));
 		lbName.setFont(new Font("dialog", 0, 12));
 		
 		tfName = new JTextField(12);
@@ -407,13 +408,13 @@ public class CircuitEditDialog extends JDialog {
 		public String getColumnName(int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return ETRC.getString("Station");
+				return _("Station");
 			case 1:
-				return ETRC.getString("Distance");
+				return _("Distance");
 			case 2:
-				return ETRC.getString("Level");
+				return _("Level");
 			case 3:
-				return ETRC.getString("Hidden");
+				return _("Hidden");
 			default:
 				return null;
 			}

@@ -7,6 +7,7 @@ import javax.swing.*;
 //import com.borland.jbcl.layout.*;
 
 import org.paradise.etrc.*;
+import static org.paradise.etrc.ETRC._;
 
 /**
  * @author lguo@sina.com
@@ -29,10 +30,10 @@ MainFrame mainFrame = null;
   JPanel jPanel3 = new JPanel();
   GridBagLayout gridBagLayout2 = new GridBagLayout();
 
-  String defaultStatus = ETRC.getString("Input the train you want to find");
+  String defaultStatus = _("Input the train you want to find");
 
   public FindTrainDialog(Frame frame) {
-    super(frame, ETRC.getString("Find a Train"), false);
+    super(frame, _("Find a Train"), false);
 
     if(frame instanceof MainFrame) {
       mainFrame = (MainFrame) frame;
@@ -50,12 +51,12 @@ MainFrame mainFrame = null;
   private void jbInit() throws Exception {
     panel.setLayout(verticalFlowLayout1);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    this.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    this.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     panel.setFont(new java.awt.Font("Dialog", 0, 12));
     panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-    lbTrainName.setText(ETRC.getString("Train number to find:"));
-    lbTrainName.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    lbTrainName.setText(_("Train number to find:"));
+    lbTrainName.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     lbTrainName.setPreferredSize(new Dimension(8, 15));
     lbTrainName.setToolTipText("");
     lbTrainName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -67,20 +68,20 @@ MainFrame mainFrame = null;
     tfTrainName.setActionCommand("Button_Find");
     tfTrainName.addActionListener(this);
 
-    btFind.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btFind.setText(ETRC.getString("Find"));
+    btFind.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+    btFind.setText(_("Find"));
     btFind.setActionCommand("Button_Find");
     btFind.addActionListener(this);
     btFind.requestFocus(false);
 
-    btClear.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
-    btClear.setText(ETRC.getString("Clear"));
+    btClear.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
+    btClear.setText(_("Clear"));
     btClear.setActionCommand("Button_Clear");
     btClear.addActionListener(this);
 
-    statusBar.setFont(new java.awt.Font(ETRC.getString("FONT_NAME"), 0, 12));
+    statusBar.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
     statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-    statusBar.setText(ETRC.getString("Input the train you want to find"));
+    statusBar.setText(_("Input the train you want to find"));
     verticalFlowLayout1.setHgap(2);
     verticalFlowLayout1.setVgap(2);
 
@@ -135,7 +136,7 @@ MainFrame mainFrame = null;
     if(mainFrame.chartView.findAndMoveToTrain(trainName))
       this.statusBar.setText(trainName);
     else {
-      this.statusBar.setText(ETRC.getString("Not found"));
+      this.statusBar.setText(_("Not found"));
       //doClear();
     }
   }
