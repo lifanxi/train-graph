@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-10 21:34+0800\n"
+"POT-Creation-Date: 2010-09-10 21:37+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,11 +166,7 @@ msgid "Open..."
 msgstr ""
 
 #: src/org/paradise/etrc/MainFrame.java:437
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:696
-#: src/org/paradise/etrc/dialog/TrainDialog.java:105
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:100
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:169
-msgid "Save"
+msgid "SaveMenu"
 msgstr ""
 
 #: src/org/paradise/etrc/MainFrame.java:438
@@ -311,6 +307,13 @@ msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:678
 msgid "Export Graph..."
+msgstr ""
+
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:696
+#: src/org/paradise/etrc/dialog/TrainDialog.java:105
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:100
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:169
+msgid "Save"
 msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:735

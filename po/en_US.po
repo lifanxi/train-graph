@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-10 21:32+0800\n"
-"PO-Revision-Date: 2010-09-10 21:33+0800\n"
+"POT-Creation-Date: 2010-09-10 21:37+0800\n"
+"PO-Revision-Date: 2010-09-10 21:37+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: English\n"
@@ -165,12 +165,8 @@ msgid "Open..."
 msgstr ""
 
 #: src/org/paradise/etrc/MainFrame.java:437
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:696
-#: src/org/paradise/etrc/dialog/TrainDialog.java:105
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:100
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:169
-msgid "Save"
-msgstr ""
+msgid "SaveMenu"
+msgstr "Save"
 
 #: src/org/paradise/etrc/MainFrame.java:438
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:702
@@ -310,6 +306,13 @@ msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:678
 msgid "Export Graph..."
+msgstr ""
+
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:696
+#: src/org/paradise/etrc/dialog/TrainDialog.java:105
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:100
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:169
+msgid "Save"
 msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:735

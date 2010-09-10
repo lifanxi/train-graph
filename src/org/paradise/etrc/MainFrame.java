@@ -434,7 +434,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		menuFile.add(createMenuItem(_("New"), File_Clear_Chart)).setMnemonic(KeyEvent.VK_N);
 		menuFile.add(createMenuItem(_("Open..."), File_Load_Chart)).setMnemonic(KeyEvent.VK_O);
 		menuFile.addSeparator();
-		menuFile.add(createMenuItem(_("Save"), File_Save_Chart)).setMnemonic(KeyEvent.VK_S);
+		menuFile.add(createMenuItem(_("SaveMenu"), File_Save_Chart)).setMnemonic(KeyEvent.VK_S);
 		menuFile.add(createMenuItem(_("Save As..."), File_Save_Chart_As)).setMnemonic(KeyEvent.VK_A);
 		menuFile.addSeparator();
 //		menuFile.add(createMenuItem("更改线路...", File_Circuit)); //Bug:更改线路后没有清空车次
