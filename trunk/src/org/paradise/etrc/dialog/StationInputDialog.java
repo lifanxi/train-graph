@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.MainFrame;
 
 import static org.paradise.etrc.ETRC._;

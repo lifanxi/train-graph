@@ -7,8 +7,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
-import org.paradise.etrc.ETRC;
-
 import static org.paradise.etrc.ETRC._;
 
 public abstract class WizardDialog extends JDialog {

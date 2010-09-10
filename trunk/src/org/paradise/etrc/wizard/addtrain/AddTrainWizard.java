@@ -2,7 +2,6 @@ package org.paradise.etrc.wizard.addtrain;
 
 import java.util.Vector;
 
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.dialog.MessageBox;
 import org.paradise.etrc.dialog.YesNoBox;

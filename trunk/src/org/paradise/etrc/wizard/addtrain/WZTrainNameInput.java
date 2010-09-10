@@ -20,7 +20,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.wizard.WizardDialog;
 

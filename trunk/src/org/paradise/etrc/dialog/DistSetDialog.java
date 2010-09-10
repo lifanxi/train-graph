@@ -8,7 +8,6 @@ import javax.swing.border.*;
 //import com.borland.jbcl.layout.*;
 
 import org.paradise.etrc.*;
-import org.paradise.etrc.ETRC;
 import org.paradise.etrc.data.Chart;
 
 import static org.paradise.etrc.ETRC._;
