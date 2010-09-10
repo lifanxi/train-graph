@@ -451,7 +451,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		menuSetup.add(createMenuItem(_("Timeline..."), Setup_Time)).setMnemonic(KeyEvent.VK_T);
 		menuSetup.add(createMenuItem(_("Distance Bar..."), Setup_Dist)).setMnemonic(KeyEvent.VK_D);
 
-        JMenu menuEdit = createMenu(_("Edit"));
+        JMenu menuEdit = createMenu(_("EditMenu"));
 		menuEdit.setMnemonic(KeyEvent.VK_E);
         menuEdit.add(createMenuItem(_("Circuit..."), Edit_Circuit)).setMnemonic(KeyEvent.VK_C);
         menuEdit.add(createMenuItem(_("Train..."), Edit_Trains)).setMnemonic(KeyEvent.VK_R);

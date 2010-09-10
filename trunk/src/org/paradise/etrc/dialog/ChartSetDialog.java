@@ -100,7 +100,7 @@ public class ChartSetDialog extends JDialog {
 		JCheckBox cbDrawPoint;
 		cbDrawPoint = new JCheckBox();
 		cbDrawPoint.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbDrawPoint.setText(_("Always highlight termials"));
+		cbDrawPoint.setText(_("Always highlight terminals"));
 		cbDrawPoint.setSelected(mainFrame.chartView.isDrawNormalPoint);
 		cbDrawPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {

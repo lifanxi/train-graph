@@ -97,7 +97,7 @@ public class WZOutPointSet extends WizardDialog {
 	private Component createTimePane() {
 		JPanel panel = new JPanel();
 		
-		JLabel lb = new JLabel(_("Termial/End Time:"));
+		JLabel lb = new JLabel(_("Terminal/End Time:"));
 		tfTime = new JTextField();
 		tfTime.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent arg0) {
