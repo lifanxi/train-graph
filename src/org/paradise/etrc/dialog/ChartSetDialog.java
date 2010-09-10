@@ -82,8 +82,8 @@ public class ChartSetDialog extends JDialog {
 		JPanel panel = new JPanel();
 		
 		JPanel panelBT = new JPanel();
-		JButton btDefault = createJButton("Default");
-		JButton btOK      = createJButton("Set");
+		JButton btDefault = createJButton(_("Default"));
+		JButton btOK      = createJButton(_("Set"));
 	
 		panelBT.add(btDefault);
 		panelBT.add(btOK);
