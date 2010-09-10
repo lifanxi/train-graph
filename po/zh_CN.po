@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-10 19:21+0800\n"
-"PO-Revision-Date: 2010-09-10 19:24+0800\n"
+"POT-Creation-Date: 2010-09-10 21:32+0800\n"
+"PO-Revision-Date: 2010-09-10 21:34+0800\n"
 "Last-Translator: Li Fanxi <lifanxi@freemindworld.com>\n"
 "Language-Team: Li Fanxi <lifanxi@freemindworld.com>\n"
 "Language: Simplified Chinese\n"
@@ -209,8 +209,7 @@ msgid "Distance Bar..."
 msgstr "距离轴(D)..."
 
 #: src/org/paradise/etrc/MainFrame.java:454
-#: src/org/paradise/etrc/dialog/TrainsDialog.java:119
-msgid "Edit"
+msgid "EditMenu"
 msgstr "编辑(E)"
 
 #: src/org/paradise/etrc/MainFrame.java:456
@@ -437,7 +436,7 @@ msgid "< Previous"
 msgstr "< 上一步"
 
 #: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:100
-msgid "Termial/End Time:"
+msgid "Terminal/End Time:"
 msgstr "出图/终到时间："
 
 #: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:186
@@ -752,6 +751,10 @@ msgstr "水印显示反向车次"
 msgid "Add"
 msgstr "添加"
 
+#: src/org/paradise/etrc/dialog/TrainsDialog.java:119
+msgid "Edit"
+msgstr "编辑"
+
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:189
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:456
 msgid "Departure"
@@ -944,7 +947,7 @@ msgid "Timeline"
 msgstr "时间轴"
 
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:103
-msgid "Always highlight termials"
+msgid "Always highlight terminals"
 msgstr "始终突出画到发点"
 
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:119
