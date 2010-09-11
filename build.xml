@@ -10,6 +10,7 @@
 
   <target name="clean">
 	<delete dir="${build.dir}"/>
+    <delete file="${top.dir}/ETRC.zip"/>
   </target>
 
   <target name="compile">
@@ -52,4 +53,11 @@
   <target name="clean-build" depends="clean,jar"/>
 
   <target name="main" depends="clean,run"/>
+  <target name="package" depends="clean,jar">
+	<copy file="${top.dir}/LICENSE" todir="${jar.dir}/" />
+    <copy file="${top.dir}/README" todir="${jar.dir}/" />
+	<zip destfile="${top.dir}/ETRC.zip"
+		 basedir="${jar.dir}"
+		 />
+  </target>
 </project>
