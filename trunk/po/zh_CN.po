@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-10 21:37+0800\n"
-"PO-Revision-Date: 2010-09-10 21:37+0800\n"
+"POT-Creation-Date: 2010-09-11 11:10+0800\n"
+"PO-Revision-Date: 2010-09-13 01:11+0800\n"
 "Last-Translator: Li Fanxi <lifanxi@freemindworld.com>\n"
 "Language-Team: Li Fanxi <lifanxi@freemindworld.com>\n"
 "Language: Simplified Chinese\n"
@@ -28,26 +28,26 @@ msgstr ""
 #: src/org/paradise/etrc/view/chart/CircuitPanel.java:39
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:214
 #: src/org/paradise/etrc/view/dynamic/RunningPanel.java:44
-#: src/org/paradise/etrc/wizard/WizardDialog.java:57
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:161
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:125
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:215
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:230
+#: src/org/paradise/etrc/wizard/WizardDialog.java:55
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:160
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:124
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:214
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:229
 #: src/org/paradise/etrc/wizard/addtrain/WZInPointSet.java:174
 #: src/org/paradise/etrc/dialog/SliceDialog.java:104
-#: src/org/paradise/etrc/dialog/TrainDialog.java:263
-#: src/org/paradise/etrc/dialog/TrainDialog.java:295
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:70
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:75
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:86
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:96
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:101
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:111
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:114
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:123
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:127
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:135
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:144
+#: src/org/paradise/etrc/dialog/TrainDialog.java:262
+#: src/org/paradise/etrc/dialog/TrainDialog.java:294
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:69
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:74
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:85
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:95
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:100
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:110
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:113
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:122
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:126
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:134
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:143
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:62
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:66
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:76
@@ -75,13 +75,13 @@ msgstr ""
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:128
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:141
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:146
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:73
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:104
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:67
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:52
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:57
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:69
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:75
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:72
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:103
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:66
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:51
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:56
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:68
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:74
 msgid "FONT_NAME"
 msgstr "宋体"
 
@@ -284,7 +284,7 @@ msgid ""
 msgstr "（批量）读入车次文件，覆盖已经存在的车次，是否继续？"
 
 #: src/org/paradise/etrc/MainFrame.java:863
-#: src/org/paradise/etrc/dialog/TrainDialog.java:290
+#: src/org/paradise/etrc/dialog/TrainDialog.java:289
 msgid "Load Train Information"
 msgstr "载入车次"
 
@@ -301,10 +301,10 @@ msgid "FONT_NAME_FIXED"
 msgstr "宋体"
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:666
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:24
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:25
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:26
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
 msgid "Add New Train"
 msgstr "添加新车"
 
@@ -313,9 +313,9 @@ msgid "Export Graph..."
 msgstr "导出运行图"
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:696
-#: src/org/paradise/etrc/dialog/TrainDialog.java:105
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:100
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:169
+#: src/org/paradise/etrc/dialog/TrainDialog.java:104
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:168
 msgid "Save"
 msgstr "保存"
 
@@ -324,7 +324,7 @@ msgid "Change Color"
 msgstr "更改颜色"
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:741
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:26
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:25
 msgid "Edit Time Table"
 msgstr "编辑点单"
 
@@ -337,7 +337,7 @@ msgid "Train %s is already in the graph, overwrite?"
 msgstr "%s次已经在图中，是否覆盖？"
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:810
-#: src/org/paradise/etrc/dialog/TrainDialog.java:324
+#: src/org/paradise/etrc/dialog/TrainDialog.java:323
 msgid "Select the color for the line"
 msgstr "请选择行车线颜色"
 
@@ -413,46 +413,46 @@ msgstr "车次不完整:"
 msgid "Station %d data error in line %s"
 msgstr "%s第%d站数据有误"
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:56
+#: src/org/paradise/etrc/wizard/WizardDialog.java:54
 msgid "Step %d: %s"
 msgstr "第%d步：%s"
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:106
+#: src/org/paradise/etrc/wizard/WizardDialog.java:104
 msgid "Finish"
 msgstr "完成"
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:107
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:138
-#: src/org/paradise/etrc/dialog/TrainDialog.java:139
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:147
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:100
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:76
+#: src/org/paradise/etrc/wizard/WizardDialog.java:105
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:137
+#: src/org/paradise/etrc/dialog/TrainDialog.java:138
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:146
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:99
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:75
 msgid "Cancel"
 msgstr "取消"
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:108
+#: src/org/paradise/etrc/wizard/WizardDialog.java:106
 msgid "Next >"
 msgstr "下一步 >"
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:109
+#: src/org/paradise/etrc/wizard/WizardDialog.java:107
 msgid "< Previous"
 msgstr "< 上一步"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:100
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:99
 msgid "Terminal/End Time:"
 msgstr "出图/终到时间："
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:186
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:185
 #: src/org/paradise/etrc/wizard/addtrain/WZInPointSet.java:199
 msgid " %s down-going direction %s km from %s station: %s station"
 msgstr "%s下行%s公里(距离%s站): %s站"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:194
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:193
 msgid ""
 "  Train %s terminates at %s station in this section, no need to set end point"
-msgstr "%次列车由本区间内的%s站终到，不需要设置出图点"
+msgstr "%s次列车由本区间内的%s站终到，不需要设置出图点"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:200
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:199
 msgid ""
 "  The last stop of train %s in this section is %s, change the station and "
 "time if this is not correct."
@@ -460,68 +460,68 @@ msgstr ""
 "%s次 在本区间内的最后一个停站是 %s站 如果该站非实际出图点，请另行选择，若系统"
 "推算出图时间有误请自行更正"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:203
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:202
 msgid "  The train %s passes this section, set the end point manually."
 msgstr ""
 "%s次 跨越本区间（在本区间内无图定办客停点），无法推算入图点，请选择入图车站，"
 "并手工设定入图时间"
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:25
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:24
 msgid "Input Train Number"
 msgstr "输入车次"
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:26
 msgid "Select Start Station"
 msgstr "确定入图（始发）点"
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
 msgid "Select Terminal Station"
 msgstr "确定出图（终到）点"
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:50
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:49
 msgid "Automatically import train informtaion from build-in time table?"
 msgstr "是否查询内置时刻表获取点单数据？"
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:64
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:63
 msgid "Unable to find information for the train %s, please input manually."
 msgstr "没有找到%s次列车的时刻表，请手工输入。"
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:78
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:77
 msgid "Find %d related information for the train %s, use the first record."
 msgstr "找到%d条有关%s次列车的时刻表数据，选用第一条数据。"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:71
-#: src/org/paradise/etrc/dialog/TrainDialog.java:179
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:206
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:70
+#: src/org/paradise/etrc/dialog/TrainDialog.java:178
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:205
 msgid "Add(Before)"
 msgstr "添加(前)"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
-#: src/org/paradise/etrc/dialog/TrainDialog.java:194
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:224
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:71
+#: src/org/paradise/etrc/dialog/TrainDialog.java:193
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:223
 msgid "Add(After)"
 msgstr "添加(后)"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:73
-#: src/org/paradise/etrc/dialog/TrainDialog.java:166
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
+#: src/org/paradise/etrc/dialog/TrainDialog.java:165
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:130
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:192
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:191
 msgid "Delete"
 msgstr "删除"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:81
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:93
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:27
-#: src/org/paradise/etrc/dialog/TrainDialog.java:184
-#: src/org/paradise/etrc/dialog/TrainDialog.java:203
-#: src/org/paradise/etrc/dialog/TrainDialog.java:473
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:213
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:230
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:411
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:80
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:92
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:26
+#: src/org/paradise/etrc/dialog/TrainDialog.java:183
+#: src/org/paradise/etrc/dialog/TrainDialog.java:202
+#: src/org/paradise/etrc/dialog/TrainDialog.java:472
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:212
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:229
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:410
 msgid "Station"
 msgstr "站名"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:124
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:123
 msgid ""
 "  The separator between the hour and minute can be space, colon, comma or "
 "period. 3 or 4 digital number can also be accepted. Click on the next text "
@@ -530,7 +530,7 @@ msgstr ""
 "    时分间隔可以是空格、冒号、分号或者句点。也可以直接输入3位或者4位纯数字，"
 "如：凌晨1点23分可以直接输入123，用鼠标点击下一输入框结束输入。"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:88
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:87
 msgid ""
 "  Please input full train number, the separator for the train number can be "
 "slash, comma or period, <Tab> to finish input"
@@ -538,7 +538,7 @@ msgstr ""
 "    请输入全车次，复车次的间隔符可以是左右斜杠，顿号，逗号，句号（点），后续"
 "车次可以只输入最后一位或者两位，Tab键结束输入。"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:93
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:92
 msgid ""
 "  Select the down-going train number for this circuit, use Mouse or Up/Down "
 "arrow key, <Tab> to finish selection."
@@ -546,7 +546,7 @@ msgstr ""
 "    请选择在本线路所使用的下行车次，用鼠标 或者，上、下键选择，Tab键结束选"
 "择。"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:101
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:100
 msgid ""
 "  Select the up-going train number for this circuit, use Mouse or Up/Down "
 "arrow key, <Tab> to finish selection."
@@ -554,27 +554,27 @@ msgstr ""
 "    请选择在本线路所使用的上行车次，用鼠标 或者，上、下键选择，Tab键结束选"
 "择。"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:108
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:107
 msgid ""
 "  Next Step: Input or read train information for the train %s. (Press Enter "
 "or Spacebar)"
 msgstr ""
 "    下一步：从时刻表读入或者手工录入 %s次 列车的点单。（按回车或者空格键）"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:112
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:111
 msgid "  Cancel adding train."
 msgstr "    放弃添加车次。"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:142
-#: src/org/paradise/etrc/dialog/TrainDialog.java:219
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:141
+#: src/org/paradise/etrc/dialog/TrainDialog.java:218
 msgid "Down-going"
 msgstr "下行车次"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:143
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:142
 msgid "Up-going"
 msgstr "上行车次"
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:146
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:145
 msgid "Train Number"
 msgstr "车次"
 
@@ -586,7 +586,7 @@ msgstr "入图/始发时间："
 msgid ""
 "  Train %s departures from %s station in this section, no need to set start "
 "point"
-msgstr "%次列车由本区间内的%s站始发，不需要设置入图点"
+msgstr "%s次列车由本区间内的%s站始发，不需要设置入图点"
 
 #: src/org/paradise/etrc/wizard/addtrain/WZInPointSet.java:213
 msgid ""
@@ -602,18 +602,18 @@ msgstr ""
 "%s次 跨越本区间（在本区间内无图定办客停点），无法推算入图点，请选择入图车站，"
 "并手工设定入图时间"
 
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:29
-#: src/org/paradise/etrc/dialog/TrainDialog.java:475
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:28
+#: src/org/paradise/etrc/dialog/TrainDialog.java:474
 msgid "Arrival"
 msgstr "到点"
 
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:31
-#: src/org/paradise/etrc/dialog/TrainDialog.java:477
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:30
+#: src/org/paradise/etrc/dialog/TrainDialog.java:476
 msgid "Leave"
 msgstr "发点"
 
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:33
-#: src/org/paradise/etrc/dialog/TrainDialog.java:479
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:32
+#: src/org/paradise/etrc/dialog/TrainDialog.java:478
 msgid "Passenger"
 msgstr "办客"
 
@@ -637,34 +637,34 @@ msgstr "GIF图片文件 (*.gif)"
 msgid "Excel CSV File (*.csv)"
 msgstr "Excel CSV格式文件 (*.csv)"
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:85
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:84
 msgid " Section"
 msgstr "段"
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:103
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:102
 #: src/org/paradise/etrc/dialog/SliceDialog.java:76
-#: src/org/paradise/etrc/dialog/TrainDialog.java:121
+#: src/org/paradise/etrc/dialog/TrainDialog.java:120
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:86
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:133
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:132
 #: src/org/paradise/etrc/dialog/AboutBox.java:69
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:91
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:90
 msgid "OK"
 msgstr "确定"
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:112
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:111
 msgid "Please select both the begin station and end station."
 msgstr "请选择起始站与终点站。"
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:115
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:114
 msgid ""
 "Please confirm the down-going direction for circuit %s is from %s to %s."
 msgstr "请确认%s %s 至 %s 为下行方向！"
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:165
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:164
 msgid "From:"
 msgstr "起点："
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:171
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:170
 msgid "To:"
 msgstr "终点："
 
@@ -715,30 +715,30 @@ msgstr "正在查找车次，请稍等..."
 msgid "Importing train information %s"
 msgstr "找到车次信息：%s"
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:72
+#: src/org/paradise/etrc/dialog/TrainDialog.java:71
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:460
 msgid "Color"
 msgstr "颜色"
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:83
+#: src/org/paradise/etrc/dialog/TrainDialog.java:82
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:111
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:155
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:154
 msgid "Load"
 msgstr "载入"
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:217
+#: src/org/paradise/etrc/dialog/TrainDialog.java:216
 msgid "Up-going:"
 msgstr "上行车次："
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:221
+#: src/org/paradise/etrc/dialog/TrainDialog.java:220
 msgid "Train number:"
 msgstr "车次："
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:258
+#: src/org/paradise/etrc/dialog/TrainDialog.java:257
 msgid "Save Train"
 msgstr "保存车次"
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:264
+#: src/org/paradise/etrc/dialog/TrainDialog.java:263
 msgid "Save "
 msgstr "保存"
 
@@ -780,53 +780,55 @@ msgstr "%已经在运行图中，是否覆盖？"
 msgid "Number"
 msgstr "车次"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:41
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:49
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:112
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:40
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:48
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:111
 msgid "Distance Bar Setting"
 msgstr "距离轴设置"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:74
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:73
 msgid "Pixels per kilometer:"
 msgstr "每公里像素数："
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:85
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:84
 msgid "Lowest display station level:"
 msgstr "最低显示车站等级："
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:97
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:96
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:104
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:98
+#: src/org/paradise/etrc/dialog/ChartSetDialog.java:86
 msgid "Set"
 msgstr "设定"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:102
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:101
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:109
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:103
+#: src/org/paradise/etrc/dialog/ChartSetDialog.java:85
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:151
 msgid "Default"
 msgstr "默认"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:116
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:115
 msgid "Set distance bar setting"
 msgstr "设定距离轴参数"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:126
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:125
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:57
 msgid " The highest station level is 0"
 msgstr " 特等站等级为0"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:136
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:135
 msgid "Highest station level to show blod line:"
 msgstr "显示粗线的最高车站等级："
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:233
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:232
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:244
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:320
 msgid "Input data out of range."
 msgstr "输入数据超出范围！"
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:249
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:248
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:246
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:259
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:339
@@ -881,7 +883,7 @@ msgid "Train number to find:"
 msgstr "查找的车次："
 
 #: src/org/paradise/etrc/dialog/FindTrainDialog.java:72
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:70
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:69
 msgid "Find"
 msgstr "查找"
 
@@ -957,27 +959,27 @@ msgstr "始终突出画到发点"
 msgid "Enable watermark display"
 msgstr "开启反向水印显示"
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:68
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:67
 msgid "Load Circuit"
 msgstr "载入线路"
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:98
 msgid "Save Circuit"
 msgstr "保存线路"
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:248
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:247
 msgid "Circuit Name:"
 msgstr "线路名："
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:413
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:412
 msgid "Distance"
 msgstr "距离"
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:415
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:414
 msgid "Level"
 msgstr "等级"
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:417
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:416
 msgid "Hidden"
 msgstr "隐藏"
 
@@ -997,19 +999,19 @@ msgstr "郭磊（海子ID: lguo）出品"
 msgid "Thanks to: achen1 on HASEA"
 msgstr "鸣谢：海子网 achen1 等网友"
 
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:38
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:52
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:37
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:51
 msgid "Circuit Selection"
 msgstr "选择线路"
 
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:66
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:65
 msgid "Search"
 msgstr "查找"
 
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:45
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:44
 msgid "Input Station Name"
 msgstr "输入车站名"
 
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:56
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:55
 msgid "Station name:"
 msgstr "站名"
