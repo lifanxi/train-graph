@@ -445,16 +445,26 @@ public class Chart {
 		
 		//新站在theTrain在本线的第一个停靠站之前 插在第一个站之前
 		Station firstStop = this.circuit.getFirstStopOnMe(theTrain);
-		int firstDist = this.circuit.getStationDist(firstStop.name);
-		if(newDist < firstDist)
-			theTrain.insertStop(stop, theTrain.findStopIndex(firstStop.name));
-		
+		if (firstStop == null) {
+			theTrain.insertStop(stop, 0);
+		}
+		else
+		{
+			int firstDist = this.circuit.getStationDist(firstStop.name);
+			if(newDist < firstDist)
+				theTrain.insertStop(stop, theTrain.findStopIndex(firstStop.name));
+		}
 		//新站在theTrain在本线的最后一个停靠站之后 append在最后一个站之后
 		Station lastStop = this.circuit.getLastStopOnMe(theTrain);
-		int lastDist = this.circuit.getStationDist(lastStop.name);
-		if(newDist > lastDist)
+		if (lastStop == null) {
 			theTrain.appendStop(stop);
-		
+		}
+		else
+		{
+			int lastDist = this.circuit.getStationDist(lastStop.name);
+			if(newDist > lastDist)
+				theTrain.appendStop(stop);
+		}
 		//新站在theTrain的第一个停靠站和最后一个停靠站之间
 		//遍历theTrain的所有停站
 		for(int i=0; i<theTrain.stopNum-1; i++) {
