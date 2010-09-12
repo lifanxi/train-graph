@@ -26,7 +26,7 @@ public class ETRCLCB {
 	private LCBStation decodeLC(String line) {
 		String xianluID = line.substring(0,2);
 		int level = ETRCData.decode(line.charAt(2));
-		int dist = ETRCData.decode(line.charAt(3)) * 64 +
+		int dist = ETRCData.decode(line.charAt(3)) * ETRCData.codeTable.length +
 				   ETRCData.decode(line.charAt(4));
 		String name = line.substring(5,line.length());
 		
