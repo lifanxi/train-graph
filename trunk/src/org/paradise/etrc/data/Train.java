@@ -564,8 +564,10 @@ public class Train {
 	public static Color getTrainColorByName(String trainName) {
 		char type = trainName.toUpperCase().charAt(0);
 		switch(type) {
-		case 'D':
+		case 'G':
+			return new Color(255, 0, 190);
 		case 'Z':
+		case 'D':
 		case 'C':
 			return new Color(128, 0, 128);
 		case 'T':
@@ -782,6 +784,8 @@ public class Train {
 	public static int getDefaultVelocityByName(String trainName) {
 		char type = trainName.toUpperCase().charAt(0);
 		switch(type) {
+		case 'G':
+			return 250;
 		case 'D':
 		case 'Z':
 		case 'C':
