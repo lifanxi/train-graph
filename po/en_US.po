@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-10 21:37+0800\n"
+"POT-Creation-Date: 2010-09-11 11:10+0800\n"
 "PO-Revision-Date: 2010-09-10 21:37+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,26 +28,26 @@ msgstr ""
 #: src/org/paradise/etrc/view/chart/CircuitPanel.java:39
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:214
 #: src/org/paradise/etrc/view/dynamic/RunningPanel.java:44
-#: src/org/paradise/etrc/wizard/WizardDialog.java:57
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:161
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:125
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:215
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:230
+#: src/org/paradise/etrc/wizard/WizardDialog.java:55
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:160
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:124
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:214
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:229
 #: src/org/paradise/etrc/wizard/addtrain/WZInPointSet.java:174
 #: src/org/paradise/etrc/dialog/SliceDialog.java:104
-#: src/org/paradise/etrc/dialog/TrainDialog.java:263
-#: src/org/paradise/etrc/dialog/TrainDialog.java:295
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:70
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:75
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:86
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:96
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:101
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:111
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:114
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:123
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:127
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:135
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:144
+#: src/org/paradise/etrc/dialog/TrainDialog.java:262
+#: src/org/paradise/etrc/dialog/TrainDialog.java:294
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:69
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:74
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:85
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:95
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:100
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:110
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:113
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:122
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:126
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:134
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:143
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:62
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:66
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:76
@@ -75,13 +75,13 @@ msgstr ""
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:128
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:141
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:146
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:73
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:104
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:67
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:52
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:57
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:69
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:75
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:72
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:103
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:66
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:51
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:56
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:68
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:74
 msgid "FONT_NAME"
 msgstr ""
 
@@ -280,7 +280,7 @@ msgid ""
 msgstr ""
 
 #: src/org/paradise/etrc/MainFrame.java:863
-#: src/org/paradise/etrc/dialog/TrainDialog.java:290
+#: src/org/paradise/etrc/dialog/TrainDialog.java:289
 msgid "Load Train Information"
 msgstr ""
 
@@ -297,10 +297,10 @@ msgid "FONT_NAME_FIXED"
 msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:666
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:24
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:25
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:26
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
 msgid "Add New Train"
 msgstr ""
 
@@ -309,9 +309,9 @@ msgid "Export Graph..."
 msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:696
-#: src/org/paradise/etrc/dialog/TrainDialog.java:105
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:100
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:169
+#: src/org/paradise/etrc/dialog/TrainDialog.java:104
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:168
 msgid "Save"
 msgstr ""
 
@@ -320,7 +320,7 @@ msgid "Change Color"
 msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:741
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:26
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:25
 msgid "Edit Time Table"
 msgstr ""
 
@@ -333,7 +333,7 @@ msgid "Train %s is already in the graph, overwrite?"
 msgstr ""
 
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:810
-#: src/org/paradise/etrc/dialog/TrainDialog.java:324
+#: src/org/paradise/etrc/dialog/TrainDialog.java:323
 msgid "Select the color for the line"
 msgstr ""
 
@@ -409,155 +409,155 @@ msgstr ""
 msgid "Station %d data error in line %s"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:56
+#: src/org/paradise/etrc/wizard/WizardDialog.java:54
 msgid "Step %d: %s"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:106
+#: src/org/paradise/etrc/wizard/WizardDialog.java:104
 msgid "Finish"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:107
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:138
-#: src/org/paradise/etrc/dialog/TrainDialog.java:139
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:147
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:100
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:76
+#: src/org/paradise/etrc/wizard/WizardDialog.java:105
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:137
+#: src/org/paradise/etrc/dialog/TrainDialog.java:138
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:146
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:99
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:75
 msgid "Cancel"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:108
+#: src/org/paradise/etrc/wizard/WizardDialog.java:106
 msgid "Next >"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/WizardDialog.java:109
+#: src/org/paradise/etrc/wizard/WizardDialog.java:107
 msgid "< Previous"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:100
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:99
 msgid "Terminal/End Time:"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:186
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:185
 #: src/org/paradise/etrc/wizard/addtrain/WZInPointSet.java:199
 msgid " %s down-going direction %s km from %s station: %s station"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:194
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:193
 msgid ""
 "  Train %s terminates at %s station in this section, no need to set end point"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:200
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:199
 msgid ""
 "  The last stop of train %s in this section is %s, change the station and "
 "time if this is not correct."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:203
+#: src/org/paradise/etrc/wizard/addtrain/WZOutPointSet.java:202
 msgid "  The train %s passes this section, set the end point manually."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:25
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:24
 msgid "Input Train Number"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:26
 msgid "Select Start Station"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
 msgid "Select Terminal Station"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:50
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:49
 msgid "Automatically import train informtaion from build-in time table?"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:64
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:63
 msgid "Unable to find information for the train %s, please input manually."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:78
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:77
 msgid "Find %d related information for the train %s, use the first record."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:71
-#: src/org/paradise/etrc/dialog/TrainDialog.java:179
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:206
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:70
+#: src/org/paradise/etrc/dialog/TrainDialog.java:178
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:205
 msgid "Add(Before)"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
-#: src/org/paradise/etrc/dialog/TrainDialog.java:194
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:224
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:71
+#: src/org/paradise/etrc/dialog/TrainDialog.java:193
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:223
 msgid "Add(After)"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:73
-#: src/org/paradise/etrc/dialog/TrainDialog.java:166
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
+#: src/org/paradise/etrc/dialog/TrainDialog.java:165
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:130
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:192
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:191
 msgid "Delete"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:81
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:93
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:27
-#: src/org/paradise/etrc/dialog/TrainDialog.java:184
-#: src/org/paradise/etrc/dialog/TrainDialog.java:203
-#: src/org/paradise/etrc/dialog/TrainDialog.java:473
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:213
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:230
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:411
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:80
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:92
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:26
+#: src/org/paradise/etrc/dialog/TrainDialog.java:183
+#: src/org/paradise/etrc/dialog/TrainDialog.java:202
+#: src/org/paradise/etrc/dialog/TrainDialog.java:472
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:212
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:229
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:410
 msgid "Station"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:124
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:123
 msgid ""
 "  The separator between the hour and minute can be space, colon, comma or "
 "period. 3 or 4 digital number can also be accepted. Click on the next text "
 "box will complete the current input. "
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:88
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:87
 msgid ""
 "  Please input full train number, the separator for the train number can be "
 "slash, comma or period, <Tab> to finish input"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:93
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:92
 msgid ""
 "  Select the down-going train number for this circuit, use Mouse or Up/Down "
 "arrow key, <Tab> to finish selection."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:101
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:100
 msgid ""
 "  Select the up-going train number for this circuit, use Mouse or Up/Down "
 "arrow key, <Tab> to finish selection."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:108
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:107
 msgid ""
 "  Next Step: Input or read train information for the train %s. (Press Enter "
 "or Spacebar)"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:112
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:111
 msgid "  Cancel adding train."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:142
-#: src/org/paradise/etrc/dialog/TrainDialog.java:219
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:141
+#: src/org/paradise/etrc/dialog/TrainDialog.java:218
 msgid "Down-going"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:143
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:142
 msgid "Up-going"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:146
+#: src/org/paradise/etrc/wizard/addtrain/WZTrainNameInput.java:145
 msgid "Train Number"
 msgstr ""
 
@@ -581,18 +581,18 @@ msgstr ""
 msgid "  The train %s passes this section, set the start point manually."
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:29
-#: src/org/paradise/etrc/dialog/TrainDialog.java:475
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:28
+#: src/org/paradise/etrc/dialog/TrainDialog.java:474
 msgid "Arrival"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:31
-#: src/org/paradise/etrc/dialog/TrainDialog.java:477
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:30
+#: src/org/paradise/etrc/dialog/TrainDialog.java:476
 msgid "Leave"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:33
-#: src/org/paradise/etrc/dialog/TrainDialog.java:479
+#: src/org/paradise/etrc/wizard/addtrain/TrainTableModel.java:32
+#: src/org/paradise/etrc/dialog/TrainDialog.java:478
 msgid "Passenger"
 msgstr ""
 
@@ -616,34 +616,34 @@ msgstr ""
 msgid "Excel CSV File (*.csv)"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:85
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:84
 msgid " Section"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:103
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:102
 #: src/org/paradise/etrc/dialog/SliceDialog.java:76
-#: src/org/paradise/etrc/dialog/TrainDialog.java:121
+#: src/org/paradise/etrc/dialog/TrainDialog.java:120
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:86
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:133
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:132
 #: src/org/paradise/etrc/dialog/AboutBox.java:69
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:91
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:90
 msgid "OK"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:112
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:111
 msgid "Please select both the begin station and end station."
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:115
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:114
 msgid ""
 "Please confirm the down-going direction for circuit %s is from %s to %s."
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:165
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:164
 msgid "From:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:171
+#: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:170
 msgid "To:"
 msgstr ""
 
@@ -694,30 +694,30 @@ msgstr ""
 msgid "Importing train information %s"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:72
+#: src/org/paradise/etrc/dialog/TrainDialog.java:71
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:460
 msgid "Color"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:83
+#: src/org/paradise/etrc/dialog/TrainDialog.java:82
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:111
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:155
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:154
 msgid "Load"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:217
+#: src/org/paradise/etrc/dialog/TrainDialog.java:216
 msgid "Up-going:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:221
+#: src/org/paradise/etrc/dialog/TrainDialog.java:220
 msgid "Train number:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:258
+#: src/org/paradise/etrc/dialog/TrainDialog.java:257
 msgid "Save Train"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/TrainDialog.java:264
+#: src/org/paradise/etrc/dialog/TrainDialog.java:263
 msgid "Save "
 msgstr ""
 
@@ -759,53 +759,55 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:41
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:49
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:112
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:40
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:48
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:111
 msgid "Distance Bar Setting"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:74
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:73
 msgid "Pixels per kilometer:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:85
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:84
 msgid "Lowest display station level:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:97
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:96
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:104
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:98
+#: src/org/paradise/etrc/dialog/ChartSetDialog.java:86
 msgid "Set"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:102
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:101
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:109
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:103
+#: src/org/paradise/etrc/dialog/ChartSetDialog.java:85
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:151
 msgid "Default"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:116
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:115
 msgid "Set distance bar setting"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:126
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:125
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:57
 msgid " The highest station level is 0"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:136
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:135
 msgid "Highest station level to show blod line:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:233
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:232
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:244
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:320
 msgid "Input data out of range."
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/DistSetDialog.java:249
+#: src/org/paradise/etrc/dialog/DistSetDialog.java:248
 #: src/org/paradise/etrc/dialog/MarginSetDialog.java:246
 #: src/org/paradise/etrc/dialog/TimeSetDialog.java:259
 #: src/org/paradise/etrc/dialog/ChartSetDialog.java:339
@@ -860,7 +862,7 @@ msgid "Train number to find:"
 msgstr ""
 
 #: src/org/paradise/etrc/dialog/FindTrainDialog.java:72
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:70
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:69
 msgid "Find"
 msgstr ""
 
@@ -936,27 +938,27 @@ msgstr ""
 msgid "Enable watermark display"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:68
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:67
 msgid "Load Circuit"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:98
 msgid "Save Circuit"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:248
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:247
 msgid "Circuit Name:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:413
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:412
 msgid "Distance"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:415
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:414
 msgid "Level"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:417
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:416
 msgid "Hidden"
 msgstr ""
 
@@ -976,19 +978,19 @@ msgstr ""
 msgid "Thanks to: achen1 on HASEA"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:38
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:52
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:37
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:51
 msgid "Circuit Selection"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:66
+#: src/org/paradise/etrc/dialog/XianluSelectDialog.java:65
 msgid "Search"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:45
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:44
 msgid "Input Station Name"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/StationInputDialog.java:56
+#: src/org/paradise/etrc/dialog/StationInputDialog.java:55
 msgid "Station name:"
 msgstr ""
