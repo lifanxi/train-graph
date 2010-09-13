@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-13 21:19+0800\n"
+"POT-Creation-Date: 2010-09-13 21:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -312,7 +312,7 @@ msgstr ""
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:696
 #: src/org/paradise/etrc/dialog/TrainDialog.java:115
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:168
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:182
 msgid "Save"
 msgstr ""
 
@@ -421,7 +421,7 @@ msgstr ""
 #: src/org/paradise/etrc/wizard/WizardDialog.java:105
 #: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:137
 #: src/org/paradise/etrc/dialog/TrainDialog.java:149
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:146
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:160
 #: src/org/paradise/etrc/dialog/XianluSelectDialog.java:99
 #: src/org/paradise/etrc/dialog/StationInputDialog.java:75
 msgid "Cancel"
@@ -471,42 +471,42 @@ msgstr ""
 msgid "Select Terminal Station"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:52
-msgid "Automatically import train informtaion from build-in time table?"
-msgstr ""
-
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:66
-msgid "Unable to find information for the train %s, please input manually."
-msgstr ""
-
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:80
-msgid "Find %d related information for the train %s, use the first record."
-msgstr ""
-
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:83
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:51
 msgid "Automatically get train informtaion from web?"
 msgstr ""
 
-#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:95
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:63
 msgid "Unable to get train information for the train %s from web."
+msgstr ""
+
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:66
+msgid "Automatically import train informtaion from build-in time table?"
+msgstr ""
+
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:80
+msgid "Unable to find information for the train %s, please input manually."
+msgstr ""
+
+#: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:94
+msgid "Find %d related information for the train %s, use the first record."
 msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:70
 #: src/org/paradise/etrc/dialog/TrainDialog.java:231
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:205
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:219
 msgid "Add(Before)"
 msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:71
 #: src/org/paradise/etrc/dialog/TrainDialog.java:246
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:223
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:237
 msgid "Add(After)"
 msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
 #: src/org/paradise/etrc/dialog/TrainDialog.java:218
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:130
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:191
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:205
 msgid "Delete"
 msgstr ""
 
@@ -516,9 +516,9 @@ msgstr ""
 #: src/org/paradise/etrc/dialog/TrainDialog.java:236
 #: src/org/paradise/etrc/dialog/TrainDialog.java:255
 #: src/org/paradise/etrc/dialog/TrainDialog.java:601
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:212
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:229
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:410
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:226
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:243
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:424
 msgid "Station"
 msgstr ""
 
@@ -710,7 +710,7 @@ msgstr ""
 
 #: src/org/paradise/etrc/dialog/TrainDialog.java:93
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:111
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:154
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:168
 msgid "Load"
 msgstr ""
 
@@ -967,19 +967,23 @@ msgstr ""
 msgid "Save Circuit"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:247
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:145
+msgid "The distance of the first station is not zero, do normalization?"
+msgstr ""
+
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:261
 msgid "Circuit Name:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:412
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:426
 msgid "Distance"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:414
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:428
 msgid "Level"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:416
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:430
 msgid "Hidden"
 msgstr ""
 
