@@ -2,12 +2,15 @@ package org.paradise.etrc.wizard.addtrain;
 
 import java.util.Vector;
 
+import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.dialog.MessageBox;
 import org.paradise.etrc.dialog.YesNoBox;
+import org.paradise.etrc.dialog.TrainDialog;
 import org.paradise.etrc.view.chart.ChartView;
 import org.paradise.etrc.wizard.Wizard;
 import org.paradise.etrc.wizard.WizardDialog;
+
 
 import static org.paradise.etrc.ETRC._;
 
@@ -45,8 +48,22 @@ public class AddTrainWizard extends Wizard {
 					downName = step1.getDownName();
 					upName = step1.getUpName();
 					
-					
-					if(new YesNoBox(chartView.mainFrame, _("Automatically import train informtaion from build-in time table?")).askForYes()) {
+					if(new YesNoBox(chartView.mainFrame, _("Automatically get train informtaion from web?")).askForYes()) {
+						String proxyAddress = chartView.mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Server);
+						int proxyPort = 0;
+						try {
+							proxyPort = Integer.parseInt(chartView.mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Port));
+						}
+						catch (NumberFormatException ex) {
+						    proxyPort = 0;
+						}
+						train = TrainDialog.doLoadTrainFromWeb(fullName, proxyAddress, proxyPort);
+						if (train == null) 
+						{
+							new MessageBox(chartView.mainFrame, String.format(_("Unable to get train information for the train %s from web."), fullName)).showMessage();
+						}
+					}
+					if ((train == null) && (new YesNoBox(chartView.mainFrame, _("Automatically import train informtaion from build-in time table?")).askForYes())) {
 						String[] names = fullName.split("/");
 						Vector<Train> trains = new Vector<Train>();
 						for(int i=0; i<names.length; i++) {
@@ -77,7 +94,7 @@ public class AddTrainWizard extends Wizard {
 							new MessageBox(chartView.mainFrame, String.format(_("Find %d related information for the train %s, use the first record."), trains.size(), fullName)).showMessage();
 						}
 					}
-					else {
+					else if (train == null) {
 						train = new Train();
 						train.trainNameFull = fullName;
 						train.trainNameDown = downName;

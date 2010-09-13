@@ -7,7 +7,6 @@ import javax.swing.table.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelListener;
 import java.awt.event.*;
-import java.io.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -168,7 +167,16 @@ public class TrainDialog extends JDialog {
 			    if (table.getCellEditor() != null)
 				table.getCellEditor().stopCellEditing();
 			    
-			    Train loadingTrain = doLoadTrainFromWeb(tfName.getText().trim());
+
+				String proxyAddress = mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Server);
+				int proxyPort = 0;
+				try {
+					proxyPort = Integer.parseInt(mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Port));
+				}
+				catch (NumberFormatException ex) {
+				    proxyPort = 0;
+				}
+			    Train loadingTrain = doLoadTrainFromWeb(tfName.getText().trim(), proxyAddress, proxyPort);
 			    if(loadingTrain != null) {
 				if(loadingTrain.color == null) {
 				    Color c = ((TrainTableModel)table.getModel()).myTrain.color;
@@ -355,7 +363,7 @@ public class TrainDialog extends JDialog {
 		return null;
 	}
 
-        protected Train doLoadTrainFromWeb(String code) {
+    public static Train doLoadTrainFromWeb(String code, String proxyAddress, int proxyPort) {
 	    Train train = new Train();
 	    train.trainNameFull = "";
 	    Date now = new Date();
@@ -367,14 +375,6 @@ public class TrainDialog extends JDialog {
 	    String postData = "nmonth1=" + mon + "&nmonth1_new_value=true&nday1=" + day + "&nday1_new_value=true&trainCode=" + 
 		code + "&trainCode_new_value=true";
 	    try {
-		String proxyAddress = mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Server);
-		int proxyPort = 0;
-		try {
-		    proxyPort = Integer.parseInt(mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Port));
-		}
-		catch (NumberFormatException e) {
-		    proxyPort = 0;
-		}
 		Proxy proxy = null;
 		if (proxyAddress.equals("") || proxyPort == 0)
 		     proxy = Proxy.NO_PROXY;
