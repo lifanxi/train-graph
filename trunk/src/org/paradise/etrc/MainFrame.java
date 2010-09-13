@@ -55,6 +55,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	public static String Prop_Show_UP = "Show_UP";
 	public static String Prop_Show_Down = "Show_Down";
 	public static String Prop_Show_Run = "Show_Run";
+	public static String Prop_HTTP_Proxy_Server = "HTTP_Proxy_Server";
+	public static String Prop_HTTP_Proxy_Port = "HTTP_Proxy_Port";
 	
 	private static String Sample_Chart_File = "sample.trc";
 	private static String Properties_File = "htrc.prop";
@@ -73,6 +75,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		defaultProp.setProperty(Prop_Show_UP, "Y");
 		defaultProp.setProperty(Prop_Show_Down, "Y");
 		defaultProp.setProperty(Prop_Show_Run, "Y");
+		defaultProp.setProperty(Prop_HTTP_Proxy_Server, "");
+		defaultProp.setProperty(Prop_HTTP_Proxy_Port, "");
 		
 		prop = new Properties(defaultProp);
 		
