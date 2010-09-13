@@ -377,7 +377,7 @@ public class TrainDialog extends JDialog {
 		}
 		Proxy proxy = null;
 		if (proxyAddress.equals("") || proxyPort == 0)
-		     proxy = new Proxy(Proxy.Type.DIRECT, null);
+		     proxy = Proxy.NO_PROXY;
 		else
 		     proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyAddress, proxyPort));
 		URL url = new URL("http://dynamic.12306.cn/TrainQuery/iframeTrainPassStationByTrainCode.jsp");
