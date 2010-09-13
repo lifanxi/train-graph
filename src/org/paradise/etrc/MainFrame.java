@@ -598,7 +598,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		Point loc = getLocation();
 		dlg.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
 				(frmSize.height - dlgSize.height) / 2 + loc.y);
-		dlg.setModal(false);
+		dlg.setModal(true);
 		dlg.pack();
 		dlg.setVisible(true);
 
