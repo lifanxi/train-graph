@@ -33,7 +33,7 @@ public class TrainTableCellEditor extends AbstractCellEditor implements TableCel
 		
 		//设置文本
 		stop = (Stop) value;
-		isArrive = (column == 2);
+		isArrive = (column == 1);
 		oldTime = (value == null) ? "" : (isArrive ? stop.arrive: stop.leave);
 		editor.setText(oldTime);
 		
