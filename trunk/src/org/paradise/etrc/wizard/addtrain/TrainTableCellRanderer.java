@@ -22,7 +22,7 @@ public class TrainTableCellRanderer extends DefaultTableCellRenderer {
 		
 		Stop stop = (Stop) value;
 		// 设置文字
-		lb.setText((value == null) ? "" : ((column == 2) ? stop.arrive	: stop.leave));
+		lb.setText((value == null) ? "" : ((column == 1) ? stop.arrive	: stop.leave));
 		lb.setHorizontalAlignment(SwingConstants.CENTER);
 
 		return lb;
