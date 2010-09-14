@@ -768,7 +768,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		pop.add(miColor);
 		pop.add(miEditTimes);
         pop.add(miTrainSlice);
-		pop.addSeparator();
+//		pop.addSeparator();
 //		pop.add(miDelTrain);
 //		pop.add(miSaveAs);
 		this.add(pop);
