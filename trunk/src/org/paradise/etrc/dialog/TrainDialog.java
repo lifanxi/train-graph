@@ -178,17 +178,17 @@ public class TrainDialog extends JDialog {
 				}
 			    Train loadingTrain = doLoadTrainFromWeb(tfName.getText().trim(), proxyAddress, proxyPort);
 			    if(loadingTrain != null) {
-				if(loadingTrain.color == null) {
-				    Color c = ((TrainTableModel)table.getModel()).myTrain.color;
-				    loadingTrain.color = c;
-				}
-				
-				((TrainTableModel)table.getModel()).myTrain = loadingTrain;
-				tfName.setText(loadingTrain.getTrainName());
-				tfNameD.setText(loadingTrain.trainNameDown);
-				tfNameU.setText(loadingTrain.trainNameUp);
+					if(loadingTrain.color == null) {
+					    Color c = ((TrainTableModel)table.getModel()).myTrain.color;
+					    loadingTrain.color = c;
+					}
+					
+					((TrainTableModel)table.getModel()).myTrain = loadingTrain;
+					tfName.setText(loadingTrain.getTrainName());
+					tfNameD.setText(loadingTrain.trainNameDown);
+					tfNameU.setText(loadingTrain.trainNameUp);
 
-				table.revalidate();
+					table.revalidate();
 			    }
 			    else {
 				new MessageBox(_("Unable to get train information from web.")).showMessage();
@@ -392,7 +392,7 @@ public class TrainDialog extends JDialog {
 		wr.flush(); 
 		BufferedReader in = new BufferedReader(
 						       new InputStreamReader(
-									     conn.getInputStream()));
+									     conn.getInputStream(), "UTF-8"));
 		String inputLine;
 
 		while ((inputLine = in.readLine()) != null) {
