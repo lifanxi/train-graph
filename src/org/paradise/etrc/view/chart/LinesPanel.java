@@ -578,9 +578,18 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				chart.addTrain(editedTrain);
 			}
 			
-			chartView.activeTrain = editedTrain;
-//			repaint();
+			chartView.setActiveTrain(editedTrain);
+			chartView.mainFrame.sheetView.updateData();
+			chartView.mainFrame.runView.refresh();
 		}
+	}
+
+	private void doDeleteActiveTrain() {
+		Chart chart = chartView.mainFrame.chart;
+		chart.delTrain(chartView.activeTrain);
+		chartView.setActiveTrain(null);
+		chartView.mainFrame.sheetView.updateData();
+		chartView.mainFrame.runView.refresh();
 	}
 
 	/**
@@ -732,10 +741,10 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 			return;
 		
 		//菜单项
-		MenuItem miColor = new MenuItem(_("Change Color"));
-		miColor.addActionListener(new ActionListener() {
+		MenuItem miDelTrain = new MenuItem(_("Delete"));
+		miDelTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				doSetColor();
+				doDeleteActiveTrain();
 			}
 		});
 		MenuItem miEditTimes = new MenuItem(_("Edit Time Table"));
@@ -744,19 +753,19 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				doEditActiveTrain();
 			}
 		});
+		MenuItem miColor = new MenuItem(_("Change Color"));
+		miColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doSetColor();
+			}
+		});
 		MenuItem miTrainSlice = new MenuItem(_("Train Slice"));
 		miTrainSlice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new ChartSlice(chartView.mainFrame.chart).makeTrainSlice(chartView.activeTrain);
 			}
 		});
-/*		MenuItem miDelTrain = new MenuItem("删除本车");
-		miDelTrain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO: 删除本车
-			}
-		});
-		MenuItem miSaveAs = new MenuItem("另存为...");
+		/*		MenuItem miSaveAs = new MenuItem("另存为...");
 		miSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO: 另存为
@@ -765,11 +774,11 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 */		
 		// 弹出PopupMenu
 		PopupMenu pop = new PopupMenu();
+		pop.add(miDelTrain);
 		pop.add(miColor);
 		pop.add(miEditTimes);
         pop.add(miTrainSlice);
 //		pop.addSeparator();
-//		pop.add(miDelTrain);
 //		pop.add(miSaveAs);
 		this.add(pop);
 		pop.show(this, p.x, p.y);

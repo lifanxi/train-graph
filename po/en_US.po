@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-14 23:51+0800\n"
+"POT-Creation-Date: 2010-09-15 00:58+0800\n"
 "PO-Revision-Date: 2010-09-10 21:37+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,7 +160,7 @@ msgid "New"
 msgstr ""
 
 #: src/org/paradise/etrc/MainFrame.java:439
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:690
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:699
 msgid "Open..."
 msgstr ""
 
@@ -169,12 +169,12 @@ msgid "SaveMenu"
 msgstr "Save"
 
 #: src/org/paradise/etrc/MainFrame.java:442
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:702
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:711
 msgid "Save As..."
 msgstr ""
 
 #: src/org/paradise/etrc/MainFrame.java:445
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:684
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:693
 msgid "Load Train..."
 msgstr ""
 
@@ -296,7 +296,7 @@ msgstr ""
 msgid "FONT_NAME_FIXED"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:666
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:675
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:29
@@ -304,35 +304,43 @@ msgstr ""
 msgid "Add New Train"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:678
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:687
 msgid "Export Graph..."
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:696
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:705
 #: src/org/paradise/etrc/dialog/TrainDialog.java:115
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:185
 msgid "Save"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:735
-msgid "Change Color"
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:744
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
+#: src/org/paradise/etrc/dialog/TrainDialog.java:218
+#: src/org/paradise/etrc/dialog/TrainsDialog.java:130
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:208
+msgid "Delete"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:741
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:750
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
 msgid "Edit Time Table"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:747
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:756
+msgid "Change Color"
+msgstr ""
+
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:762
 msgid "Train Slice"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:789
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:798
 msgid "Train %s is already in the graph, overwrite?"
 msgstr ""
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:810
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:819
 #: src/org/paradise/etrc/dialog/TrainDialog.java:452
 msgid "Select the color for the line"
 msgstr ""
@@ -500,13 +508,6 @@ msgstr ""
 #: src/org/paradise/etrc/dialog/TrainDialog.java:246
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:240
 msgid "Add(After)"
-msgstr ""
-
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
-#: src/org/paradise/etrc/dialog/TrainDialog.java:218
-#: src/org/paradise/etrc/dialog/TrainsDialog.java:130
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:208
-msgid "Delete"
 msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:80

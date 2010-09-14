@@ -172,6 +172,7 @@ public class DynamicView extends JPanel implements KeyListener, Runnable {
 	public void refresh() {
 		panelRunning.setSize(panelRunning.getPreferredSize());
 		panelDistance.setSize(panelDistance.getPreferredSize());
+		panelRunning.repaint();
 	}
 	
 	/**
