@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-14 23:51+0800\n"
+"POT-Creation-Date: 2010-09-15 00:58+0800\n"
 "PO-Revision-Date: 2010-09-14 23:51+0800\n"
 "Last-Translator: Li Fanxi <lifanxi@freemindworld.com>\n"
 "Language-Team: Li Fanxi <lifanxi@freemindworld.com>\n"
@@ -162,7 +162,7 @@ msgid "New"
 msgstr "新建(N)"
 
 #: src/org/paradise/etrc/MainFrame.java:439
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:690
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:699
 msgid "Open..."
 msgstr "打开(O)"
 
@@ -171,12 +171,12 @@ msgid "SaveMenu"
 msgstr "保存(S)"
 
 #: src/org/paradise/etrc/MainFrame.java:442
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:702
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:711
 msgid "Save As..."
 msgstr "另存为(A)..."
 
 #: src/org/paradise/etrc/MainFrame.java:445
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:684
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:693
 msgid "Load Train..."
 msgstr "载入车次(L)..."
 
@@ -300,7 +300,7 @@ msgstr "打开里程表文件失败！"
 msgid "FONT_NAME_FIXED"
 msgstr "宋体"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:666
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:675
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:27
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:29
@@ -308,35 +308,43 @@ msgstr "宋体"
 msgid "Add New Train"
 msgstr "添加新车"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:678
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:687
 msgid "Export Graph..."
 msgstr "导出运行图"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:696
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:705
 #: src/org/paradise/etrc/dialog/TrainDialog.java:115
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:185
 msgid "Save"
 msgstr "保存"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:735
-msgid "Change Color"
-msgstr "更改颜色"
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:744
+#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
+#: src/org/paradise/etrc/dialog/TrainDialog.java:218
+#: src/org/paradise/etrc/dialog/TrainsDialog.java:130
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:208
+msgid "Delete"
+msgstr "删除"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:741
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:750
 #: src/org/paradise/etrc/wizard/addtrain/AddTrainWizard.java:28
 msgid "Edit Time Table"
 msgstr "编辑点单"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:747
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:756
+msgid "Change Color"
+msgstr "更改颜色"
+
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:762
 msgid "Train Slice"
 msgstr "车次切片"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:789
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:798
 msgid "Train %s is already in the graph, overwrite?"
 msgstr "%s次已经在图中，是否覆盖？"
 
-#: src/org/paradise/etrc/view/chart/LinesPanel.java:810
+#: src/org/paradise/etrc/view/chart/LinesPanel.java:819
 #: src/org/paradise/etrc/dialog/TrainDialog.java:452
 msgid "Select the color for the line"
 msgstr "请选择行车线颜色"
@@ -509,13 +517,6 @@ msgstr "添加(前)"
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:240
 msgid "Add(After)"
 msgstr "添加(后)"
-
-#: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
-#: src/org/paradise/etrc/dialog/TrainDialog.java:218
-#: src/org/paradise/etrc/dialog/TrainsDialog.java:130
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:208
-msgid "Delete"
-msgstr "删除"
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:80
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:92
