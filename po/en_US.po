@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: train-graph\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-13 21:53+0800\n"
+"POT-Creation-Date: 2010-09-14 23:51+0800\n"
 "PO-Revision-Date: 2010-09-10 21:37+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -311,7 +311,7 @@ msgstr ""
 #: src/org/paradise/etrc/view/chart/LinesPanel.java:696
 #: src/org/paradise/etrc/dialog/TrainDialog.java:115
 #: src/org/paradise/etrc/dialog/CircuitEditDialog.java:99
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:182
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:185
 msgid "Save"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgstr ""
 #: src/org/paradise/etrc/wizard/WizardDialog.java:105
 #: src/org/paradise/etrc/dialog/CircuitMakeDialog.java:137
 #: src/org/paradise/etrc/dialog/TrainDialog.java:149
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:160
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:163
 #: src/org/paradise/etrc/dialog/XianluSelectDialog.java:99
 #: src/org/paradise/etrc/dialog/StationInputDialog.java:75
 msgid "Cancel"
@@ -492,20 +492,20 @@ msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:70
 #: src/org/paradise/etrc/dialog/TrainDialog.java:231
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:219
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:222
 msgid "Add(Before)"
 msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:71
 #: src/org/paradise/etrc/dialog/TrainDialog.java:246
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:237
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:240
 msgid "Add(After)"
 msgstr ""
 
 #: src/org/paradise/etrc/wizard/addtrain/WZTimeEdit.java:72
 #: src/org/paradise/etrc/dialog/TrainDialog.java:218
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:130
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:205
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:208
 msgid "Delete"
 msgstr ""
 
@@ -515,9 +515,9 @@ msgstr ""
 #: src/org/paradise/etrc/dialog/TrainDialog.java:236
 #: src/org/paradise/etrc/dialog/TrainDialog.java:255
 #: src/org/paradise/etrc/dialog/TrainDialog.java:601
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:226
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:243
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:424
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:229
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:246
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:427
 msgid "Station"
 msgstr ""
 
@@ -709,7 +709,7 @@ msgstr ""
 
 #: src/org/paradise/etrc/dialog/TrainDialog.java:93
 #: src/org/paradise/etrc/dialog/TrainsDialog.java:111
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:168
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:171
 msgid "Load"
 msgstr ""
 
@@ -966,23 +966,27 @@ msgstr ""
 msgid "Save Circuit"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:145
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:143
+msgid "A circut must have at least two stations."
+msgstr ""
+
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:148
 msgid "The distance of the first station is not zero, do normalization?"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:261
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:264
 msgid "Circuit Name:"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:426
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:429
 msgid "Distance"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:428
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:431
 msgid "Level"
 msgstr ""
 
-#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:430
+#: src/org/paradise/etrc/dialog/CircuitEditDialog.java:433
 msgid "Hidden"
 msgstr ""
 
