@@ -138,17 +138,20 @@ public class CircuitEditDialog extends JDialog {
 				
 				// Normalize
 				Circuit c = ((StationTableModel)table.getModel()).circuit;
-				if (c.stationNum > 1)
+				if (c.stationNum < 2)
 				{
-					int offset = c.stations[0].dist;
-					if (offset != 0) {
-						if (new YesNoBox(mainFrame, _("The distance of the first station is not zero, do normalization?")).askForYes()) {
-							for (int i = 0; i < c.stationNum; ++i) {
-								c.stations[i].dist -= offset; 
-							}	
-						}
+					new MessageBox(mainFrame, _("A circut must have at least two stations.")).showMessage();
+					return;
+				}
+				int offset = c.stations[0].dist;
+				if (offset != 0) {
+					if (new YesNoBox(mainFrame, _("The distance of the first station is not zero, do normalization?")).askForYes()) {
+						for (int i = 0; i < c.stationNum; ++i) {
+							c.stations[i].dist -= offset; 
+						}	
 					}
 				}
+				c.length = c.stations[c.stationNum - 1].dist;
 				
 				mainFrame.chart.circuit = c;
 				mainFrame.chart.circuit.name = tfName.getText();
