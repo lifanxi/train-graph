@@ -55,8 +55,8 @@ public class AboutBox extends JDialog implements ActionListener {
 		label1.setFont(new java.awt.Font("Dialog", 0, 12));
 		label1.setText(_("LGuo's Train Graph"));
 
-		label2.setText("Version 2.50 Beta");
-		label3.setText("Build 20090912 Revision 36");
+		label2.setText("Version 2.60");
+		label3.setText("Build 20100916 Revision 102");
 
 		label4.setFont(new java.awt.Font("Dialog", 0, 12));
 		label4.setText(_("Author: Guo Lei (HASEA ID:lguo)"));
