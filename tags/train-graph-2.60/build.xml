@@ -1,0 +1,63 @@
+<project name="ETRC" basedir="." default="main">
+  <property name="top.dir"     value="." />
+  <property name="src.dir"     value="src"/>
+
+  <property name="build.dir"   value="build"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="jar.dir"     value="${build.dir}/jar"/>
+
+  <property name="main-class"  value="org.paradise.etrc.ETRC"/>
+
+  <target name="clean">
+	<delete dir="${build.dir}"/>
+    <delete file="${top.dir}/ETRC.zip"/>
+  </target>
+
+  <target name="compile">
+	<mkdir dir="${classes.dir}"/>
+	<javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false" />
+  </target>
+
+  <target name="po-resource">
+	<mkdir dir="${classes.dir}/resources" />
+	<exec executable="./gen_po_res.sh">
+	  <arg value="${classes.dir}" />
+	</exec>
+  </target>
+
+  <target name="post-compile" depends="compile">
+	<mkdir dir="${classes.dir}/pic"/>
+	<copy todir="${classes.dir}/pic">
+	  <fileset dir="${src.dir}/pic" />
+	</copy>
+  </target>
+
+  <target name="jar" depends="compile,post-compile,po-resource">
+	<mkdir dir="${jar.dir}"/>
+	<copy file="${top.dir}/sample.trc" todir="${jar.dir}/" />
+	<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+	  <manifest>
+		<attribute name="Main-Class" value="${main-class}"/>
+	  </manifest>
+	</jar>
+	<mkdir dir="${jar.dir}/eda"/>
+	<copy todir="${jar.dir}/eda">
+	  <fileset dir="${top.dir}/eda" />
+	</copy>
+  </target>
+
+  <target name="run" depends="jar">
+	<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" dir="${jar.dir}" />
+  </target>
+
+  <target name="clean-build" depends="clean,jar"/>
+
+  <target name="main" depends="clean,run"/>
+  <target name="package" depends="clean,jar">
+	<copy file="${top.dir}/LICENSE" todir="${jar.dir}/" />
+    <copy file="${top.dir}/README" todir="${jar.dir}/" />
+	<zip destfile="${top.dir}/ETRC.zip"
+		 basedir="${jar.dir}"
+		 />
+  </target>
+</project>

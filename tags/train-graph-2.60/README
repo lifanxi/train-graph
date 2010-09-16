@@ -1,0 +1,43 @@
+How to use
+==========
+
+Sun Java Runtime Environment (JRE) is required for train-graph
+program. Currently, train-graph only works with Sun JRE. 
+
+You can obtain the installation package for Sun JRE at
+http://www.java.com/en/download/manual.jsp
+
+For Linux user, you can start the train-graph program by the following
+command:
+$ java -jar ETRC.jar
+
+For Windows user, simply double click on the ETRC.jar file to run the
+program.
+
+train-graph will use the system locale to show it's user
+interface. Currently only English and Simplified Chinese is
+supported. You are more than welcome to contribute on the UI
+translation and wording. Please contact with us for translation
+related work.
+
+
+How to contact
+==============
+
+If you have any suggestion or questions, please feel free to submit Issue
+on train-graph Google Code page: 
+
+http://code.google.com/p/train-graph/issues/list
+
+You can also send email to lifanxi <AT> freemindworld.com for any issues. 
+
+
+License
+=======
+train-graph is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+
+
+
