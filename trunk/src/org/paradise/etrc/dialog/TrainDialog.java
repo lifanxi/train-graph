@@ -189,6 +189,7 @@ public class TrainDialog extends JDialog {
 					tfNameU.setText(loadingTrain.trainNameUp);
 
 					table.revalidate();
+					table.updateUI();
 			    }
 			    else {
 				new MessageBox(_("Unable to get train information from web.")).showMessage();
@@ -367,28 +368,28 @@ public class TrainDialog extends JDialog {
 	    Train train = new Train();
 	    train.trainNameFull = "";
 	    Date now = new Date();
-	    SimpleDateFormat format = new SimpleDateFormat("MM");
-	    String mon = format.format(now);
-	    format = new SimpleDateFormat("dd");
-	    String day = format.format(now);
+	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	    String date = format.format(now);
 	    
-	    String postData = "nmonth1=" + mon + "&nmonth1_new_value=true&nday1=" + day + "&nday1_new_value=true&trainCode=" + 
-		code + "&trainCode_new_value=true";
+	    if (code.indexOf("/") != -1)
+	    	code = code.split("/")[0];
+	    
+	    String getData = "cxlx=cc&date=" + date + "&trainCode=" + code;
 	    try {
 		Proxy proxy = null;
 		if (proxyAddress.equals("") || proxyPort == 0)
 		     proxy = Proxy.NO_PROXY;
 		else
 		     proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyAddress, proxyPort));
-		URL url = new URL("http://dynamic.12306.cn/TrainQuery/iframeTrainPassStationByTrainCode.jsp");
+		URL url = new URL("http://dynamic.12306.cn/TrainQuery/skbcx.jsp?" + getData);
 
 		URLConnection conn = url.openConnection(proxy);
 		conn.setRequestProperty ( "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
-		conn.setRequestProperty("Referer", "www.12306.cn");
+		conn.setRequestProperty("Referer", "http://dynamic.12306.cn/TrainQuery/trainInfoByStation.jsp");
 
 		conn.setDoOutput(true); 
 		OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream()); 
-		wr.write(postData); 
+		// wr.write(postData); 
 		wr.flush(); 
 		BufferedReader in = new BufferedReader(
 						       new InputStreamReader(
@@ -396,10 +397,10 @@ public class TrainDialog extends JDialog {
 		String inputLine;
 
 		while ((inputLine = in.readLine()) != null) {
-		    if ((inputLine.indexOf("//") == -1) && (inputLine.indexOf("parent.mygrid.addRow") != -1)) {
+		    if ((inputLine.indexOf("//") == -1) && (inputLine.indexOf("mygrid.addRow") != -1)) {
 			String [] items = inputLine.split(",");
-			if (items[4].indexOf("----") != -1) items[4] = items[5];
-			if (items[5].indexOf("----") != -1) items[5] = items[4];
+			// if (items[4].indexOf("----") != -1) items[4] = items[5];
+			// if (items[5].indexOf("----") != -1) items[5] = items[4];
 			Stop stop = new Stop(items[2].split("\\^")[0].trim(), items[4].trim(), items[5].trim(), true);
 			train.appendStop(stop);
 			String c = items[3].trim();
@@ -432,6 +433,11 @@ public class TrainDialog extends JDialog {
 			train.trainNameDown = names[i];
 		    }
 		}
+		
+		// Fix wrong start/end time
+		train.stops[0].arrive = train.stops[0].leave;
+		train.stops[train.stopNum - 1].leave = train.stops[train.stopNum - 1].arrive;
+		
 		return train;
 	    }
 	    catch (Exception e) {
