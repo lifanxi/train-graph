@@ -79,7 +79,7 @@ public class TrainSlice {
 					//他经过本站的时候我在站上（站内会车我停他不停：我让他）
 					int myArriveTime = myStopLine.time1;
 					int myLeaveTime = myStopLine.time2;
-					if(myArriveTime<hisPassTime && hisPassTime<myLeaveTime) {
+					if(myArriveTime<=hisPassTime && hisPassTime<=myLeaveTime) {
 //						System.out.println(myStopLine.stop1.stationName + " " + train.getTrainName(circuit) + " sr站内会车（我停他不停，如果单线就是被踩） " + he.train.getTrainName(circuit));
 						events.add(new TrainEvent(hisPassTime, myStopLine.dist1, myStopLine.stop1.stationName, he.train.getTrainName(circuit), TrainEvent.MEET, TrainEvent.ME_STOP));
 					}
@@ -102,7 +102,7 @@ public class TrainSlice {
 					//我经过这个停站时他在站上（站内会车他停我不停：他让我）
 					int hisArriveTime = hisStopLine.time1;
 					int hisLeaveTime = hisStopLine.time2;
-					if(hisArriveTime<myPassTime && myPassTime<hisLeaveTime) {
+					if(hisArriveTime<=myPassTime && myPassTime<=hisLeaveTime) {
 //						System.out.println(hisStopLine.stop1.stationName + " " + train.getTrainName(circuit) + " rs站内会车（他停我不停，如果单线就是踩他） " + he.train.getTrainName(circuit));
 						events.add(new TrainEvent(myPassTime, hisStopLine.dist1, hisStopLine.stop1.stationName, he.train.getTrainName(circuit), TrainEvent.MEET, TrainEvent.HE_STOP));
 					}
