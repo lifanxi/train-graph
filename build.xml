@@ -28,7 +28,7 @@
   <target name="post-compile" depends="compile">
 	<mkdir dir="${classes.dir}/pic"/>
 	<copy todir="${classes.dir}/pic">
-	  <fileset dir="${src.dir}/pic" />
+	  <fileset dir="${src.dir}/main/resources/pic" />
 	</copy>
   </target>
 
