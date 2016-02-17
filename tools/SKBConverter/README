@@ -1,0 +1,3 @@
+This directory contains the code for extracting train data from SMSKB (http://www.smskb.com).
+This code is not a part of the train-graph project, this is just a tool.
+Compile this project in Visual Studio 2005 on Windows.
