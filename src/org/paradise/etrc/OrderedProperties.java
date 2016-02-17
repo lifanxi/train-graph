@@ -1,5 +1,5 @@
-
 package org.paradise.etrc;
+
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
@@ -12,14 +12,14 @@ public class OrderedProperties extends Properties {
     private final LinkedHashSet<Object> keys = new LinkedHashSet<Object>();
 
     public Enumeration<Object> keys() {
-        return Collections.<Object> enumeration(keys);
+        return Collections.<Object>enumeration(keys);
     }
 
     public Object put(Object key, Object value) {
         keys.add(key);
         return super.put(key, value);
     }
-    
+
     public synchronized Object remove(Object key) {
         keys.remove(key);
         return super.remove(key);

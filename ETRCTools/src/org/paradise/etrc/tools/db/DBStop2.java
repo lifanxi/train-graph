@@ -12,9 +12,9 @@ CREATE TABLE STOP2
  */
 
 public class DBStop2 {
-	public String singleName;
-	public String stationID;
-	public String arriveTime;
-	public String leaveTime;
-	public int distance;
+    public String singleName;
+    public String stationID;
+    public String arriveTime;
+    public String leaveTime;
+    public int distance;
 }

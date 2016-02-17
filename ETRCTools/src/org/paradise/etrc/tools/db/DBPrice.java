@@ -31,45 +31,45 @@ COMMENT ON COLUMN PRICE.YINGZUO IS '硬座票价';
  */
 
 public class DBPrice {
-	public int type;
-	public int level;
-	public int distFrom;
-	public int distTo;
-	public int ruanwoD;
-	public int ruanwoU;
-	public int ruanzuo;
-	public int yingzuo;
-	public int yingwoD;
-	public int yingwoM;
-	public int yingwoU;
-	
-	public DBPrice copy() {
-		DBPrice price = new DBPrice();
-		
-		price.type = this.type;
-		price.level = this.level;
-		price.distFrom = this.distFrom;
-		price.distTo = this.distTo;
-		price.ruanwoD = this.ruanwoD;
-		price.ruanwoU = this.ruanwoU;
-		price.ruanzuo = this.ruanzuo;
-		price.yingzuo = this.yingzuo;
-		price.yingwoD = this.yingwoD;
-		price.yingwoM = this.yingwoM;
-		price.yingwoU = this.yingwoU;
-		
-		return price;
-	}
-	
-	public String toString() {
-		return "[" + type + level + "]"
-		     + "(" + distFrom + "-" + distTo + ")"
-		     + "YZ:" + yingzuo
-		     + "|RZ:" + ruanzuo
-		     + "|YWU:" + yingwoU
-		     + "|YWM:" + yingwoM
-		     + "|YWD:" + yingwoD
-		     + "|RWU:" + ruanwoU
-		     + "|RWD:" + ruanwoD;
-	}
+    public int type;
+    public int level;
+    public int distFrom;
+    public int distTo;
+    public int ruanwoD;
+    public int ruanwoU;
+    public int ruanzuo;
+    public int yingzuo;
+    public int yingwoD;
+    public int yingwoM;
+    public int yingwoU;
+
+    public DBPrice copy() {
+        DBPrice price = new DBPrice();
+
+        price.type = this.type;
+        price.level = this.level;
+        price.distFrom = this.distFrom;
+        price.distTo = this.distTo;
+        price.ruanwoD = this.ruanwoD;
+        price.ruanwoU = this.ruanwoU;
+        price.ruanzuo = this.ruanzuo;
+        price.yingzuo = this.yingzuo;
+        price.yingwoD = this.yingwoD;
+        price.yingwoM = this.yingwoM;
+        price.yingwoU = this.yingwoU;
+
+        return price;
+    }
+
+    public String toString() {
+        return "[" + type + level + "]"
+                + "(" + distFrom + "-" + distTo + ")"
+                + "YZ:" + yingzuo
+                + "|RZ:" + ruanzuo
+                + "|YWU:" + yingwoU
+                + "|YWM:" + yingwoM
+                + "|YWD:" + yingwoD
+                + "|RWU:" + ruanwoU
+                + "|RWD:" + ruanwoD;
+    }
 }

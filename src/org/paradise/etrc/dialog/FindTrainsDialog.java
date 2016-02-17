@@ -1,16 +1,20 @@
 package org.paradise.etrc.dialog;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Vector;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.util.regex.*;
-import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.data.skb.ETRCSKB;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import static org.paradise.etrc.ETRC._;
 
 /**
  * @author lguo@sina.com
@@ -18,192 +22,189 @@ import org.paradise.etrc.data.skb.ETRCSKB;
  */
 
 public class FindTrainsDialog extends JDialog {
-	private static final long serialVersionUID = -609136239072858202L;
+    private static final long serialVersionUID = -609136239072858202L;
 
-	private ProgressPanel progressPanel = new ProgressPanel();
+    private ProgressPanel progressPanel = new ProgressPanel();
 
-	private JLabel msgLabel;
-	
-	private MainFrame mainFrame;
+    private JLabel msgLabel;
 
-	public FindTrainsDialog(MainFrame parent) {
-		super(parent);
-		mainFrame = parent;
+    private MainFrame mainFrame;
 
-		try {
-			jbInit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public FindTrainsDialog(MainFrame parent) {
+        super(parent);
+        mainFrame = parent;
 
-	private void jbInit() throws Exception {
-		this.setTitle(_("Finding Train Information"));
+        try {
+            jbInit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		ImageIcon image = new ImageIcon(org.paradise.etrc.MainFrame.class.getResource("/pic/msg.png"));
-		JLabel imageLabel = new JLabel();
-		imageLabel.setIcon(image);
-		
-		msgLabel = new JLabel(_("Removing existing train data, please wait..."));
-		msgLabel.setFont(new java.awt.Font("Dialog", 0, 12));
+    private void jbInit() throws Exception {
+        this.setTitle(_("Finding Train Information"));
 
-		JPanel messagePanel = new JPanel();
-		messagePanel.setLayout(new BorderLayout());
-		messagePanel.setBorder(new EmptyBorder(4,4,4,4));
-		messagePanel.add(imageLabel, BorderLayout.WEST);
-		messagePanel.add(msgLabel, BorderLayout.CENTER);
+        ImageIcon image = new ImageIcon(org.paradise.etrc.MainFrame.class.getResource("/pic/msg.png"));
+        JLabel imageLabel = new JLabel();
+        imageLabel.setIcon(image);
 
-		JPanel rootPanel = new JPanel();
-		rootPanel.setLayout(new BorderLayout());
-		rootPanel.setBorder(BorderFactory.createRaisedBevelBorder());
-		rootPanel.add(progressPanel, BorderLayout.SOUTH);
-		rootPanel.add(messagePanel, BorderLayout.CENTER);
+        msgLabel = new JLabel(_("Removing existing train data, please wait..."));
+        msgLabel.setFont(new java.awt.Font("Dialog", 0, 12));
 
-		this.getContentPane().add(rootPanel, BorderLayout.CENTER);
+        JPanel messagePanel = new JPanel();
+        messagePanel.setLayout(new BorderLayout());
+        messagePanel.setBorder(new EmptyBorder(4, 4, 4, 4));
+        messagePanel.add(imageLabel, BorderLayout.WEST);
+        messagePanel.add(msgLabel, BorderLayout.CENTER);
 
-		int w = imageLabel.getPreferredSize().width
-				+ msgLabel.getPreferredSize().width + 40;
-		int h = messagePanel.getPreferredSize().height
-				+ progressPanel.getPreferredSize().height + 20;
-		this.setSize(w, h);
+        JPanel rootPanel = new JPanel();
+        rootPanel.setLayout(new BorderLayout());
+        rootPanel.setBorder(BorderFactory.createRaisedBevelBorder());
+        rootPanel.add(progressPanel, BorderLayout.SOUTH);
+        rootPanel.add(messagePanel, BorderLayout.CENTER);
 
-		setResizable(false);
-	}
+        this.getContentPane().add(rootPanel, BorderLayout.CENTER);
 
-	public void findTrains() {
-		Dimension dlgSize = this.getPreferredSize();
-		Dimension frmSize = mainFrame.getSize();
-		Point loc = mainFrame.getLocation();
+        int w = imageLabel.getPreferredSize().width
+                + msgLabel.getPreferredSize().width + 40;
+        int h = messagePanel.getPreferredSize().height
+                + progressPanel.getPreferredSize().height + 20;
+        this.setSize(w, h);
 
-		this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-				         (frmSize.height - dlgSize.height) / 2 + loc.y);
-		this.setModal(true);
-		this.pack();
-		
-		new Thread(new LoadingThread()).start();
-		setVisible(true);
-	}
+        setResizable(false);
+    }
 
-	class LoadingThread implements Runnable {
-		public void run() {
-			hold(500);
-			mainFrame.chart.clearTrains();
-			mainFrame.chartView.repaint();
-			
-			msgLabel.setText(_("Please wait while imporing train information..."));
-			
-			ETRCSKB skb = mainFrame.getSKB();
-			Vector<Train> trains = skb.findTrains(mainFrame.chart.circuit);
-						
-			for(int i=0; i<trains.size(); i++) {
-				Train loadingTrain = (Train) (trains.get(i));
-				//char type = loadingTrain.getTrainName().toUpperCase().charAt(0);
-				// char type = loadingTrain.getTrainName().charAt(0);
-			// if ( mainFrame.type_case == 1 && (type == 'G' || type == 'D' || type == 'C'))
-			// {
-			// //仅铺画普通列车，跳过G/C/D车次
-			// continue;
-			// }
-			// else if ( mainFrame.type_case == 2 && (type != 'G' && type != 'D' && type != 'C'))
-			// {
-			// //仅铺画动车组，跳过普通车次
-			// continue ;
-			// }
-			// else if ( mainFrame.type_case == 3 )
-			// {
-			// //do nothing
-			// }
-			
-	//将MainFrame输入的正则表达式编译！	
-    Pattern p = Pattern.compile(mainFrame.my_regexp);  
-	//将当前车次名称与正则表达式匹配
-	//System.out.println(loadingTrain.getTrainName());
-    Matcher m = p.matcher(loadingTrain.getTrainName());  
-    if (m.matches()) {  
-       //do nothing，匹配则继续当前铺画动作
-       // System.out.println("true");  
-    } else {  
-	    //不匹配，则跳过当前铺画过程
-       // System.out.println("false");  
-	   continue;
-    } 
-			
-			
-			
-			
-				if(loadingTrain.isDownTrain(mainFrame.chart.circuit, false) > 0) {
-					mainFrame.chart.addTrain(loadingTrain);
-					
-					msgLabel.setText(String.format(_("Importing train information %s"), loadingTrain.getTrainName()));
-					hold(50);
-				}
-			}
-			
-			mainFrame.chartView.repaint();
-			mainFrame.sheetView.updateData();
-	        mainFrame.runView.refresh();
+    public void findTrains() {
+        Dimension dlgSize = this.getPreferredSize();
+        Dimension frmSize = mainFrame.getSize();
+        Point loc = mainFrame.getLocation();
 
-			progressPanel.gotoEnd();
+        this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+                (frmSize.height - dlgSize.height) / 2 + loc.y);
+        this.setModal(true);
+        this.pack();
 
-			hold(200);
-			dispose();
-		}
-		
-		private void hold(long time) {
-			try {
-				Thread.sleep(time);
-			} catch (InterruptedException e) {
-			}
-		}
-	}
-	
-    class ProgressPanel extends JPanel
-    {
-		private static final long serialVersionUID = -2195298227589227704L;
-		private JProgressBar pb;
+        new Thread(new LoadingThread()).start();
+        setVisible(true);
+    }
+
+    class LoadingThread implements Runnable {
+        public void run() {
+            hold(500);
+            mainFrame.chart.clearTrains();
+            mainFrame.chartView.repaint();
+
+            msgLabel.setText(_("Please wait while imporing train information..."));
+
+            ETRCSKB skb = mainFrame.getSKB();
+            Vector<Train> trains = skb.findTrains(mainFrame.chart.circuit);
+
+            for (int i = 0; i < trains.size(); i++) {
+                Train loadingTrain = (Train) (trains.get(i));
+                //char type = loadingTrain.getTrainName().toUpperCase().charAt(0);
+                // char type = loadingTrain.getTrainName().charAt(0);
+                // if ( mainFrame.type_case == 1 && (type == 'G' || type == 'D' || type == 'C'))
+                // {
+                // //仅铺画普通列车，跳过G/C/D车次
+                // continue;
+                // }
+                // else if ( mainFrame.type_case == 2 && (type != 'G' && type != 'D' && type != 'C'))
+                // {
+                // //仅铺画动车组，跳过普通车次
+                // continue ;
+                // }
+                // else if ( mainFrame.type_case == 3 )
+                // {
+                // //do nothing
+                // }
+
+                //将MainFrame输入的正则表达式编译！
+                Pattern p = Pattern.compile(mainFrame.my_regexp);
+                //将当前车次名称与正则表达式匹配
+                //System.out.println(loadingTrain.getTrainName());
+                Matcher m = p.matcher(loadingTrain.getTrainName());
+                if (m.matches()) {
+                    //do nothing，匹配则继续当前铺画动作
+                    // System.out.println("true");
+                } else {
+                    //不匹配，则跳过当前铺画过程
+                    // System.out.println("false");
+                    continue;
+                }
+
+
+                if (loadingTrain.isDownTrain(mainFrame.chart.circuit, false) > 0) {
+                    mainFrame.chart.addTrain(loadingTrain);
+
+                    msgLabel.setText(String.format(_("Importing train information %s"), loadingTrain.getTrainName()));
+                    hold(50);
+                }
+            }
+
+            mainFrame.chartView.repaint();
+            mainFrame.sheetView.updateData();
+            mainFrame.runView.refresh();
+
+            progressPanel.gotoEnd();
+
+            hold(200);
+            dispose();
+        }
+
+        private void hold(long time) {
+            try {
+                Thread.sleep(time);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    class ProgressPanel extends JPanel {
+        private static final long serialVersionUID = -2195298227589227704L;
+        private JProgressBar pb;
 
         public ProgressPanel() {
             pb = new JProgressBar();
-            pb.setPreferredSize(new Dimension(200,20));
-            
+            pb.setPreferredSize(new Dimension(200, 20));
+
             // 设置定时器，用来控制进度条的处理
-            Timer time = new Timer(1,new ActionListener() { 
+            Timer time = new Timer(1, new ActionListener() {
                 int counter = 0;
+
                 public void actionPerformed(ActionEvent e) {
                     counter++;
                     pb.setValue(counter);
-                    Timer t = (Timer)e.getSource();
-                    
+                    Timer t = (Timer) e.getSource();
+
                     // 如果进度条达到最大值重新开发计数
-                    if (counter == pb.getMaximum())
-                    {
+                    if (counter == pb.getMaximum()) {
                         t.stop();
-                        counter =0;
+                        counter = 0;
                         t.start();
-                    }                    
+                    }
                 }
             });
             time.start();
-            
+
             //pb.setStringPainted(true);
             pb.setMinimum(0);
             pb.setMaximum(300);
             pb.setBackground(Color.white);
             pb.setForeground(Color.red);
-                        
-            this.add(pb);                
+
+            this.add(pb);
         }
-        
+
         /**
          * 设置进度条的数据模型
          */
         public void setProcessBar(BoundedRangeModel rangeModel) {
             pb.setModel(rangeModel);
         }
-        
+
         public void gotoEnd() {
-			pb.setValue(pb.getMaximum());
-         }
+            pb.setValue(pb.getMaximum());
+        }
     }
-	
+
 }

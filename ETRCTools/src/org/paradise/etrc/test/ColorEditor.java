@@ -4,25 +4,21 @@ package org.paradise.etrc.test;
  * TableDialogEditDemo.java.
  */
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.table.TableCellEditor;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
-import javax.swing.JTable;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.*;
+import javax.swing.table.TableCellEditor;
+
 public class ColorEditor extends AbstractCellEditor
-                         implements TableCellEditor,
-			            ActionListener {
+        implements TableCellEditor,
+        ActionListener {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1049675379938396699L;
-	Color currentColor;
+     *
+     */
+    private static final long serialVersionUID = 1049675379938396699L;
+    Color currentColor;
     JButton button;
     JColorChooser colorChooser;
     JDialog dialog;
@@ -41,16 +37,15 @@ public class ColorEditor extends AbstractCellEditor
         //Set up the dialog that the button brings up.
         colorChooser = new JColorChooser();
         dialog = JColorChooser.createDialog(button,
-                                        "Pick a Color",
-                                        true,  //modal
-                                        colorChooser,
-                                        this,  //OK button handler
-                                        null); //no CANCEL button handler
+                "Pick a Color",
+                true,  //modal
+                colorChooser,
+                this,  //OK button handler
+                null); //no CANCEL button handler
     }
 
     /**
-     * Handles events from the editor button and from
-     * the dialog's OK button.
+     * Handles events from the editor button and from the dialog's OK button.
      */
     public void actionPerformed(ActionEvent e) {
         if (EDIT.equals(e.getActionCommand())) {
@@ -79,7 +74,7 @@ public class ColorEditor extends AbstractCellEditor
                                                  boolean isSelected,
                                                  int row,
                                                  int column) {
-        currentColor = (Color)value;
+        currentColor = (Color) value;
         return button;
     }
 }
