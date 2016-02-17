@@ -30,7 +30,6 @@ public class AboutBox extends JDialog implements ActionListener {
 
     ImageIcon image1 = new ImageIcon();
 
-    JLabel label5 = new JLabel();
     JLabel label6 = new JLabel();
     GridBagLayout gridBagLayout1 = new GridBagLayout();
 
@@ -63,8 +62,6 @@ public class AboutBox extends JDialog implements ActionListener {
 
         label4.setFont(new java.awt.Font("Dialog", 0, 12));
         label4.setText("Author: Guo Lei (lguo), lifanxi, westeast1984");
-        label5.setText("http://train-graph.googlecode.com");
-        label5.setFont(new java.awt.Font("Dialog", 0, 12));
         label6.setText("https://github.com/lifanxi/train-graph");
         label6.setFont(new java.awt.Font("Dialog", 0, 12));
 
@@ -82,9 +79,6 @@ public class AboutBox extends JDialog implements ActionListener {
         panel1.add(label3, new GridBagConstraints(1, 2, 2, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
                 0, 0, 0), 0, 0));
-        panel1.add(label5, new GridBagConstraints(1, 4, 3, 1, 0.0, 0.0,
-                GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 20, 0), 0, 0));
         panel1.add(label6, new GridBagConstraints(1, 5, 3, 1, 0.0, 0.0,
                 GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 0), 0, 0));
