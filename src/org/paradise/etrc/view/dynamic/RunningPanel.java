@@ -39,18 +39,48 @@ public class RunningPanel extends JPanel {
 	}
 
 	void jbInit() throws Exception {
-		this.setBackground(Color.white);
+		if (dView.mainFrame.chartView.NIGHTMODE == true)
+		{
+		this.setBackground(Color.black);	
+		}
+		else
+		{
+		this.setBackground(Color.white);	
+		}
+		
 		this.setLayout(new BorderLayout());
 		this.setFont(new Font(_("FONT_NAME"), 0, 12));
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
-		
+	
+
+//2015-07-07增加以下刷新背景颜色的代码
+		if (dView.mainFrame.chartView.NIGHTMODE == true)
+		{
+		//this.setBackground(Color.black);
+		this.setBackground(new Color(51, 51, 51)); //亮黑色
+		}
+		else
+		{
+		this.setBackground(Color.white);	
+		}	
 		//上行线
 		drawRailwayLine(g, 0, dView.topMargin, getPreferredSize().width, 0);
+		
+		//2015-09-19 如果发现该线所有车站的doublecheck属性都为false，则sum_doubletrack =false, 则定义为纯单线线路，只画一条运行线。
 		//下行线
+		boolean sum_doubletrack = false; 
+		for (int i = 0; i < chart.circuit.stationNum; i++) {
+			sum_doubletrack = sum_doubletrack || chart.circuit.stations[i].doubletrack ;
+		}
+		//sum_doubletrack为真，表明为非纯单线线路，则铺画下行线。
+		if (sum_doubletrack) 
+		{
 		drawRailwayLine(g, 0, this.getHeight() - dView.bottomMargin, getPreferredSize().width, 1);
+		}
+		
 		
 		if (chart == null)
 			return;
@@ -72,8 +102,18 @@ public class RunningPanel extends JPanel {
 	//isWhiteFirst = 1 时先画白色 = 0 时先画黑色
 	private void drawRailwayLine(Graphics g, int x, int y, int width, int isWhiteFirst) {
 		Color oldColor = g.getColor();
-		g.setColor(Color.lightGray);
 
+
+		if (dView.mainFrame.chartView.NIGHTMODE == true)
+		{	
+        g.setColor(new Color(0, 204, 255)); //夜间模式设为亮蓝色铁路线
+		}
+		else
+		{
+		g.setColor(Color.lightGray);	//非夜间模式设为灰色铁路线
+		}
+		
+		
 		g.drawLine(x, y - 1, width, y - 1);
 		g.drawLine(x, y + 1, width, y + 1);
 
@@ -130,9 +170,30 @@ public class RunningPanel extends JPanel {
 			g.drawLine(x, y1, x, y2);
 			//恢复原色
 			g.setColor(oldColor);
-
+			
 			//画站名
 			drawStationName(g, station, x);
+			//如果接续站不为空，则在动态图中显示接续站名
+			//如果用英语|号隔开，则为两个方向显示
+			
+			//Color oldColor = g.getColor();
+			g.setColor(new Color(255, 0, 0));
+			if (!station.following.equalsIgnoreCase("")){
+				String following = station.following ;
+				Rectangle r = g.getFontMetrics().getStringBounds(following, g).getBounds();
+				if (following.indexOf("|")>=0 ){
+					String[] strarray= following.split("\\|");
+					g.drawString(strarray[0], x - r.width / 2, y1+10);
+					g.drawString(strarray[1], x - r.width / 2, y2-10);
+				} 
+				else
+				{
+				    g.drawString(following, x - r.width / 2, y1+10);	
+				}
+							
+			}
+			g.setColor(oldColor);
+
 		}
 	}
 
@@ -144,10 +205,31 @@ public class RunningPanel extends JPanel {
 		int left = x - r.width / 2;
 		int top = getHeight() / 2 + r.height / 2 - 2;
 
-		g.setColor(Color.white);
+		
+		if (dView.mainFrame.chartView.NIGHTMODE == true)
+		{
+		//g.setColor(Color.black);  //夜间模式设为黑底
+        g.setColor(new Color(51, 51, 51));		
+		}
+		else
+		{
+		g.setColor(Color.white);	//非夜间模式设为白底
+		}
+		
 		g.fillRect(left - 1, top - r.height + 1, r.width + 2, r.height + 4);
 		
-		g.setColor(Color.black);
+		if (dView.mainFrame.chartView.NIGHTMODE == true)
+		{
+		g.setColor(Color.white);  //夜间模式设为白字	
+		}
+		else
+		{
+		g.setColor(Color.black);  //非夜间模式设为黑字
+		}	
+
+		
+		
+		
 		g.drawString(station.name, left, top);
 		g.setColor(oldColor);
 	}
@@ -163,10 +245,14 @@ public class RunningPanel extends JPanel {
 		runningTrains.clear();
 		for(int i = 0; i < chart.trainNum; i++) {
 			int dist = chart.circuit.getDistOfTrain(chart.trains[i], dView.getCurrentTime());
-			
+			int trainspeed = chart.circuit.getSpeedOfTrain(chart.trains[i], dView.getCurrentTime());
+			//int trainspeed = 0 ;
+			//System.out.println(trainspeed);
 			if(dist >= 0) {
 				if(!atStationTrains.keySet().contains(chart.trains[i]))
-					runningTrains.put(chart.trains[i], "" + dist);
+//runningTrains.put(chart.trains[i], "" + dist);
+//2015-06-20把距离和速度都放入runningTrains Hashtable
+				runningTrains.put(chart.trains[i], "" + dist+ ":"+ trainspeed);
 			}
 			
 //			String station = chart.circuit.getStationName(dist, true);
@@ -185,12 +271,17 @@ public class RunningPanel extends JPanel {
 		Enumeration<Train> en = runningTrains.keys();
 		while(en.hasMoreElements()) {
 			Train theRunningTrain = (Train) en.nextElement();
-			int theDist = Integer.parseInt((String) runningTrains.get(theRunningTrain));
+			//int theDist = Integer.parseInt((String) runningTrains.get(theRunningTrain));
+			//2015-06-20更改取距离值,取速度值。
+			String dd =  runningTrains.get(theRunningTrain);//取hash的value
+			String d[] = dd.split(":");//二维数组，第0位距离，第1位速度
+			int theDist = Integer.parseInt(d[0]);
+			int theSpeed= Integer.parseInt(d[1]);
 			if(theRunningTrain.isDownTrain(chart.circuit) == Train.DOWN_TRAIN) {
-				drawRunningTrainDown(g, theRunningTrain, theDist);
+				drawRunningTrainDown(g, theRunningTrain, theDist, theSpeed);
 			}
 			else {
-				drawRunningTrainUp(g, theRunningTrain, theDist);
+				drawRunningTrainUp(g, theRunningTrain, theDist, theSpeed);
 			}
 		}
 
@@ -238,6 +329,9 @@ public class RunningPanel extends JPanel {
 			}
 			else {
 				drawTrainAtStationUp(g, uNum, train, dist);
+		//String cur_index;
+		//cur_index = chart.circuit.getStationName(0) ;
+		//System.out.println(cur_index);
 				uNum ++;
 			}
 		}
@@ -261,69 +355,207 @@ public class RunningPanel extends JPanel {
 
 	private void drawTrainAtStationUp(Graphics g, int i, Train train, int dist) {
 		int x = dView.getPelsX(dist);
-		int y = getHeight() - dView.bottomMargin + (i+1) * SPACE_AT_STATION;
+		//int y = getHeight() - dView.bottomMargin + (i+1) * SPACE_AT_STATION;
 
+		//2015-09-19如果该列车当前距离dist纯单线区间，则改变上行车的纵坐标跟上行车一致！
+		int y;
+		int cur_index;
+	
+
+		//得到当前列车前方车站的索引
+		cur_index = chart.circuit.getStationIndexUp(dist);
+		//得到当前列车前方车站的名字
+		String cur_station = chart.circuit.stations[cur_index].name;
+		//列车图线的y坐标由（上行）后方车站的复线状态决定（由我们的数据架构决定）
+		if (chart.circuit.stations[cur_index+1].doubletrack) {
+		 y = getHeight() - dView.bottomMargin + (i+1) * SPACE_AT_STATION;
+		}
+        else {
+		 y = dView.topMargin - (i+1) * SPACE_AT_STATION;	
+		}
+		
+		
+
+		 //y = getHeight() - dView.bottomMargin + (i+1) * SPACE_AT_STATION;
 		drawTrainRect(g, train, x, y);
 		
 		String trainName = train.getTrainName(chart.circuit);
-		
+		System.out.println("上行："+trainName+" 停靠在 "+cur_station);
 		Font oldFont = g.getFont();
 		g.setFont(new Font("Dialog", Font.PLAIN, 10));
 		
 		int w = (int) g.getFontMetrics().getStringBounds(trainName, g).getWidth();
-		g.drawString(trainName, x - w/2, y + 13);
-		
+		int pp = chart.circuit.getStationStopTime(train, dist);
+	//2015-09-07增加停站时间显示	
+		g.drawString(trainName+ "," + pp + "min", x - w/2, y + 13);
+
 		g.setFont(oldFont);
 	}
 
 	private void drawTrainAtStationDown(Graphics g, int i, Train train, int dist) {
+		
 		int x = dView.getPelsX(dist);
 		int y = dView.topMargin - (i+1) * SPACE_AT_STATION;
 		
 		drawTrainRect(g, train, x, y);
-
+		String cur_station = chart.circuit.getStationName(dist);
 		String trainName = train.getTrainName(chart.circuit);
-		
+		System.out.println("上行："+trainName+" 停靠在 "+cur_station);
 		Font oldFont = g.getFont();
 		g.setFont(new Font("Dialog", Font.PLAIN, 10));
 		
 		int w = (int) g.getFontMetrics().getStringBounds(trainName, g).getWidth();
-		g.drawString(trainName, x - w/2, y - 5);
+		int pp = chart.circuit.getStationStopTime(train, dist);
+     //2015-09-07增加停站时间显示	
+	    g.drawString(trainName + "," + pp + "min", x - w/2, y - 5);
 		
 		g.setFont(oldFont);
 	}
 
-	private void drawRunningTrainUp(Graphics g, Train train, int dist) {
+	private void drawRunningTrainUp(Graphics g, Train train, int dist, int speed) {
 		int x = dView.getPelsX(dist);
-		int y = getHeight() - dView.bottomMargin;
+		//int y = getHeight() - dView.bottomMargin;
 		
+		//2015-09-19如果该列车当前距离dist为纯单线区间，则改变上行车的纵坐标跟上行车一致！
+
+		int y;
+		int cur_index;
+
+		//得到当前列车前方车站的索引，
+		cur_index = chart.circuit.getStationIndexUp(dist);	
+		//得到当前列车前方车站的名字
+		String cur_station = chart.circuit.stations[cur_index].name;
+		//列车图线的y坐标由（上行）后方车站的复线状态决定（由我们的数据架构决定）
+		if (chart.circuit.stations[cur_index+1].doubletrack) {	
+		  y = getHeight() - dView.bottomMargin;
+		}
+        else {
+		  y = dView.topMargin;	
+		}
+		//y = getHeight() - dView.bottomMargin;
 		drawTrainRect(g, train, x, y);
 		
 		String trainName = train.getTrainName(chart.circuit);
+		System.out.println("上行: "+trainName+ " 驶向 "+cur_station);
+		 String aa = train.getStartStation();
+		 String aaa ;
+		 String aaaa ;
+		 
+		 String bb =  train.getTerminalStation() ;
+		 String bbb ;
+		 String bbbb ;
+		 
+		 //如果含有（高），（城）字样，则替换掉
+		 if(aa.indexOf("（高）")>=0 ||aa.indexOf("（城）")>=0 )
+		 {
+			 aaa = aa.replaceAll("（高）","");
+			 aaaa = aaa.replaceAll("（城）","");
+		 }
+		 else
+		 {
+			 aaaa= aa;
+		 }
+		 
+		 if(bb.indexOf("（高）")>=0 ||bb.indexOf("（城）")>=0 )
+		 {
+			 bbb = bb.replaceAll("（高）","");
+			 bbbb = bbb.replaceAll("（城）","");
+		 }	
+		 else
+		 {
+			 bbbb = bb;
+		 }	
+		
 		
 		Font oldFont = g.getFont();
 		g.setFont(new Font("Dialog", Font.PLAIN, 10));
 		
 		int w = (int) g.getFontMetrics().getStringBounds(trainName, g).getWidth();
 		g.drawString(trainName, x - w/2, y + 13);
+		g.setFont(new Font("FONT_NAME", Font.PLAIN, 12));
+		//g.drawString(dist+aaaa + "-" + bbbb + speed + "km/h", x - w/2, y + 28);
 		
+		//g.drawString(dist + "km," + speed + "km/h", x - w/2, y + 43);
+		if (dView.mainFrame.chartView.SHOWDISTANCE == true)
+		{
+		g.drawString(speed + "km/h,"+ dist + "km", x - w/2, y + 28);	
+		}
+		else
+		{
+		g.drawString(speed + "km/h", x - w/2, y + 28);	
+		}
+		
+		
+		
+		g.drawString(aaaa + "-" + bbbb , x - w/2, y + 43);
 		g.setFont(oldFont);
 	}
 	
-	private void drawRunningTrainDown(Graphics g, Train train, int dist) {
+	private void drawRunningTrainDown(Graphics g, Train train, int dist, int speed) {
 		int x = dView.getPelsX(dist);
 		int y = dView.topMargin;
 		
 		drawTrainRect(g, train, x, y);
+		//String cur_station = chart.circuit.getStationName(dist);
+		int cur_index;
+
+		//得到当前列车前方车站的索引，
+		cur_index = chart.circuit.getStationIndexDown(dist);	
+		//得到当前列车前方车站的名字
+		String cur_station = chart.circuit.stations[cur_index].name;
 		
 		String trainName = train.getTrainName(chart.circuit);
+		System.out.println("下行: "+trainName+ " 驶向 "+cur_station);
+		
+		 String aa = train.getStartStation();
+		 String aaa ;
+		 String aaaa ;
+		 
+		 String bb =  train.getTerminalStation() ;
+		 String bbb ;
+		 String bbbb ;
+		 
+		 //如果含有（高），（城）字样，则替换掉
+		 if(aa.indexOf("（高）")>=0 ||aa.indexOf("（城）")>=0 )
+		 {
+			 aaa = aa.replaceAll("（高）","");
+			 aaaa = aaa.replaceAll("（城）","");
+		 }
+		 else
+		 {
+			 aaaa= aa;
+		 }
+		 
+		 if(bb.indexOf("（高）")>=0 ||bb.indexOf("（城）")>=0 )
+		 {
+			 bbb = bb.replaceAll("（高）","");
+			 bbbb = bbb.replaceAll("（城）","");
+		 }	
+		 else
+		 {
+			 bbbb = bb;
+		 }	
+		
 		
 		Font oldFont = g.getFont();
 		g.setFont(new Font("Dialog", Font.PLAIN, 10));
 		
 		int w = (int) g.getFontMetrics().getStringBounds(trainName, g).getWidth();
 		g.drawString(trainName, x - w/2, y - 5);
+		g.setFont(new Font("FONT_NAME", Font.PLAIN, 12));
+		//g.drawString(dist+aaaa + "-" + bbbb + speed + "km/h", x - w/2, y - 20);
 		
+		//g.drawString(dist+ "km," + speed + "km/h", x - w/2, y - 35);
+		if (dView.mainFrame.chartView.SHOWDISTANCE == true)
+		{
+		g.drawString(speed + "km/h," + dist + "km", x - w/2, y - 20);	
+		}
+		else
+		{
+		g.drawString(speed + "km/h", x - w/2, y - 20);	
+		}
+		g.drawString(speed + "km/h", x - w/2, y - 20);
+		g.drawString(aaaa + "-" + bbbb , x - w/2, y - 35);
 		g.setFont(oldFont);
 	}
 }

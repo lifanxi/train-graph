@@ -39,8 +39,10 @@ public class DynamicView extends JPanel implements KeyListener, Runnable {
 	public MainFrame mainFrame;
 	public int scale = DEFAULT_SCALE;
 	private static final int DEFAULT_SCALE = 5;
-	private static final int MIN_SCALE = 3;
-	private static final int MAX_SCALE = 10;
+	//private static final int MIN_SCALE = 3;
+	private static final int MIN_SCALE = 1;
+	//private static final int MAX_SCALE = 10;
+	private static final int MAX_SCALE = 20;
 	public void increaseScale(int i) {
 		scale += i;
 		
@@ -249,6 +251,11 @@ public class DynamicView extends JPanel implements KeyListener, Runnable {
 	
 	public void increaseTime(int i) {
 		currentTime += i;
+		int hour = currentTime/60;
+		int minutes = currentTime - hour * 60 ;
+		String strMinute = minutes < 10 ? "0" + minutes : "" + minutes;
+		String strHour = hour < 10 ? "0" + hour : "" + hour;
+		System.out.println("当前时间"+ strHour + ":" + strMinute);
 		updateCurrentTime();
 	}
 	

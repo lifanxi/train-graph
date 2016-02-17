@@ -139,26 +139,26 @@ public class TrainNameRect {
     private void drawInRectDown(Graphics g, boolean isActive) {
       int x = anchor.x;
       int y = anchor.y;
-
+// 由于车次框宽度由10调整为12， 故以下坐标由5调整为6
       int y1 = y - ChartView.trainNameRecMargin;
-      int px[] = {x, x-5, x+5};
+      int px[] = {x, x-6, x+6};
       int py[] = {y1, y1-10, y1-10};
       g.fillPolygon(px, py, 3);
       //g.drawLine(x, y, x, y1);
-      drawNameRec(g, x-5, y1-10-ChartView.trainNameRecHeight, isActive);
+      drawNameRec(g, x-6, y1-10-ChartView.trainNameRecHeight, isActive);
     }
 
     //上行入图
     private void drawInRectUp(Graphics g, boolean isActive) {
       int x = anchor.x;
       int y = anchor.y;
-
+// 由于车次框宽度由10调整为12， 故以下坐标由5调整为6
       int y1 = y + ChartView.trainNameRecMargin;
-      int px[] = {x, x-5, x+5};
+      int px[] = {x, x-6, x+6};
       int py[] = {y1, y1+10, y1+10};
       g.fillPolygon(px, py, 3);
       //g.drawLine(x, y, x, y1);
-      this.drawNameRec(g, x-5, y1+10, isActive);
+      this.drawNameRec(g, x-6, y1+10, isActive);
     }
 
     //出图
@@ -173,25 +173,25 @@ public class TrainNameRect {
     private void drawOutRectDown(Graphics g, boolean isActive) {
       int x = anchor.x;
       int y = anchor.y;
-
+// 由于车次框宽度由10调整为12， 故以下坐标由5调整为6
       int y1 = y + ChartView.trainNameRecMargin;
       int y2 = y1 + ChartView.trainNameRecHeight;
-      int px[] = {x, x - 5, x + 5};
+      int px[] = {x, x - 6, x + 6};
       int py[] = {y2 + 10, y2, y2};
       g.fillPolygon(px, py, 3);
-      drawNameRec(g, x-5, y1, isActive);
+      drawNameRec(g, x-6, y1, isActive);
     }
 
     //上行出图
     private void drawOutRectUp(Graphics g, boolean isActive) {
       int x = anchor.x;
       int y = anchor.y;
-
+// 由于车次框宽度由10调整为12， 故以下坐标由5调整为6
       int y1 = y - ChartView.trainNameRecHeight - ChartView.trainNameRecMargin;
-      int px[] = {x, x-5, x+5};
+      int px[] = {x, x-6, x+6};
       int py[] = {y1-10, y1, y1};
       g.fillPolygon(px, py, 3);
-      drawNameRec(g, x-5, y1, isActive);
+      drawNameRec(g, x-6, y1, isActive);
     }
 
     //始发
@@ -264,8 +264,8 @@ public class TrainNameRect {
     
     //画下行始发终到车的尾框
     private void drawTailRecDown(Graphics g, int x, int y) {
-        g.fillRect(x, y, 11, 4);
-        
+        g.fillRect(x, y, 13, 4);
+// 由于车次框宽度由10调整为12， 故以上坐标由11调整为13        
         Color drawingColor = g.getColor();
         g.setColor(Color.white);
         
@@ -277,8 +277,8 @@ public class TrainNameRect {
     
     //画上行始发终到车的尾框
     private void drawTailRecUp(Graphics g, int x, int y) {
-        g.fillRect(x, y, 11, 4);
-        
+        g.fillRect(x, y, 13, 4);
+  // 由于车次框宽度由10调整为12， 故以上坐标由11调整为13       
         Color drawingColor = g.getColor();
         g.setColor(Color.white);
         
@@ -300,17 +300,19 @@ public class TrainNameRect {
     private void drawNameRecInactive(Graphics g, int x, int y) {
       Color oldColor = g.getColor();
       g.setColor(Color.white);
-      g.fillRect(x, y, 10, ChartView.trainNameRecHeight);
-      g.setColor(oldColor);
-      g.setFont(new Font(_("FONT_NAME_FIXED"), 0, 10));
-      g.drawRect(x, y, 10, ChartView.trainNameRecHeight);
-
+ //由于为了支持汉字始发终到站显示，车次框宽度由10调整为12， 故以下坐标由10调整为12 ，更改字体
+	  g.fillRect(x, y, 12, ChartView.trainNameRecHeight);
+	  g.setColor(oldColor);
+	  g.setFont(new Font(_("FONT_NAME"), 0, 12));
+      g.drawRect(x, y, 12, ChartView.trainNameRecHeight);
+ 
       int h = g.getFontMetrics().getHeight() - 5;
-      int xt = x + 3;
+      int xt = x + 1;
       int yt = y + h + 2;
       for(int i=0; i<trainName.length(); i++) {
         g.drawString(trainName.substring(i,i+1), xt, yt+h*i);
       }
+	 
     }
 
     //画活跃车次框

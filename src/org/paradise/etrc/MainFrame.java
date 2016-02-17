@@ -14,8 +14,10 @@ import java.awt.print.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.util.regex.*;
 import javax.swing.border.*;
-
+import java.lang.*;
+import java.awt.Color;
 import org.paradise.etrc.data.*;
 import org.paradise.etrc.data.skb.ETRCLCB;
 import org.paradise.etrc.data.skb.ETRCSKB;
@@ -27,7 +29,6 @@ import org.paradise.etrc.filter.TRFFilter;
 import org.paradise.etrc.view.chart.ChartView;
 import org.paradise.etrc.view.dynamic.DynamicView;
 import org.paradise.etrc.view.sheet.SheetView;
-
 import static org.paradise.etrc.ETRC._;
 
 /**
@@ -45,18 +46,45 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	public SheetView sheetView;
 	
 	private boolean isShowRun = true;
-	
+	public int type_case ;
+	public String my_regexp;
 	public JLabel statusBarMain = new JLabel();
 	public JLabel statusBarRight = new JLabel();
-
-	private Properties defaultProp;
-	public Properties prop;
+//OrderedProperties 为自定义可排序属性，在根目录下
+	private OrderedProperties defaultProp;
+	public OrderedProperties prop;
 	public static String Prop_Working_Chart = "Working_Chart";
 	public static String Prop_Show_UP = "Show_UP";
 	public static String Prop_Show_Down = "Show_Down";
 	public static String Prop_Show_Run = "Show_Run";
 	public static String Prop_HTTP_Proxy_Server = "HTTP_Proxy_Server";
 	public static String Prop_HTTP_Proxy_Port = "HTTP_Proxy_Port";
+	//2014-07-10 Joe add below setting to be supported in htrc.proc
+	//定义一个新属性，需要3步，  第65 行： 定义属性字符串，第102行绑定属性， 第300+行 设定属性具体行为
+	public static String Prop_underDrawingColor = "underDrawingColor";
+	public static String Prop_isDrawNormalPoint= "isDrawNormalPoint";
+	public static String Prop_lineWidth="lineWidth";
+	public static String Prop_G_color="G_color";
+	public static String Prop_D_color="D_color";
+    public static String Prop_C_color="C_color";
+    public static String Prop_Z_color="Z_color";
+    public static String Prop_T_color="T_color";
+    public static String Prop_K_color="K_color";
+    public static String Prop_Y_color="Y_color";
+    public static String Prop_L_color="L_color";
+    public static String Prop_default_color="default_color";
+    public static String Prop_grid_color="grid_color";
+    public static String Prop_halfHourDashGrid="halfHourDashGrid";
+	//2015-07-13 Joe增加属性
+	public static String Prop_dashsiding="dashsiding";
+	public static String Prop_showdistance="showdistance";
+	public static String Prop_nightmode="nightmode";
+	public static String Prop_showtrainstartend="showtrainstartend";
+	
+	
+	
+	
+	
 	
 	private static String Sample_Chart_File = "sample.trc";
 	private static String Properties_File = "htrc.prop";
@@ -70,16 +98,43 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	
 	//Construct the frame
 	public MainFrame() {
-		defaultProp = new Properties();
+		defaultProp = new OrderedProperties();
 		defaultProp.setProperty(Prop_Working_Chart, Sample_Chart_File);
 		defaultProp.setProperty(Prop_Show_UP, "Y");
 		defaultProp.setProperty(Prop_Show_Down, "Y");
 		defaultProp.setProperty(Prop_Show_Run, "Y");
 		defaultProp.setProperty(Prop_HTTP_Proxy_Server, "");
 		defaultProp.setProperty(Prop_HTTP_Proxy_Port, "");
+		defaultProp.setProperty(Prop_underDrawingColor,"N");
+		defaultProp.setProperty(Prop_isDrawNormalPoint,"N");
+		defaultProp.setProperty(Prop_lineWidth,"3");	
+		defaultProp.setProperty(Prop_G_color,"FF00BE"); //Color(255, 0, 190), pink
+		defaultProp.setProperty(Prop_D_color,"800080"); //Color(128, 0, 128) purple
+		defaultProp.setProperty(Prop_C_color,"800080"); //Color(128, 0, 128) purple
+        defaultProp.setProperty(Prop_T_color,"0000FF");//Color(0, 0, 255); blue
+		defaultProp.setProperty(Prop_Z_color,"804000"); //Color(128, 64, 0); brown
+		defaultProp.setProperty(Prop_K_color,"FF0000"); //Color(255, 0, 0); red
+        defaultProp.setProperty(Prop_Y_color,"FF0000"); //Color(255, 0, 0); red
+		defaultProp.setProperty(Prop_L_color,"008000"); //Color(0, 128, 0); dark green
+        defaultProp.setProperty(Prop_default_color,"008000"); //Color(0, 128, 0); dark green
+		defaultProp.setProperty(Prop_grid_color,"008000"); //Color(0,128,0);dark green
+		defaultProp.setProperty(Prop_halfHourDashGrid,"Y"); // enable dash dot line for half hour clock grid
 		
-		prop = new Properties(defaultProp);
+		defaultProp.setProperty(Prop_dashsiding,"Y"); // enable dash  line for the siding stations
+		defaultProp.setProperty(Prop_showdistance,"Y"); // show current train distance in dynamic views
+		defaultProp.setProperty(Prop_nightmode,"Y"); // nigh modes for dynamic views
+		defaultProp.setProperty(Prop_showtrainstartend,"Y"); // show train start end sation name for the train name textbox
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		//prop = new Properties(defaultProp); //prop改成OrderedProperties之后必须注释掉本行，否则出错
+		prop = defaultProp;
 		trainSelectHistory = new Vector<String>();
 		cbTrainSelectHistory = new JComboBox(new DefaultComboBoxModel(trainSelectHistory));
 		
@@ -100,7 +155,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	public void doExit() {
 		if(chart != null)
-			if(new YesNoBox(this, _("The train graph is has changed.\nDo you want to save the changes?")).askForYes())
+			if(new YesNoBox(this, _("The graph preference will be auto-saved.\r Besides, do you want to save the graph change?\r")).askForYes())
 				doSaveChart(); 
 		
 		try {
@@ -301,6 +356,11 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		jToolBar.addSeparator();
 		jToolBar.add(jbSetupH);
 		jToolBar.add(jbSetupV);
+		//jToolBar.addSeparator();
+		//JButton jbSetupVV = createTBButton("setupVV", _("Overall Chart Settings"), Setup_Chart);
+		//jToolBar.add(jbSetupVV);
+		
+		
 		
 		//动态图是否开启
 		ImageIcon imageRun = new ImageIcon(this.getClass().getResource("/pic/show_run.png"));
@@ -356,6 +416,148 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		}
 		else
 			jtButtonUp.setSelected(false);
+		//2014-07-10 Joe add below setting to be supported in htrc.proc	
+		if(prop.getProperty(Prop_underDrawingColor).equalsIgnoreCase("N")) {
+			chartView.DEFAULT_UNDER_COLOR = new Color(220, 220, 220);
+			chartView.underDrawingColor = null;//当水印色为null的时候不画反向车次
+			prop.setProperty(Prop_underDrawingColor, "N");
+		}	
+        else
+			//2015-06-18 read in the underdrawing color setting from the htrc.prop file
+		{
+			chartView.DEFAULT_UNDER_COLOR = new Color(Integer.parseInt(prop.getProperty(Prop_underDrawingColor), 16));
+			chartView.underDrawingColor = chartView.DEFAULT_UNDER_COLOR ;
+			prop.setProperty(Prop_underDrawingColor,prop.getProperty(Prop_underDrawingColor));
+		}
+		if(prop.getProperty(Prop_isDrawNormalPoint).equalsIgnoreCase("N")) {
+		    chartView.isDrawNormalPoint = false;
+			prop.setProperty(Prop_isDrawNormalPoint, "N");
+		}	
+        else
+		{
+			chartView.isDrawNormalPoint = true;
+			prop.setProperty(Prop_isDrawNormalPoint, "Y");
+		}
+
+       // the width of train drawing lines,  0.5 * the width number
+		if(prop.getProperty(Prop_lineWidth).equalsIgnoreCase("1")) {
+			chartView.lineWidth = 0.5f;
+			prop.setProperty(Prop_lineWidth,"1");
+		}	
+        else if (prop.getProperty(Prop_lineWidth).equalsIgnoreCase("2"))
+		{
+			chartView.lineWidth = 1.0f;
+			prop.setProperty(Prop_lineWidth,"2");
+		}
+        else if (prop.getProperty(Prop_lineWidth).equalsIgnoreCase("3"))
+		{
+			chartView.lineWidth = 1.5f;
+			prop.setProperty(Prop_lineWidth,"3");
+		}
+        else if (prop.getProperty(Prop_lineWidth).equalsIgnoreCase("4"))
+		{
+			chartView.lineWidth = 2.0f;
+			prop.setProperty(Prop_lineWidth,"4");
+		}
+		else
+		//default setting the same as previous version
+		{
+			chartView.lineWidth = 0.5f;
+			prop.setProperty(Prop_lineWidth,"1");		
+		}
+	
+		if(prop.getProperty(Prop_halfHourDashGrid).equalsIgnoreCase("Y")) {
+			chartView.halfHourDashGrid = true;
+			prop.setProperty(Prop_halfHourDashGrid,"Y");
+		}
+        else
+		{
+			chartView.halfHourDashGrid = false;
+			prop.setProperty(Prop_halfHourDashGrid,"N");		
+		}	
+
+
+
+		
+		
+		if(prop.getProperty(Prop_dashsiding).equalsIgnoreCase("Y")) {
+			chartView.DASHSIDING = true;
+			prop.setProperty(Prop_dashsiding,"Y");
+		}
+        else
+		{
+			chartView.DASHSIDING = false;
+			prop.setProperty(Prop_dashsiding,"N");		
+		}
+
+
+		if(prop.getProperty(Prop_showdistance).equalsIgnoreCase("Y")) {
+			chartView.SHOWDISTANCE = true;
+			prop.setProperty(Prop_showdistance,"Y");
+		}
+        else
+		{
+			chartView.SHOWDISTANCE = false;
+			prop.setProperty(Prop_showdistance,"N");		
+		}
+
+		if(prop.getProperty(Prop_nightmode).equalsIgnoreCase("Y")) {
+			chartView.NIGHTMODE = true;
+			prop.setProperty(Prop_nightmode,"Y");
+		}
+        else
+		{
+			chartView.NIGHTMODE = false;
+			prop.setProperty(Prop_nightmode,"N");		
+		}
+
+		if(prop.getProperty(Prop_showtrainstartend).equalsIgnoreCase("Y")) {
+			chartView.SHOWTRAIN_StartEnd = true;
+			prop.setProperty(Prop_showtrainstartend,"Y");
+		}
+        else
+		{
+			chartView.SHOWTRAIN_StartEnd = false;
+			prop.setProperty(Prop_showtrainstartend,"N");		
+		}
+		
+		
+		
+		
+		
+
+		String c1 = prop.getProperty(Prop_G_color);
+		String c2 = prop.getProperty(Prop_D_color);
+		String c3 = prop.getProperty(Prop_C_color);
+		String c4 = prop.getProperty(Prop_Z_color);
+		String c5 = prop.getProperty(Prop_T_color);
+		String c6 = prop.getProperty(Prop_K_color);
+		String c7 = prop.getProperty(Prop_L_color);
+		String c8 = prop.getProperty(Prop_Y_color);
+		String c9 = prop.getProperty(Prop_default_color);
+		String c10 = prop.getProperty(Prop_grid_color);
+// use 	Integer.parseInt(c1, 16) to cnvert the hex "string" to the color	
+		chartView.G_color_chartview = new Color(Integer.parseInt(c1, 16));
+		chartView.D_color_chartview = new Color(Integer.parseInt(c2, 16));
+		chartView.C_color_chartview = new Color(Integer.parseInt(c3, 16));
+		chartView.Z_color_chartview = new Color(Integer.parseInt(c4, 16));
+		chartView.T_color_chartview = new Color(Integer.parseInt(c5, 16));
+		chartView.K_color_chartview = new Color(Integer.parseInt(c6, 16));
+		chartView.L_color_chartview = new Color(Integer.parseInt(c7, 16));
+		chartView.Y_color_chartview = new Color(Integer.parseInt(c8, 16));
+		chartView.default_color_chartview = new Color(Integer.parseInt(c9, 16));
+		chartView.gridColor = new Color(Integer.parseInt(c10, 16));	
+		//chartView.gridColor = Color.GRAY;//808080, the color setting of previous version 
+		prop.setProperty(Prop_G_color,c1);
+		prop.setProperty(Prop_D_color,c2);
+		prop.setProperty(Prop_C_color,c3);
+		prop.setProperty(Prop_Z_color,c4);
+		prop.setProperty(Prop_T_color,c5);
+		prop.setProperty(Prop_K_color,c6);
+		prop.setProperty(Prop_L_color,c7);
+		prop.setProperty(Prop_Y_color,c8);
+		prop.setProperty(Prop_default_color,c9);		
+		prop.setProperty(Prop_grid_color,c10);		
 		//让ChartView右下角的上下行状态显示图标显示正确的内容
 		chartView.updateUpDownDisplay();
 
@@ -424,7 +626,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	private final String Setup_Margin = "Setup_MarginSet";
 	private final String Setup_Time = "Setup_TimeSet";
 	private final String Setup_Dist = "Setup_DistSet";
-
+	private final String Setup_Chart = "Setup_ChartSet";
 	private final String Tools_Circuit = "Tools_Circuit";
 	private final String Tools_Train = "Tools_Train";
 	
@@ -454,7 +656,14 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		menuSetup.addSeparator();
 		menuSetup.add(createMenuItem(_("Timeline..."), Setup_Time)).setMnemonic(KeyEvent.VK_T);
 		menuSetup.add(createMenuItem(_("Distance Bar..."), Setup_Dist)).setMnemonic(KeyEvent.VK_D);
+		//new added
+		menuSetup.addSeparator();
+		menuSetup.add(createMenuItem(_("ChartSet..."), Setup_Chart)).setMnemonic(KeyEvent.VK_W);
 
+
+		
+		
+		
         JMenu menuEdit = createMenu(_("EditMenu"));
 		menuEdit.setMnemonic(KeyEvent.VK_E);
         menuEdit.add(createMenuItem(_("Circuit..."), Edit_Circuit)).setMnemonic(KeyEvent.VK_C);
@@ -534,6 +743,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 			this.doTimeSet();
 		} else if (command.equalsIgnoreCase(Setup_Dist)) {
 			this.doDistSet();
+		 } else if (command.equalsIgnoreCase(Setup_Chart)) {
+		    this.doChartSet();
 		} else if (command.equalsIgnoreCase(Edit_Circuit)) {
 			this.doEditCircuit();
 		} else if (command.equalsIgnoreCase(Edit_Trains)) {
@@ -565,7 +776,37 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	private void doTrainTools() {
 		//new MessageBox(this, "todo：从网络获取数据生成车次描述文件(.trf文件)。").showMessage();
+
+
+ 
+     
+
+		
+		
+		
 		if(new YesNoBox(this, _("This operation will delete all the train information on the graph, then import the train information from the default time table for this circuit. Continue?")).askForYes()) {
+			//以下设置影响FindTrainsDialog.java
+			   // if ( new YesNoBox(this, _("only common trains? 是否排除动车组（G/C/D)车次即只铺画普通机辆车次（Z/T/K/L/Y/xxxx)？")).askForYes()) {
+				// //仅铺画普通列车
+				// type_case  = 1;
+				// }
+				// else
+				// {
+				// if ( new YesNoBox(this, _("only CRH? 是否排除普通机辆（Z/T/K/L/Y/xxxx)车次即只铺画动车组？")).askForYes()) {  
+				// //仅铺画动车组
+				// type_case = 2;
+				// }
+				// else
+				// {//铺画全部列车
+				// type_case = 3;
+				// }
+			
+			    // }
+				//以下设置影响FindTrainsDialog.java
+			   my_regexp = JOptionPane.showInputDialog(null,"Please input the regular expression to define the trains which you want to chart\r请输入用来描述你要铺画的列车车次的简单正则表达式:","Z.*|T.*|L.*|K.*|Y.*|S.*|G.*|D.*|C.*|^\\d.*");
+               //my_regexp = JOptionPane.showInputDialog(null,"Please input the regular expression to define the trains which you want to chart:Z.*|T.*|L.*|K.*|Y.*|S.*|G.*|D.*|C.*|^\\d.*","Z.*|T.*|L.*|K.*|Y.*|S.*|G.*|D.*|C.*|^\\d.*");
+			   //下面是一个不完整的正则表达式用例
+		       //System.out.println(inputValue.matches(".*joe.*"));
 			FindTrainsDialog waitingBox = new FindTrainsDialog(this);
 			waitingBox.findTrains();
 		}
@@ -787,11 +1028,13 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 * doSaveChartAs
 	 */
 	public void doSaveChartAs() {
-		JFileChooser chooser = new JFileChooser();
+	    File chartFile = new File(prop.getProperty(Prop_Working_Chart));
+		JFileChooser chooser = new JFileChooser(chartFile);
 		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle(_("Save As"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+
 		chooser.setMultiSelectionEnabled(false);
 		chooser.setFileFilter(new TRCFilter());
 		chooser.setFont(new java.awt.Font(_("FONT_NAME"), 0, 12));
@@ -821,7 +1064,8 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	 * doLoadChart
 	 */
 	public void doLoadChart() {
-		JFileChooser chooser = new JFileChooser();
+		File chartFile = new File(prop.getProperty(Prop_Working_Chart));
+		JFileChooser chooser = new JFileChooser(chartFile);
 		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle(_("Open"));
@@ -860,8 +1104,10 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 	public void doLoadTrain() {
 		if(!(new YesNoBox(this, _("Load train information file and overwrite the existing information. Continue?")).askForYes()))
 			return;
-
-		JFileChooser chooser = new JFileChooser();
+		File chartFile = new File(prop.getProperty(Prop_Working_Chart));
+		JFileChooser chooser = new JFileChooser(chartFile);
+		//change the default directly when filechooser dialog show to the working_chart dir in htrc props.
+		//JFileChooser chooser = new JFileChooser();
 		ETRC.setFont(chooser);
 
 		chooser.setDialogTitle(_("Load Train Information"));
@@ -914,6 +1160,22 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 
 	}
 
+	
+	/**
+	 * doChartSet
+	 */
+	private void doChartSet() {
+		ChartSetDialog dlg = new ChartSetDialog(this);
+		Dimension dlgSize = dlg.getPreferredSize();
+		Dimension frmSize = getSize();
+		Point loc = getLocation();
+		dlg.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+				(frmSize.height - dlgSize.height) / 2 + loc.y);
+		dlg.setModal(false);
+		dlg.pack();
+		dlg.setVisible(true);
+	}
+	
 	/**
 	 * doDistSet
 	 */
@@ -1005,3 +1267,7 @@ public class MainFrame extends JFrame implements ActionListener, Printable {
 		}
 	}
 }
+
+
+
+

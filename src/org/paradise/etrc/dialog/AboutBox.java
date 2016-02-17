@@ -53,16 +53,16 @@ public class AboutBox extends JDialog implements ActionListener {
 		this.setTitle(_("About"));
 		panel1.setLayout(gridBagLayout1);
 		label1.setFont(new java.awt.Font("Dialog", 0, 12));
-		label1.setText(_("LGuo's Train Graph"));
+		label1.setText("LGuo's Train Graph");
 
-		label2.setText("Version 2.60");
-		label3.setText("Build 20100916 Revision 102");
+		label2.setText("Version 2.70");
+		label3.setText("Build 20160228 Revision 113");
 
 		label4.setFont(new java.awt.Font("Dialog", 0, 12));
-		label4.setText(_("Author: Guo Lei (HASEA ID:lguo)"));
-		label5.setText(_("Thanks to: achen1 on HASEA"));
+		label4.setText("Author: Guo Lei (lguo), lifanxi, westeast1984");
+		label5.setText("http://train-graph.googlecode.com");
 		label5.setFont(new java.awt.Font("Dialog", 0, 12));
-		label6.setText("http://train-graph.googlecode.com    ");
+		label6.setText("https://github.com/lifanxi/train-graph");
 		label6.setFont(new java.awt.Font("Dialog", 0, 12));
 
 		button1.setActionCommand("Ok");

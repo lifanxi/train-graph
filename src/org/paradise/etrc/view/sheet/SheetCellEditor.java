@@ -107,7 +107,7 @@ public class SheetCellEditor extends AbstractCellEditor implements TableCellEdit
 		if(stop == null) {
 			//原来没有数据，并且用户输入了时间－－设置标志，通知DataModel加入
 			if(!time.equals("")) {
-				stop = new Stop(null, time, time, false);
+				stop = new Stop(null, time, time, false,"0");
 			}
 			//原来没有数据，并且没有输入时间则直接返回空值（什么也不做，让stop=null返回）
 		}

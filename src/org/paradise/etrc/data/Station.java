@@ -5,24 +5,29 @@ package org.paradise.etrc.data;
     public boolean hide = false;
     public int level = 0;
     public int dist = 0;
-
-    public Station(String _name, int _dist, int _level, boolean _hide) {
+//2015-09-06增加车站的接续站属性，用来描述当前车站所通达的跨线车站
+	public String following = "";
+//2015-09-19增加车站（实际上是铁路区间的）复线属性，
+    public boolean doubletrack  = true; 
+    public Station(String _name, int _dist, int _level, boolean _hide, String _following, boolean _doubletrack) {
       name = _name;
       level = _level;
       dist = _dist;
       hide = _hide;
+	  following = _following;
+	  doubletrack = _doubletrack;
     }
     
     public Station copy() {
-    	return new Station(this.name, this.dist, this.level, this.hide);
+    	return new Station(this.name, this.dist, this.level, this.hide,this.following, this.doubletrack);
     }
 
     public Station(String _name, int _dist, int _level) {
-      this(_name, _dist, _level, false);
+      this(_name, _dist, _level, false,"",true);
     }
 
     public Station(String _name, int _dist) {
-      this(_name, _dist, 0, false);
+      this(_name, _dist, 0, false,"",true);
     }
     
     public String getOneName() {

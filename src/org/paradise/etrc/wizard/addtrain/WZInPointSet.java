@@ -235,7 +235,7 @@ public class WZInPointSet extends WizardDialog {
 			return;
 		else {
 			//TODO: train.xstop.setTime;
-			Stop stop = new Stop(curStation.name, time, time, false);
+			Stop stop = new Stop(curStation.name, time, time, false,"0");
 			chart.insertNewStopToTrain(train, stop);
 			
 			super.doNext();

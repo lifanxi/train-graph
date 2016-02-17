@@ -48,21 +48,21 @@ public class AddTrainWizard extends Wizard {
 					downName = step1.getDownName();
 					upName = step1.getUpName();
 					
-					if(new YesNoBox(chartView.mainFrame, _("Automatically get train informtaion from web?")).askForYes()) {
-						String proxyAddress = chartView.mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Server);
-						int proxyPort = 0;
-						try {
-							proxyPort = Integer.parseInt(chartView.mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Port));
-						}
-						catch (NumberFormatException ex) {
-						    proxyPort = 0;
-						}
-						train = TrainDialog.doLoadTrainFromWeb(fullName, proxyAddress, proxyPort);
-						if (train == null) 
-						{
-							new MessageBox(chartView.mainFrame, String.format(_("Unable to get train information for the train %s from web."), fullName)).showMessage();
-						}
-					}
+					    //if(new YesNoBox(chartView.mainFrame, _("Automatically get train informtaion from web?")).askForYes()) {	
+						// String proxyAddress = chartView.mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Server);
+						// int proxyPort = 0;
+						// try {
+							// proxyPort = Integer.parseInt(chartView.mainFrame.prop.getProperty(MainFrame.Prop_HTTP_Proxy_Port));
+						// }
+						// catch (NumberFormatException ex) {
+						    // proxyPort = 0;
+						// }
+						// train = TrainDialog.doLoadTrainFromWeb(fullName, proxyAddress, proxyPort);
+						// if (train == null) 
+						// {
+							// new MessageBox(chartView.mainFrame, String.format(_("Unable to get train information for the train %s from web."), fullName)).showMessage();
+						// }
+					    // }
 					if ((train == null) && (new YesNoBox(chartView.mainFrame, _("Automatically import train informtaion from build-in time table?")).askForYes())) {
 						String[] names = fullName.split("/");
 						Vector<Train> trains = new Vector<Train>();

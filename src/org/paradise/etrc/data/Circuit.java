@@ -13,7 +13,7 @@ import static org.paradise.etrc.ETRC._;
  */
 
 public class Circuit {
-	public static int MAX_STATION_NUM = 256;
+	public static int MAX_STATION_NUM = 1024;  // joe added it to 1024 on 2015/6/9
 
 	public String name = "";
 
@@ -35,7 +35,6 @@ public class Circuit {
 
 		for (int i = 0; i < stationNum; i++)
 			cir.stations[i] = this.stations[i].copy();
-
 		return cir;
 	}
 
@@ -191,6 +190,28 @@ public class Circuit {
 		
 		return "";
 	}
+
+
+	//查找列车train在距离dist处（某站）停靠的时间 2015-09-07
+	//返回整数
+	public int getStationStopTime(Train train, int dist) {
+		for(int i=0; i<train.stopNum; i++) {
+			//获取停站的里程值
+			int dd = getStationDist(train.stops[i].stationName);
+			if(dist == dd ) {
+			int t1 = Train.trainTimeToInt(train.stops[i].arrive);
+			int t2 = Train.trainTimeToInt(train.stops[i].leave);
+			//跨越0点情况的处理
+					if(t2 < t1) {
+						t2 += 24 * 60;
+					}
+			return t2-t1 ;
+            }
+
+	    }	
+		return 0;
+
+	}
 	
 //	private boolean isBetween(int myTime, int t1, int t2) {
 //		if(t1 < t2)
@@ -261,6 +282,78 @@ public class Circuit {
 		
 		return -1;
 	}
+	
+	
+	
+		//查找train在时刻time的时候的速度值，单位km/h，不在运行时刻内则返回0.
+	public int getSpeedOfTrain(Train train, int time) {
+		//停站的情况
+		for(int i=0; i<train.stopNum; i++) {
+			int t1 = Train.trainTimeToInt(train.stops[i].arrive);
+			int t2 = Train.trainTimeToInt(train.stops[i].leave);
+			
+			//跨越0点情况的处理
+			int myTime = time;
+			if(t2 < t1) {
+				if (myTime < t2)
+					myTime += 24 * 60;
+				t2 += 24 * 60;
+			}
+
+			if(t1<= myTime && t2 >= myTime ) {
+//				System.out.println(train.getTrainName() + "^" + time + "~" + train.stops[i].stationName + 
+//						"~" + t1 + "~" + train.stops[i].arrive + 
+//						"~" + t2 + "~" + train.stops[i].leave);
+				int d = getStationDist(train.stops[i].stationName);
+				
+				if(d >= 0)
+					//return d;
+				    return 0;
+			}
+		}
+		
+		//运行中的情况
+		for(int i=0; i<train.stopNum-1; i++) {
+			Stop s1 = train.stops[i];
+			Stop s2 = train.stops[i+1];
+			
+			int d1 = getStationDist(s1.stationName);
+			int d2 = getStationDist(s2.stationName);
+			
+			int t1 = Train.trainTimeToInt(s1.leave);
+			int t2 = Train.trainTimeToInt(s2.arrive);
+			
+			//不在本线路上-继续找（可能下一天会在本线路上的）
+			if(d1<0 || d2<0)
+				continue;
+			
+			//跨越0点情况的处理
+			int myTime = time;
+			if(t2 < t1) {
+				if (myTime < t2)
+					myTime += 24 * 60;
+				t2 += 24 * 60;
+			}
+			
+			if(t1 <= myTime && t2 >= myTime) {
+				//int dist = (d2-d1)*(myTime-t1)/(t2-t1) + d1;
+//				System.out.println(train.getTrainName() + "^" + myTime + "~" + train.stops[i].stationName + 
+//						"~" + t1 + "~" + train.stops[i].arrive + 
+//						"~" + t2 + "~" + train.stops[i].leave + "*****" 
+//						+ d1 + "~" + d2 + "~" + dist);
+                //return dist;
+				int speed = (d2-d1)*60/(t2-t1) ;  //km/h
+				if (speed <0)
+				speed = -speed;
+				return speed;
+			}
+		}
+		
+		return 0;
+	}
+	
+	
+	
 
 	public void loadFromFile(String file) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(new BOMStripperInputStream(new FileInputStream(file)),"UTF-8"));
@@ -374,6 +467,71 @@ public class Circuit {
 		return -1;
 	}
 
+	//2015-09-21
+	//查找上行列车在当前里程dist所处的区间前方车站station的Index
+	//仅用于上行列车，其距离逐步减小
+	public int getStationIndexUp(int dist) {
+		//倒序排除
+		//车站index从stationNum -1到0共stationNum个数
+		int i ;
+		for (i = stationNum -1 ; i >=0 ; i--) {
+			
+			if ( dist > stations[i].dist) 
+			{
+				break ;			
+			}
+			else
+			{
+				//donothing,继续下一次循环
+			}
+			
+			
+		}
+		//经过上面的循环后，i最大可能为stationNum -2 ，也可能为-1
+		// 如果i为-1，0 则返回0，
+		//否则返回i;
+
+          if ( i < 0 ) {
+			  return 0;
+		  }
+		  else {
+			return i;  
+		  }
+		
+	}	
+	
+	//2015-09-21
+	//查找下行列车在当前里程dist所处的区间前方车站station的Index
+	//仅用于下行列车，其距离逐步增大
+	public int getStationIndexDown(int dist) {
+		//正序排除
+		//车站index从0到stationNum -1共stationNum个数
+		int i ;
+		for (i = 0; i < stationNum ; i++) {
+			
+			if ( dist < stations[i].dist) 
+			{
+				break ;			
+			}
+			else
+			{
+				//donothing,继续下一次循环
+			}
+			
+			
+		}
+		//经过上面的循环后，i最大可能为stationNum（溢出） ，也可能为1
+		// 如果i为-1，0 则返回0，
+		//否则返回i;
+
+          if ( i == stationNum ) {
+			  return stationNum - 1;
+		  }
+		  else {
+			return i;  
+		  }
+		
+	}	
 	//查找距离dist最近的station的Index
 	public int getStationIndex(int dist) {
 		int gap[] = new int[stationNum];
@@ -436,8 +594,10 @@ public class Circuit {
 		out.write(length + "");
 		out.newLine();
 		for (int i = 0; i < stationNum; i++) {
+			//out.write(stations[i].name + "," + stations[i].dist + ","
+			//		+ stations[i].level + "," + stations[i].hide);
 			out.write(stations[i].name + "," + stations[i].dist + ","
-					+ stations[i].level + "," + stations[i].hide);
+					+ stations[i].level + "," + stations[i].hide + "," + stations[i].following + "," + stations[i].doubletrack);
 			out.newLine();
 		}
 	}
@@ -501,7 +661,27 @@ public class Circuit {
 				throw new IOException(String.format(_("Invalid hidden type data for station %s"), stName));
 		}
 
-		Station st = new Station(stName, dist, level, hide);
+		//如果获取的station属性个数大于4，则表明其含有接续站属性，覆盖当前设置；否则取默认。向前兼容
+		String following = "";
+		if (stStation.length > 4) {
+			following = stStation[4];
+		}
+		//如果获取的station属性个数大于5，则表明其含有复线区间属性，覆盖当前设置；否则取默认。向前兼容
+		boolean doubletrack = true;
+		if (stStation.length > 5) {
+		
+			String stdoubletrack = stStation[5];
+			if (stdoubletrack.equals("1") || stdoubletrack.equalsIgnoreCase("t")
+					|| stdoubletrack.equalsIgnoreCase("true"))
+				doubletrack = true;
+			else if (stdoubletrack.equals("0") || stdoubletrack.equalsIgnoreCase("f")
+					|| stdoubletrack.equalsIgnoreCase("false"))
+				doubletrack = false;
+			else
+				throw new IOException(String.format(_("Invalid doubletrack type data for station %s"), stName));
+			
+		}		
+		Station st = new Station(stName, dist, level, hide,following, doubletrack);
 		stations[stationNum] = st;
 		stationNum++;
 	}

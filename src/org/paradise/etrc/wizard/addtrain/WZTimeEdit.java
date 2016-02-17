@@ -10,7 +10,7 @@ import javax.swing.text.DefaultCaret;
 import org.paradise.etrc.data.Stop;
 import org.paradise.etrc.data.Train;
 import org.paradise.etrc.wizard.WizardDialog;
-
+import org.paradise.etrc.dialog.YesNoBox;
 import static org.paradise.etrc.ETRC._;
 
 public class WZTimeEdit extends WizardDialog {
@@ -69,6 +69,8 @@ public class WZTimeEdit extends WizardDialog {
 		
 		JButton addFButton = new JButton(_("Add(Before)"));
 		JButton addBButton = new JButton(_("Add(After)"));
+		JButton addTButton = new JButton(_("Interpolate Timetable"));
+		//JButton addTButton = new JButton(_("推算时刻"));
 		JButton delButton = new JButton(_("Delete"));
 		
 		addFButton.addActionListener(new ActionListener() {
@@ -77,7 +79,7 @@ public class WZTimeEdit extends WizardDialog {
 					table.getCellEditor().stopCellEditing();
 
 				int row = table.getSelectedRow();
-				model.myTrain.insertStop(new Stop(_("Station"), "00:00", "00:00", false), row);
+				model.myTrain.insertStop(new Stop(_("Station"), "00:00", "00:00", false,"0"), row);
 				model.fireTableDataChanged();
 				
 				table.getSelectionModel().setSelectionInterval(row, row);
@@ -89,7 +91,7 @@ public class WZTimeEdit extends WizardDialog {
 					table.getCellEditor().stopCellEditing();
 
 				int row = table.getSelectedRow() + 1;
-				model.myTrain.insertStop(new Stop(_("Station"), "00:00", "00:00", false), row);
+				model.myTrain.insertStop(new Stop(_("Station"), "00:00", "00:00", false,"0"), row);
 				model.fireTableDataChanged();
 				
 				table.getSelectionModel().setSelectionInterval(row, row);
@@ -108,10 +110,102 @@ public class WZTimeEdit extends WizardDialog {
 			}
 		});
 		
+		addTButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				        table.getCellEditor().stopCellEditing();
+				int curIndex = table.getSelectedRow();
+
+				if(curIndex<1)
+				{
+					System.out.println("当前行为首行，无法计算！");
+					return;
+				}
+
+
+			 int t1 = Train.trainTimeToInt(model.myTrain.stops[curIndex-1].leave);
+			 int t2 = Train.trainTimeToInt(model.myTrain.stops[curIndex+1].arrive);
+			 
+			 int d1 = Integer.parseInt(model.myTrain.stops[curIndex-1].licheng);
+			 int d2 = Integer.parseInt(model.myTrain.stops[curIndex+1].licheng); 
+		 
+			 if (d1 >= d2) {
+					System.out.println("错误：出发站里程大于等于到达站里程");
+					return ;
+			 }
+			 if (t2< t1) {
+					t2 = t2 + 24 * 60;
+			 }
+			double mySpeed = ((double)(d2-d1)/(double)(t2-t1));
+			System.out.println(d2+ " " + d1 + " " + t2 + " " + t1 + " " + mySpeed + "km/min");
+			 //如果里程仍然为0（包括输入未确认），则提示需要更新里程
+			 String aa = model.myTrain.stops[curIndex].licheng ;
+			 int d ;
+			 int t ;
+			 if (aa.equalsIgnoreCase("0")){
+				 System.out.println("错误：通过站里程为0");
+				 return ;
+			 }
+			 
+			//如果里程含有#号，则为相对里程，用于计算
+			if(aa.indexOf("#")>=0)
+			{
+					  aa = aa.replaceAll("#","");
+					  d =  Integer.parseInt(aa);
+					  
+					  if (d >= (d2 -d1)){
+						System.out.println("错误：通过站相对里程大于出发站到达站区间里程");  
+						return;
+					  }
+					  if (d <=0){
+						System.out.println("错误：通过站相对里程为非正数");  
+						return;
+					  }						  
+					  
+					  t =  (int)	((d- 0)/mySpeed + t1) ;
+			}
+			else
+		    //里程为绝对里程，需要计算
+			{
+					  aa= aa;
+					  d =  Integer.parseInt(aa);
+					  
+					  if (d <= d1 ){
+						System.out.println("错误：通过站里程小于等于出发站里程");
+						return ;
+					  }
+					  if (d >= d2 ){
+						System.out.println("错误：通过站里程大于等于到达站里程");
+						return ;
+					  }					  
+					  
+					  t =  (int)	((d- d1)/mySpeed + t1) ;
+					 
+			}
+			System.out.println(d);
+			System.out.println(t);	
+				
+
+			if (t > (24*60)) {
+				t = t- 24 *60 ;
+			}
+			System.out.println(d2+ " " + d1 + " " + t2 + " " + t1 + " " + mySpeed + "km/min, pass time:" + t);
+			String oo =	Train.intToTrainTime(t);
+			//String oo = "13:00";
+				model.myTrain.stops[curIndex].arrive = oo;
+				//model.myTrain.stops[curIndex].leave = model.myTrain.stops[curIndex].arrive;
+                //model.fireTableDataChanged();				
+                model.myTrain.stops[curIndex].leave = oo; 
+                model.fireTableDataChanged();
+				table.getSelectionModel().setSelectionInterval(curIndex, curIndex);
+
+			}
+		});
+		
 //		right.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 		
 		right.add(addFButton);
 		right.add(addBButton);
+		right.add(addTButton);
 		right.add(delButton);
 				
 		return btPane;

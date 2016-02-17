@@ -29,6 +29,8 @@ import org.paradise.etrc.filter.CSVFilter;
 import org.paradise.etrc.filter.TRFFilter;
 import org.paradise.etrc.dialog.MessageBox;
 
+import org.paradise.etrc.wizard.addtrain.TrainTable;
+//import org.paradise.etrc.wizard.addtrain.TrainTableModel;
 import static org.paradise.etrc.ETRC._;
 
 
@@ -41,10 +43,11 @@ public class TrainDialog extends JDialog {
 	private static final long serialVersionUID = 4016578609920190434L;
 
 	private TrainTable table;
+	//private TrainTableModel model;
 	private JTextField tfNameU;
 	private JTextField tfNameD;
 	private JTextField tfName;
-	
+
 	private MainFrame mainFrame;
 	
 	public boolean isCanceled = false;
@@ -56,7 +59,8 @@ public class TrainDialog extends JDialog {
 
 		table = new TrainTable();
 		table.setModel(new TrainTableModel(_train));
-
+		//model = new TrainTableModel(_train);
+        //table.setModel(model);
 		try {
 			jbInit();
 			pack();
@@ -205,7 +209,7 @@ public class TrainDialog extends JDialog {
 		buttonPanel.add(btSave);
 		buttonPanel.add(btOK);
 		buttonPanel.add(btCancel);
-		buttonPanel.add(btWeb);
+		//buttonPanel.add(btWeb);// joe commented out on 2015/06/10 due to now 12306 interface can't work!
 
 		JPanel rootPanel = new JPanel();
 		rootPanel.setLayout(new BorderLayout());
@@ -237,7 +241,7 @@ public class TrainDialog extends JDialog {
 				String name = _("Station");
 				String arrive = "00:00";
 				String leave = "00:00";
-				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), 
+				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false,"0"), 
 						table.getSelectedRow());
 
 				table.revalidate();
@@ -256,16 +260,122 @@ public class TrainDialog extends JDialog {
 				String name = _("Station");
 				String arrive = "00:00";
 				String leave = "00:00";
-				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false), curIndex+1);
+				((TrainTableModel)table.getModel()).myTrain.insertStop(new Stop(name, arrive, leave, false,"0"), curIndex+1);
 
 				table.revalidate();
 			}
 		});
 
+		JButton btFil = new JButton(_("Interpolate Timetable"));
+		//JButton btFil = new JButton(_("推算时刻"));
+		btFil.setFont(new Font("dialog", 0, 12));
+		btFil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//如果没有下面两行，则补全时刻被单击前选中的单元格不会被更新！
+				if (table.getCellEditor() != null)
+				        table.getCellEditor().stopCellEditing();
+				int curIndex = table.getSelectedRow();
+
+				if(curIndex<1)
+				{
+					System.out.println("当前行为首行，无法计算！");
+					return;
+				}
+
+
+			 int t1 = Train.trainTimeToInt(((TrainTableModel)table.getModel()).myTrain.stops[curIndex-1].leave);
+			 int t2 = Train.trainTimeToInt(((TrainTableModel)table.getModel()).myTrain.stops[curIndex+1].arrive);
+			 
+			 int d1 = Integer.parseInt(((TrainTableModel)table.getModel()).myTrain.stops[curIndex-1].licheng);
+			 int d2 = Integer.parseInt(((TrainTableModel)table.getModel()).myTrain.stops[curIndex+1].licheng); 
+		 
+			 if (d1 >= d2) {
+					System.out.println("错误：出发站里程大于等于到达站里程");
+					return ;
+			 }
+			 if (t2< t1) {
+					t2 = t2 + 24 * 60;
+			 }
+			double mySpeed = ((double)(d2-d1)/(double)(t2-t1));
+			System.out.println(d2+ " " + d1 + " " + t2 + " " + t1 + " " + mySpeed + "km/min");
+			 //如果里程仍然为0（包括输入未确认），则提示需要更新里程
+			 String aa = ((TrainTableModel)table.getModel()).myTrain.stops[curIndex].licheng ;
+			 int d ;
+			 int t ;
+			 if (aa.equalsIgnoreCase("0")){
+				 System.out.println("错误：通过站里程为0");
+				 return ;
+			 }
+			 
+			//如果里程含有#号，则为相对里程，用于计算
+			if(aa.indexOf("#")>=0)
+			{
+					  aa = aa.replaceAll("#","");
+					  d =  Integer.parseInt(aa);
+					  
+					  if (d >= (d2 -d1)){
+						System.out.println("错误：通过站相对里程大于出发站到达站区间里程");  
+						return;
+					  }
+					  if (d <=0){
+						System.out.println("错误：通过站相对里程为非正数");  
+						return;
+					  }						  
+					  
+					  t =  (int)	((d- 0)/mySpeed + t1) ;
+			}
+			else
+		    //里程为绝对里程，需要计算
+			{
+					  aa= aa;
+					  d =  Integer.parseInt(aa);
+					  
+					  if (d <= d1 ){
+						System.out.println("错误：通过站里程小于等于出发站里程");
+						return ;
+					  }
+					  if (d >= d2 ){
+						System.out.println("错误：通过站里程大于等于到达站里程");
+						return ;
+					  }					  
+					  
+					  t =  (int)	((d- d1)/mySpeed + t1) ;
+					 
+			}
+			System.out.println(d);
+			System.out.println(t);	
+				
+
+			if (t > (24*60)) {
+				t = t- 24 *60 ;
+			}
+			System.out.println(d2+ " " + d1 + " " + t2 + " " + t1 + " " + mySpeed + "km/min, pass time:" + t);
+			String oo =	Train.intToTrainTime(t);
+			System.out.println(oo);
+			//String oo = "13:00";
+				((TrainTableModel)table.getModel()).myTrain.stops[curIndex].arrive = oo;
+				//model.myTrain.stops[curIndex].leave = model.myTrain.stops[curIndex].arrive;
+                //model.fireTableDataChanged();		
+                ((TrainTableModel)table.getModel()).fireTableDataChanged();				
+                ((TrainTableModel)table.getModel()).myTrain.stops[curIndex].leave = oo; 
+                ((TrainTableModel)table.getModel()).fireTableDataChanged();
+				//table.revalidate();
+				//如果没有updateui，则只有单击别的行后当前被推算时刻行的时刻才会显示更新后的时刻。
+				table.updateUI();
+				//table.setModel(model);
+				//curIndex = table.getSelectedRow();
+				//table.getSelectionModel().setSelectionInterval(curIndex-1, curIndex);
+
+			}
+		});
+
+		
+		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(btAdd);
 		buttonPanel.add(btApp);
 		buttonPanel.add(btDel);
+		buttonPanel.add(btFil);
 		
 		JLabel lbNameU = new JLabel(_("Up-going:"));
 		lbNameU.setFont(new Font("dialog", 0, 12));
@@ -401,7 +511,7 @@ public class TrainDialog extends JDialog {
 			String [] items = inputLine.split(",");
 			// if (items[4].indexOf("----") != -1) items[4] = items[5];
 			// if (items[5].indexOf("----") != -1) items[5] = items[4];
-			Stop stop = new Stop(items[2].split("\\^")[0].trim(), items[4].trim(), items[5].trim(), true);
+			Stop stop = new Stop(items[2].split("\\^")[0].trim(), items[4].trim(), items[5].trim(), true,"0");
 			train.appendStop(stop);
 			String c = items[3].trim();
 			if ((c.charAt(c.length() - 1) - '0') % 2 == 0) {
@@ -497,7 +607,7 @@ public class TrainDialog extends JDialog {
 		 * @return int
 		 */
 		public int getColumnCount() {
-			return 4;
+			return 5;
 		}
 
 		/**
@@ -518,7 +628,7 @@ public class TrainDialog extends JDialog {
 		 */
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return (columnIndex == 0) || (columnIndex == 1)	
-				|| (columnIndex == 2) || (columnIndex == 3);
+				|| (columnIndex == 2) || (columnIndex == 3) || (columnIndex == 4);
 		}
 
 		/**
@@ -535,6 +645,8 @@ public class TrainDialog extends JDialog {
 				return String.class;
 			case 3:
 				return Boolean.class;
+			case 4:
+				return String.class;
 			default:
 				return null;
 			}
@@ -557,6 +669,9 @@ public class TrainDialog extends JDialog {
 				return myTrain.stops[rowIndex].leave;
 			case 3:
 				return Boolean.valueOf(myTrain.stops[rowIndex].isPassenger);
+			case 4:
+			    return myTrain.stops[rowIndex].licheng;
+				//return "1xx";
 			default:
 				return null;
 			}
@@ -587,6 +702,9 @@ public class TrainDialog extends JDialog {
 				case 3:
 					myTrain.stops[rowIndex].isPassenger = ((Boolean) aValue).booleanValue();
 					break;
+				case 4:
+					myTrain.stops[rowIndex].licheng = (String) aValue;
+					break;		
 				default:
 				}
 //			} catch (ParseException ex) {
@@ -611,6 +729,8 @@ public class TrainDialog extends JDialog {
 				return _("Leave");
 			case 3:
 				return _("Passenger");
+			case 4:
+				return _("Distance");				
 			default:
 				return null;
 			}
@@ -633,25 +753,27 @@ public class TrainDialog extends JDialog {
 		}
 	}
 
-	public class TrainTable extends JTable {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 2242015871442153005L;
+	// 2015-09-17 注释掉下面的TrainTable class定义，采用import org.paradise.etrc.wizard.addtrain.TrainTable;可以实现表格内容居中对齐！
+	//与添加车次向导中内置时刻表查询所得表格样式一致！
+	// public class TrainTable extends JTable {
+		// /**
+		 // * 
+		 // */
+		// private static final long serialVersionUID = 2242015871442153005L;
 
-		public TrainTable() {
-			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		}
+		// public TrainTable() {
+			// setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// }
 
-		public Dimension getPreferredScrollableViewportSize() {
-			int h = this.getRowHeight() * 12;
-			int w = super.getPreferredScrollableViewportSize().width;
-			return new Dimension(w, h);
-		}
+		// public Dimension getPreferredScrollableViewportSize() {
+			// int h = this.getRowHeight() * 12;
+			// int w = super.getPreferredScrollableViewportSize().width;
+			// return new Dimension(w, h);
+		// }
 
-		public boolean isRowSelected(int row) {
-			//      return chart.trains[row].equals(chart.getActiveTrain());
-			return super.isRowSelected(row);
-		}
-	}
+		// public boolean isRowSelected(int row) {
+		//	    // return chart.trains[row].equals(chart.getActiveTrain());
+			// return super.isRowSelected(row);
+		// }
+	// }
 }

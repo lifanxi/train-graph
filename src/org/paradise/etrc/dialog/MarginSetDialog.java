@@ -158,6 +158,11 @@ MainFrame mainFrame = null;
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
     panel.add(jPanel2, null);
+	//jPanel2.setLayout(new BorderLayout());
+	//jPanel2.add(btDefault, BorderLayout.WEST);
+	//jPanel2.add(btOK,BorderLayout.SOUTH);
+	//jPanel2.setLayout(new FlowLayout(FlowLayout.CENTER));
+    //jPanel2.setLayout(new GridLayout(0,2)); 
     jPanel2.add(btTest, null);
     jPanel2.add(btDefault, null);
     jPanel2.add(btOK, null);
@@ -189,8 +194,8 @@ MainFrame mainFrame = null;
     //this.mainFrame.remove(mainFrame.panelChart);
     //this.mainFrame.getContentPane().add(mainFrame.panelChart, BorderLayout.CENTER);
     //this.mainFrame.panelChart.spLines.getRootPane().setSize(400,800);
-    //mainFrame.repaint();
-    this.statusBar.setText("测试用的，如果忘记去掉请告知 lguo@suteng.com");
+    mainFrame.repaint();
+    //this.statusBar.setText("测试用的，如果忘记去掉请告知 lguo@suteng.com");
   }
 
   /**

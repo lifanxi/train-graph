@@ -36,7 +36,25 @@ public class Chart {
 	public int dNum = 0;
 	//上行车次数目
 	public int uNum = 0;
-
+//下行全程车数目
+	public int dNum_all = 0;	
+//上行全程车数目
+	public int uNum_all = 0;
+//下行本线车数目
+	public int dNum_benxian = 0;	
+//上行本线车数目
+	public int uNum_benxian = 0;
+	
+	public Color G_color;
+	public Color D_color;
+	public Color C_color;
+	public Color Z_color;
+	public Color T_color;
+	public Color K_color;
+	public Color L_color;	
+    public Color Y_color;
+    public Color default_color;	
+	
 	public Chart(File f) throws IOException {
 		loadFromFile(f);
 	}
@@ -45,6 +63,10 @@ public class Chart {
 		circuit = cir;
 	}
 
+	
+
+
+	
 	public void addTrain(Train loadingTrain) {
 		if (trainNum >= MAX_TRAIN_NUM)
 			return;
@@ -55,21 +77,116 @@ public class Chart {
 		}
 
 		if (loadingTrain.color == null)
-			loadingTrain.color = loadingTrain.getDefaultColor();
+			{
+			//loadingTrain.color = loadingTrain.getDefaultColor();
+
+String trname = loadingTrain.getTrainName();
+char cc = trname.toUpperCase().charAt(0);
+
+if ( cc=='G')
+{
+loadingTrain.color =  G_color ;
+}	
+else if ( cc=='D')
+{
+loadingTrain.color =  D_color ;
+}
+else if ( cc=='C')
+{
+loadingTrain.color =  C_color ;
+}
+else if ( cc=='Z')
+{
+loadingTrain.color =  Z_color ;
+}
+else if ( cc=='T')
+{
+loadingTrain.color =  T_color ;
+}
+else if ( cc=='K')
+{
+loadingTrain.color =  K_color ;
+}
+else if ( cc=='L')
+{
+loadingTrain.color =  L_color ;
+}
+else if ( cc=='Y')
+{
+loadingTrain.color =  Y_color ;
+}
+else
+{
+loadingTrain.color =  default_color;
+}
+//	System.out.print(trname+ ":"+cc+":"+ loadingTrain.color+"\n");
+		}
 //			loadingTrain.color = getNextTrainColor();
 
 		this.trains[trainNum] = loadingTrain;
-
+		//2015-12-10增加
+		String my_start = loadingTrain.getStartStation();
+		String my_end = loadingTrain.getTerminalStation();
+		String my_train = loadingTrain.getTrainName();
+		String start_station_name= circuit.stations[0].name;
+		String end_station_name= circuit.stations[circuit.stationNum-1].name;
+		//start_match: 表征当前车次起点站是否为当前线路的车站
+		//end_match: 表征当前车次终点站是否为当前线路的车站
+		boolean start_match = false ;
+		boolean end_match = false ;
 		switch (loadingTrain.isDownTrain(circuit)) {
 		case Train.DOWN_TRAIN:
-			dNum++;
+			dNum++;	
+			if (my_start.equals(start_station_name)&& my_end.equals(end_station_name)) {
+			dNum_all++;
+			}
+
+
+			for(int i = 0; i<circuit.stationNum; i++) {
+				if(my_start.equals(circuit.stations[i].name)) {
+					start_match = true ;
+				}
+				if(my_end.equals(circuit.stations[i].name)) {
+					end_match = true ;
+				}		
+			}
+			
+			if ( start_match && end_match) 
+			{
+			dNum_benxian ++ ;	
+			System.out.print("下行本线车"+ my_train +"\n");			
+			}
+		
 			break;
 		case Train.UP_TRAIN:
 			uNum++;
+			if (my_start.equals(end_station_name)&& my_end.equals(start_station_name)) {
+			uNum_all++;
+			}
+			
+			for(int i = 0; i<circuit.stationNum; i++) {
+				if(my_start.equals(circuit.stations[i].name)) {
+					start_match = true ;
+				}
+				if(my_end.equals(circuit.stations[i].name)) {
+					end_match = true ;
+				}		
+			}
+			
+			if ( start_match && end_match) 
+			{
+			uNum_benxian ++ ;
+			System.out.print("上行本线车"+ my_train +"\n");		
+			}
+			
+			
 			break;
 		}
 		trainNum++;
 
+
+		//System.out.print(my_train+"起点"+my_start+"终点"+my_end+"线路："+ start_station_name+"-"+end_station_name+"\n");
+		//System.out.print("\n");
 //	    String direction="";
 //	    switch(loadingTrain.isDownTrain(circuit)){
 //	      case Train.DOWN_TRAIN:
@@ -117,7 +234,9 @@ public class Chart {
 			return;
 
 		Train[] newTrains = new Train[MAX_TRAIN_NUM];
-
+        
+		//thetrain为将要删除的train
+		Train theTrain = trains[index];
 		int j = 0;
 		for (int i = 0; i < index; i++) {
 			newTrains[j++] = trains[i];
@@ -128,12 +247,132 @@ public class Chart {
 		}
 
 		trains = newTrains;
+		//2015-12-10修正bug:删除列车时应该更新dNum，uNum，包括主页面时刻表格的表头部分D:xx U:xx
+
+		//2015-12-10增加
+		String my_start = theTrain.getStartStation();
+		String my_end = theTrain.getTerminalStation();
+		String my_train = theTrain.getTrainName();
+		String start_station_name= circuit.stations[0].name;
+		String end_station_name= circuit.stations[circuit.stationNum-1].name;	
+//System.out.print(my_train+"起点"+my_start+"终点"+my_end+"线路："+ start_station_name+"-"+end_station_name+"\n");	
+
+		//start_match: 表征当前车次起点站是否为当前线路的车站
+		//end_match: 表征当前车次终点站是否为当前线路的车站
+		boolean start_match = false ;
+		boolean end_match = false ;
+
+
+	
+		switch (theTrain.isDownTrain(circuit)) {
+		case Train.DOWN_TRAIN:
+			dNum--;
+			if (my_start.equals(start_station_name)&& my_end.equals(end_station_name)) {
+			dNum_all--;
+			}
+			
+			for(int i = 0; i<circuit.stationNum; i++) {
+				if(my_start.equals(circuit.stations[i].name)) {
+					start_match = true ;
+				}
+				if(my_end.equals(circuit.stations[i].name)) {
+					end_match = true ;
+				}		
+			}
+			
+			if ( start_match && end_match) 
+			{
+			dNum_benxian -- ;	
+			System.out.print("删除下行本线车"+ my_train +"\n");			
+			}
+			
+			
+			break;
+		case Train.UP_TRAIN:
+			uNum--;
+			if (my_start.equals(end_station_name)&& my_end.equals(start_station_name)) {
+			uNum_all--;
+			}
+			
+			for(int i = 0; i<circuit.stationNum; i++) {
+				if(my_start.equals(circuit.stations[i].name)) {
+					start_match = true ;
+				}
+				if(my_end.equals(circuit.stations[i].name)) {
+					end_match = true ;
+				}		
+			}
+			
+			if ( start_match && end_match) 
+			{
+			uNum_benxian --;
+			System.out.print("删除上行本线车"+ my_train +"\n");		
+			}	
+			
+			break;
+		}		
 		trainNum--;
 	}
 	
 	public void delTrain(Train theTrain) {
 		if(!isLoaded(theTrain))
 			return;
+		
+
+//2015-12-10修正bug:删除列车时应该更新dNum，uNum
+		//2015-12-10增加
+		String my_start = theTrain.getStartStation();
+		String my_end = theTrain.getTerminalStation();
+		String my_train = theTrain.getTrainName();
+		String start_station_name= circuit.stations[0].name;
+		String end_station_name= circuit.stations[circuit.stationNum-1].name;
+		//start_match: 表征当前车次起点站是否为当前线路的车站
+		//end_match: 表征当前车次终点站是否为当前线路的车站
+		boolean start_match = false ;
+		boolean end_match = false ;
+		switch (theTrain.isDownTrain(circuit)) {
+		case Train.DOWN_TRAIN:
+			dNum--;
+			if (my_start.equals(start_station_name)&& my_end.equals(end_station_name)) {
+			dNum_all--;
+			}
+			for(int i = 0; i<circuit.stationNum; i++) {
+				if(my_start.equals(circuit.stations[i].name)) {
+					start_match = true ;
+				}
+				if(my_end.equals(circuit.stations[i].name)) {
+					end_match = true ;
+				}		
+			}		
+			if ( start_match && end_match) 
+			{
+			dNum_benxian -- ;	
+			System.out.print("删除下行本线车"+ my_train +"\n");			
+			}			
+			break;
+		case Train.UP_TRAIN:
+			uNum--;
+			if (my_start.equals(end_station_name)&& my_end.equals(start_station_name)) {
+			uNum_all--;
+			}
+			
+			for(int i = 0; i<circuit.stationNum; i++) {
+				if(my_start.equals(circuit.stations[i].name)) {
+					start_match = true ;
+				}
+				if(my_end.equals(circuit.stations[i].name)) {
+					end_match = true ;
+				}		
+			}
+			
+			if ( start_match && end_match) 
+			{
+			uNum_benxian --;
+			System.out.print("删除上行本线车"+ my_train +"\n");		
+			}
+			
+			break;
+		}
 		
 		Train[] newTrains = new Train[MAX_TRAIN_NUM];
 
@@ -188,6 +427,7 @@ public class Chart {
 	public static final String circuitPattern = "***Circuit***";
 	public static final String trainPattern = "===Train===";
 	public static final String colorPattern = "---Color---";
+    public static final String linetypePattern = "---LineType---";
 	public static final String setupPattern = "...Setup...";
 
 	public void saveToFile(File f) throws IOException {
@@ -213,6 +453,17 @@ public class Chart {
 			out.write("," + trains[i].color.getBlue());
 			out.newLine();
 		}
+        //线型（0~2）+线宽（1~4f）
+		out.write(linetypePattern);
+		out.newLine();
+		for (int i = 0; i < trainNum; i++) {
+			out.write(trains[i].getTrainName());
+			out.write("," + trains[i].linestytletype);
+            out.write("," + trains[i].linewidth );
+		//	System.out.println(trains[i].linewidth);
+			out.newLine();
+		}
+
 		//设置
 		out.write(setupPattern);
 		out.newLine();
@@ -235,8 +486,8 @@ public class Chart {
 		final int READING_CIRCUIT = 1;
 		final int READING_TRAIN = 2;
 		final int READING_COLOR = 3;
-		final int READING_SETUP = 4;
-
+		final int READING_LINESTYTLETYPE = 4;
+        final int READING_SETUP = 5;
 		int reading_state = 0;
 		int lineNum = 0;
 
@@ -260,6 +511,9 @@ public class Chart {
 			} else if (line.equalsIgnoreCase(colorPattern)) {
 				reading_state = READING_COLOR;
 				lineNum = 0;
+			} else if (line.equalsIgnoreCase(linetypePattern)) {
+				reading_state = READING_LINESTYTLETYPE;
+				lineNum = 0;
 			} else if (line.equalsIgnoreCase(setupPattern)) {
 				reading_state = READING_SETUP;
 				lineNum = 0;
@@ -275,6 +529,10 @@ public class Chart {
 					break;
 				case READING_COLOR:
 					parseColor(line, readingTrains, readTrainNum);
+					lineNum++;
+					break;
+				case READING_LINESTYTLETYPE:
+					parseLineType(line, readingTrains, readTrainNum);
 					lineNum++;
 					break;
 				case READING_SETUP:
@@ -293,6 +551,8 @@ public class Chart {
 		trainNum = 0;
 		dNum = 0;
 		uNum = 0;
+		uNum_all = 0;
+		dNum_all = 0;
 		for (int i = 0; i < readTrainNum; i++) {
 			addTrain(readingTrains[i]);
 		}
@@ -345,6 +605,38 @@ public class Chart {
 			}
 		}
 	}
+
+	private void parseLineType(String line, Train[] readingTrains, int readTrainNum)
+			throws IOException {
+		String StytleLine[] = line.split(",");
+
+		int linestytle = 0 ;
+		float linewidth = 1.0f ;
+		try {
+		linestytle = Integer.parseInt(StytleLine[1]);	
+		} catch (Exception e) {
+			throw new IOException(String.format(_("Error reading line style settings for the train %s."), StytleLine[0]));
+		}
+		try {
+		linewidth = Float.parseFloat(StytleLine[2]);
+		} catch (Exception e) {
+			throw new IOException(String.format(_("Error reading line width settings for the train %s."), StytleLine[0]));
+		}	
+		
+		
+		
+
+		for (int i = 0; i < readTrainNum; i++) {
+			if (readingTrains[i].getTrainName().equalsIgnoreCase(StytleLine[0])) {
+				//将etrc文件中关于线型的设置赋给class train的 linestytletype
+				readingTrains[i].linestytletype = linestytle;
+				//将etrc文件中关于线宽的设置赋给class train的 linestytletype
+				readingTrains[i].linewidth = linewidth;
+			}
+		}
+	}
+
+
 	
 	  //测试用
 	  public static void main(String argv[]) {
@@ -387,6 +679,9 @@ public class Chart {
 		trainNum = 0;
 		dNum = 0;
 		uNum = 0;
+		dNum_all = 0;
+		uNum_all = 0;
+		
 	}
 
 	public void insertNewStopToTrain(Train theTrain, Stop stop) {

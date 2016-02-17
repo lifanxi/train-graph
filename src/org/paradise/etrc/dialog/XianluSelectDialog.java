@@ -120,7 +120,7 @@ public class XianluSelectDialog extends JDialog {
 	
 	private JList buildXianluList() {
 		xlList = new JList();
-		xlList.setListData(lcb.findXianlu('J'));
+		xlList.setListData(lcb.findXianlu('*'));
 		xlList.setFont(new Font("dialog", 0, 12));
 //		xlList.addListSelectionListener(new ListSelectionListener() {
 //			public void valueChanged(ListSelectionEvent lse) {

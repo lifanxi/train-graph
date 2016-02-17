@@ -17,7 +17,7 @@ public class TrainTableModel extends AbstractTableModel {
 	}
 	
 	public int getColumnCount() {
-		return 4;
+		return 5;
 	}
 
 	public String getColumnName(int columnIndex) {
@@ -30,6 +30,8 @@ public class TrainTableModel extends AbstractTableModel {
 			return _("Leave");
 		case 3:
 			return _("Passenger");
+		case 4:
+		    return _("Distance");
 		default:
 			return null;
 		}
@@ -44,6 +46,8 @@ public class TrainTableModel extends AbstractTableModel {
 			return Stop.class;
 		case 3:
 			return Boolean.class;
+		case 4:
+			return String.class;			
 		default:
 			return null;
 		}
@@ -67,6 +71,9 @@ public class TrainTableModel extends AbstractTableModel {
 			return (myTrain == null) ? null : myTrain.stops[rowIndex];
 		case 3:
 			return (myTrain == null) ? new Boolean(true) : Boolean.valueOf(myTrain.stops[rowIndex].isPassenger);
+		case 4:
+			return (myTrain == null) ? "" : myTrain.stops[rowIndex].licheng;
+			//return (myTrain == null) ? "" : "0xxx";
 		default:
 			return null;
 		}
@@ -88,6 +95,9 @@ public class TrainTableModel extends AbstractTableModel {
 			break;
 		case 3:
 			myTrain.stops[rowIndex].isPassenger = ((Boolean) aValue).booleanValue();
+			break;
+		case 4:
+			myTrain.stops[rowIndex].licheng = (String) aValue;
 			break;
 		default:
 		}

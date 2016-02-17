@@ -29,8 +29,12 @@ public class ETRCLCB {
 		int dist = ETRCData.decode(line.charAt(3)) * ETRCData.codeTable.length +
 				   ETRCData.decode(line.charAt(4));
 		String name = line.substring(5,line.length());
-		
-		LCBStation station = new LCBStation(name, dist, level, false);
+//暂时认为数据文件中接续站设置都为空！因此如使用该属性需要用户自己在程序中输入。2015-09-05
+//暂时认为数据文件中复线区间设置都为真！因此如使用该属性需要用户自己在程序中输入来覆盖。2015-09-19
+//TODO：改变数据文件格式，以带有这两个属性，然后直接读取并译码。
+        String following = "";
+		boolean doubletrack = true; 
+		LCBStation station = new LCBStation(name, dist, level, false, following, doubletrack);
 		station.xianlu = getXianlu(xianluID);
 
 		return station;

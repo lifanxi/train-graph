@@ -225,7 +225,7 @@ MainFrame mainFrame = null;
       bold = Integer.parseInt(stBold);
 
       if(!((distScale >= 1 && distScale <= 10)
-           &&(display >= 0 && display <= 6)
+           &&(display >= -1 && display <= 6)
            &&(bold >=0 && bold <= 6)
            &&(bold <= display))){
 

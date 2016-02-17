@@ -9,14 +9,16 @@ public class Stop {
 	public String arrive;
 	public String leave;
 	
+	public String licheng;
 	//20070224新增，是否图定
 	public boolean isPassenger;
 
-	public Stop(String _name, String _arrive, String _leave, boolean _schedular) {
+	public Stop(String _name, String _arrive, String _leave, boolean _schedular, String _licheng) {
 		stationName = _name;
 		arrive = _arrive;
 		leave = _leave;
 		isPassenger = _schedular;
+		licheng = _licheng;
 	}
 
 //	public Stop(String _name, String _arrive, String _leave) {
@@ -24,7 +26,7 @@ public class Stop {
 //	}
 
 	public Stop copy() {
-		Stop st = new Stop(this.stationName, this.arrive, this.leave, this.isPassenger);
+		Stop st = new Stop(this.stationName, this.arrive, this.leave, this.isPassenger, this.licheng);
 		
 		return st;
 	}
@@ -39,7 +41,7 @@ public class Stop {
 		return ((Stop) obj).stationName.equalsIgnoreCase(this.stationName);
 	}
 	
-	public static Stop makeStop(String theName, String strArrive, String strLeave, boolean isSchedular) {
+	public static Stop makeStop(String theName, String strArrive, String strLeave, boolean isSchedular, String licheng) {
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		Date theArrive = null;
 		Date theLeave = null;
@@ -70,6 +72,6 @@ public class Stop {
 		else
 			myLeave = df.format(theLeave);
 		
-		return new Stop(theName, myArrive, myLeave, isSchedular);
+		return new Stop(theName, myArrive, myLeave, isSchedular,licheng);
 	}
 }

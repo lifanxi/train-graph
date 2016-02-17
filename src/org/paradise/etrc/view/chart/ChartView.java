@@ -33,16 +33,20 @@ public class ChartView extends JPanel {
 
 	public static final int DEFAULT_LEFT_MARGIN = 45;
 	public static final int DEFAULT_RIGHT_MARGIN = 45;
-	public static final int DEFAULT_TOP_MARGIN = 66;
-	public static final int DEFAULT_BOTTOM_MARGIN = 66;
-
+	//public static final int DEFAULT_TOP_MARGIN = 66;
+	//public static final int DEFAULT_BOTTOM_MARGIN = 66;
+	public static final int DEFAULT_TOP_MARGIN = 136; //由于需要支持显示始发站终到站，需要调整运行图上下高度
+    public static final int DEFAULT_BOTTOM_MARGIN = 136;//由于需要支持显示始发站终到站，需要调整运行图上下高度
 	public int leftMargin = DEFAULT_LEFT_MARGIN;
 	public int rightMargin = DEFAULT_RIGHT_MARGIN;
 	public int topMargin = DEFAULT_TOP_MARGIN;
 	public int bottomMargin = DEFAULT_BOTTOM_MARGIN;
 
 	public static int trainNameRecMargin = 1;
-	public static int trainNameRecHeight = 54;
+	//public static int trainNameRecHeight = 54;
+	
+	public static int trainNameRecHeight = 124;//由于需要支持显示始发站终到站，需要调整车次框高度，目前支持9个字符（5位车次+4位车站）
+	
 	public static int circuitPanelWidth = 80;
 	public static int clockPanelHeight = 16;
 
@@ -57,13 +61,28 @@ public class ChartView extends JPanel {
 	public ClockPanel panelClock;
 
 	private JScrollPane spLines = new JScrollPane();
-
-	public Color gridColor = Color.GRAY;
+    
+	//public Color gridColor = Color.GRAY;
+	public Color gridColor;
 	public Color activeGridColor = Color.DARK_GRAY;
-	
+	public Color G_color_chartview;
+	public Color D_color_chartview;
+	public Color C_color_chartview;
+	public Color Z_color_chartview;
+	public Color T_color_chartview;
+	public Color K_color_chartview;
+	public Color Y_color_chartview;
+	public Color L_color_chartview;
+	public Color default_color_chartview;	
 	public Train activeTrain;
 	public Station activeStation;
 	
+	
+	public boolean SHOWDISTANCE ; //动态运行图中显示里程
+	public boolean DASHSIDING ; //虚线显示侧线运行线
+	public boolean NIGHTMODE ; //动态运行图夜间显示模式
+	public boolean SHOWTRAIN_StartEnd;// 运行图中车次起始框，终止框显示起点站终点站
+	public boolean SHOWTRAIN_DetailTime;// 运行图中显示详细停点
 	public MainFrame mainFrame;
 
 	public ChartView(MainFrame _mainFrame) {
@@ -150,6 +169,9 @@ public class ChartView extends JPanel {
 		repaint();
 	}
 
+
+
+
 	public void buildTrainDrawings() {
 		//重建当前选中车次的图线
 		activeTrainDrawing = (activeTrain == null) ? null : new TrainDrawing(this, activeTrain, true, false);
@@ -159,6 +181,17 @@ public class ChartView extends JPanel {
 		underDrawings.removeAllElements();
 
 		Chart chart = mainFrame.chart;
+		
+		chart.G_color = G_color_chartview;
+		chart.D_color = D_color_chartview;
+		chart.C_color = C_color_chartview;
+		chart.Z_color = Z_color_chartview;
+		chart.T_color = T_color_chartview;
+		chart.K_color = K_color_chartview;
+		chart.Y_color = Y_color_chartview;
+		chart.L_color = L_color_chartview;
+		chart.default_color = default_color_chartview;
+		
 		for (int i = 0; i < chart.trainNum; i++) {
 			int isDown = chart.trains[i].isDownTrain(chart.circuit);
 			switch (showUpDownState) {
@@ -188,16 +221,23 @@ public class ChartView extends JPanel {
 	}
 
 	//水印颜色
-	public final static Color DEFAULT_UNDER_COLOR = new Color(220, 220, 220);
-
+	public  static Color DEFAULT_UNDER_COLOR ;
+	//public final static Color DEFAULT_UNDER_COLOR = new Color(220, 220, 220);
 	//当水印色为null的时候不画反向车次(也作为反向车次是否能被选择的依据)
-	public Color underDrawingColor = DEFAULT_UNDER_COLOR;
-	
+	//public Color underDrawingColor = DEFAULT_UNDER_COLOR;
+	//or  public Color underDrawingColor = null;
+	//以下public underDrawingColor在mainframe中通过props被赋值，以实现可控显示方向水印车次的功能
+	public Color underDrawingColor ;
 	//普通图线的到发点是否画出
 	//在有详细点单数据的时候所有通过点都画出会影响图的美观。
 	//不管该选项是否开启，当前选中车次的到发点仍然会画出来。
-	public boolean isDrawNormalPoint = true;
+	
+	//public boolean isDrawNormalPoint = true;
+	public boolean isDrawNormalPoint ;
 
+	public boolean halfHourDashGrid ;
+	public float lineWidth;
+	//public boolean dashline ;
 	/**
 	 * 从相对时间计算X坐标
 	 * @param coordinate int

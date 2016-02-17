@@ -42,7 +42,14 @@ public class Train {
 	public Stop[] stops = new Stop[MAX_STOP_NUM];
 
 	public Color color = null;
-
+// Joe added on 2015/06/18 this var is to control the train line stytle such as dash line , dot line, etc.
+	public int linestytletype ;
+// Joe added on 2015/06/18 this var is to control the train line width, float number.  by default 1.0f
+	public float linewidth ;
+	// = 1.0f ;
+	
+	
+	
 	public Train() {
 	}
 
@@ -232,7 +239,8 @@ public class Train {
 			out.write(stops[i].stationName + ","
 					+ stops[i].arrive + ","
 					+ stops[i].leave + ","
-					+ stops[i].isPassenger); //20070224新增，是否图定
+					+ stops[i].isPassenger + ","
+					+ stops[i].licheng); //20070224新增，是否图定;20150915新增写出里程信息
 			out.newLine();
 		}
 	}
@@ -281,6 +289,15 @@ public class Train {
 
 		//发点
 		String stLeave = stStop[2];
+		//2015-09-15增加里程信息解析,并增加旧运行图格式的兼容性
+		String stLicheng ;
+		if (stStop.length == 5) {
+		 stLicheng = stStop[4];
+		}
+		else
+		{
+		stLicheng = "NA";	
+		}
 //		Date leave = new Date(0);
 //		try {
 //			leave = df.parse(stLeave);
@@ -288,7 +305,8 @@ public class Train {
 //			throw new IOException(stName + "站发点读取错");
 //		}
 
-		Stop stop = new Stop(stName, stArrive, stLeave, isSchedular);
+		Stop stop = new Stop(stName, stArrive, stLeave, isSchedular,stLicheng);
+		//Stop stop = new Stop(stName, stArrive, stLeave, isSchedular,"ff");
 		stops[stopNum] = stop;
 		stopNum++;
 	}
@@ -373,12 +391,12 @@ public class Train {
 			return getTrainName();
 		}
 	}
-	
-	public void insertStopAfter(Stop afterStop, String newStopName,	String arrive, String leave, boolean isSchedular) {
-		Stop newStop = new Stop(newStopName, arrive, leave, isSchedular);
+	//2015-09-15 删除，与下面的代码重复
+	//public void insertStopAfter(Stop afterStop, String newStopName,	String arrive, String leave, boolean isSchedular) {
+	//	Stop newStop = new Stop(newStopName, arrive, leave, isSchedular,"0");
 		
-		insertStopAfter(afterStop, newStop);
-	}
+	//	insertStopAfter(afterStop, newStop);
+	//}
 
 	public void insertStopAfter(Stop afterStop, Stop newStop) {
 		if(afterStop == null)

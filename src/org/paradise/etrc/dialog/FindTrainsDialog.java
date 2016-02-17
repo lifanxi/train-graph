@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
+import java.util.regex.*;
 import static org.paradise.etrc.ETRC._;
 import org.paradise.etrc.MainFrame;
 import org.paradise.etrc.data.Train;
@@ -94,10 +94,43 @@ public class FindTrainsDialog extends JDialog {
 			
 			ETRCSKB skb = mainFrame.getSKB();
 			Vector<Train> trains = skb.findTrains(mainFrame.chart.circuit);
-			
+						
 			for(int i=0; i<trains.size(); i++) {
 				Train loadingTrain = (Train) (trains.get(i));
-				
+				//char type = loadingTrain.getTrainName().toUpperCase().charAt(0);
+				// char type = loadingTrain.getTrainName().charAt(0);
+			// if ( mainFrame.type_case == 1 && (type == 'G' || type == 'D' || type == 'C'))
+			// {
+			// //仅铺画普通列车，跳过G/C/D车次
+			// continue;
+			// }
+			// else if ( mainFrame.type_case == 2 && (type != 'G' && type != 'D' && type != 'C'))
+			// {
+			// //仅铺画动车组，跳过普通车次
+			// continue ;
+			// }
+			// else if ( mainFrame.type_case == 3 )
+			// {
+			// //do nothing
+			// }
+			
+	//将MainFrame输入的正则表达式编译！	
+    Pattern p = Pattern.compile(mainFrame.my_regexp);  
+	//将当前车次名称与正则表达式匹配
+	//System.out.println(loadingTrain.getTrainName());
+    Matcher m = p.matcher(loadingTrain.getTrainName());  
+    if (m.matches()) {  
+       //do nothing，匹配则继续当前铺画动作
+       // System.out.println("true");  
+    } else {  
+	    //不匹配，则跳过当前铺画过程
+       // System.out.println("false");  
+	   continue;
+    } 
+			
+			
+			
+			
 				if(loadingTrain.isDownTrain(mainFrame.chart.circuit, false) > 0) {
 					mainFrame.chart.addTrain(loadingTrain);
 					

@@ -101,6 +101,7 @@ public class ChartSetDialog extends JDialog {
 		cbDrawPoint = new JCheckBox();
 		cbDrawPoint.setFont(new java.awt.Font("Dialog", 0, 12));
 		cbDrawPoint.setText(_("Always highlight terminals"));
+		//cbDrawPoint.setText(_("始终突出画到发点"));
 		cbDrawPoint.setSelected(mainFrame.chartView.isDrawNormalPoint);
 		cbDrawPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -114,9 +115,17 @@ public class ChartSetDialog extends JDialog {
 		});
 		
 		JCheckBox cbUnderColor;
+		JCheckBox ShowDistance;
+		JCheckBox DashSiding;
+		JCheckBox NightMode;
+		JCheckBox StartEnd;
+		JCheckBox DetailTime;
+		JCheckBox halfHourDashGrid;
+		//用水印颜色显示反向运行线
 		cbUnderColor = new JCheckBox();
 		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText(_("Enable watermark display"));
+		cbUnderColor.setText(_("Enable watermark display Opposite Trains"));
+		//cbUnderColor.setText(_("水印显示反向车次"));
 		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
 		cbUnderColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -129,10 +138,127 @@ public class ChartSetDialog extends JDialog {
 			}
 		});
 		
+		
+		//动态图显示里程信息
+		ShowDistance = new JCheckBox();
+		ShowDistance.setFont(new java.awt.Font("Dialog", 0, 12));
+		//ShowDistance.setText(_("动态图中显示当前车次里程信息"));
+		ShowDistance.setText(_("Show Distance Info in Dynamic View"));
+		ShowDistance.setSelected(mainFrame.chartView.SHOWDISTANCE == true);
+		ShowDistance.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.SHOWDISTANCE = true;
+				else
+					mainFrame.chartView.SHOWDISTANCE = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});
+		//虚线显示侧线车站运行线
+		DashSiding = new JCheckBox();
+		DashSiding.setFont(new java.awt.Font("Dialog", 0, 12));
+		//DashSiding.setText(_("虚线显示侧线车站运行线"));
+		DashSiding.setText(_("Use DashLine for trains lines to siding station"));
+		DashSiding.setSelected(mainFrame.chartView.DASHSIDING == true);
+		DashSiding.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.DASHSIDING = true;
+				else
+					mainFrame.chartView.DASHSIDING = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});		
+		
+		//设置动态运行图是否为夜间模式
+		NightMode = new JCheckBox();
+		NightMode.setFont(new java.awt.Font("Dialog", 0, 12));
+		NightMode.setText(_("Enable Night Mode in Dynamic View"));
+		//NightMode.setText(_("设置动态运行图为夜间模式"));
+		NightMode.setSelected(mainFrame.chartView.NIGHTMODE == true);
+		NightMode.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.NIGHTMODE = true;
+				else
+					mainFrame.chartView.NIGHTMODE = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});		
+
+
+		//设置运行图运行图中车次起始框，终止框显示起点站终点站
+		StartEnd = new JCheckBox();
+		StartEnd.setFont(new java.awt.Font("Dialog", 0, 12));
+		StartEnd.setText(_("*Show Start-End Station"));
+		//StartEnd.setText(_("*车次框中显示起止车站"));
+		StartEnd.setSelected(mainFrame.chartView.SHOWTRAIN_StartEnd == true);
+		StartEnd.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.SHOWTRAIN_StartEnd = true;
+				else
+					mainFrame.chartView.SHOWTRAIN_StartEnd = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});	
+	
+		//设置运行图中是否显示通过文本框实现的详细停点
+		DetailTime = new JCheckBox();
+		DetailTime.setFont(new java.awt.Font("Dialog", 0, 12));
+		DetailTime.setText(_("*Show Detail Stop Time"));
+		//DetailTime.setText(_("*显示详细停点"));
+		DetailTime.setSelected(mainFrame.chartView.SHOWTRAIN_DetailTime == true);
+		DetailTime.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.SHOWTRAIN_DetailTime = true;
+				else
+					mainFrame.chartView.SHOWTRAIN_DetailTime = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});	
+	
+		
+		//设置运行图中是否采用虚线显示半小时线
+		halfHourDashGrid = new JCheckBox();
+		halfHourDashGrid.setFont(new java.awt.Font("Dialog", 0, 12));
+		halfHourDashGrid.setText(_("Display Half-Hour clock using dashline"));
+		//halfHourDashGrid.setText(_("虚线显示半小时时间线"));
+		halfHourDashGrid.setSelected(mainFrame.chartView.halfHourDashGrid == true);
+		halfHourDashGrid.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected())
+					mainFrame.chartView.halfHourDashGrid = true;
+				else
+					mainFrame.chartView.halfHourDashGrid = false;
+				
+				mainFrame.chartView.repaint();
+			}
+		});			
+		
 		JPanel panelCB = new JPanel();
-		panelCB.setLayout(new GridLayout(1,2));
+		panelCB.setLayout(new GridLayout(5,1));
 		panelCB.add(cbUnderColor);
 		panelCB.add(cbDrawPoint);
+		
+		panelCB.add(halfHourDashGrid);
+		panelCB.add(DashSiding);
+		
+		panelCB.add(DetailTime);
+		panelCB.add(StartEnd);
+			
+		panelCB.add(ShowDistance);
+		panelCB.add(NightMode);
+		
+
+
+		
 		
 		panel.setLayout(new BorderLayout());
 		panel.add(panelCB, BorderLayout.CENTER);
@@ -171,8 +297,9 @@ public class ChartSetDialog extends JDialog {
 	}
 	
 	public Dimension getPreferredSize() {
-		int w = 270;
-		int h = tbPane.getPreferredSize().height + 108;
+	//change the dialog window width to show all texts
+		int w = 570;
+		int h = tbPane.getPreferredSize().height + 308;
 		return new Dimension(w, h);
 	}
 	

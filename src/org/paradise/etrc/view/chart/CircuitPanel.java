@@ -105,12 +105,50 @@ public class CircuitPanel extends JPanel {
 			//画站名与里程
 			DrawName(g, station, y);
 		}
+		
+
 	}
 
 	private void DrawName(Graphics g, Station station, int y) {
 		//站名
+		
+		if (station.level == -1) //如果level为-1，则该站非本线正线车站，字体设为斜体,红色！
+		{
+		Font oldFont = g.getFont();	
+		Color oldColor = g.getColor();
+		//System.out.println(oldFont.getName());
+		//System.out.println(oldFont.getSize());
+		//旧字体为FONT_NAME, 12
+		g.setFont(new Font("FONT_NAME", 1, 12));
+		g.setColor(Color.RED);
 		g.drawString(station.name, myLeftMargin + 2, y - 2);
+		g.setFont(oldFont);
+		g.setColor(oldColor);
+		}
+	    else
+		{
+		g.drawString(station.name, myLeftMargin + 2, y - 2);	
+		}
+		//g.drawString(station.name, myLeftMargin + 2, y - 2);
 
+		
+			//如果following不为空，则也画出。
+		if (!station.following.equalsIgnoreCase("")) {
+			String following = station.following ;
+			
+			if (following.indexOf("|")>=0 ){
+				String[] strarray= following.split("\\|");
+				g.drawString(strarray[0],myLeftMargin + 2, y - 20);
+				g.drawString(strarray[1],myLeftMargin + 2, y + 20);
+			}
+			else
+			{
+				g.drawString(following,myLeftMargin + 2, y - 20);
+			}
+			
+		}	
+		
+		
 		Color oldColor = g.getColor();
 		String stDist;
 		//下行里程

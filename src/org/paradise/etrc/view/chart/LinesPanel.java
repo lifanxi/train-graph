@@ -20,6 +20,7 @@ import org.paradise.etrc.view.sheet.SheetTable;
 import org.paradise.etrc.wizard.Wizard;
 import org.paradise.etrc.wizard.addtrain.AddTrainWizard;
 
+import java.awt.BasicStroke;
 /**
  * @author lguo@sina.com
  * @version 1.0
@@ -330,7 +331,20 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 			int x = start + chart.timeInterval * chart.minuteScale * i;
 			int y1 = chartView.topMargin;
 			int y2 = y1 + h;
-			g.drawLine(x, y1, x, y2);
+			
+// when current time matchs half hour clock and when htrc enabled halfHourDashGrid, 
+// draw dot dash line for half clock grid
+			   if (i == 30/chart.timeInterval && chartView.halfHourDashGrid)
+			   {
+			   ((Graphics2D)g).setStroke(new BasicStroke(0.5f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_ROUND,1f,new float[]{15,10,},0f));
+			   //g.drawLine(x, y1, x, y2);
+			   }
+			   else
+			   {
+			   ((Graphics2D)g).setStroke(new BasicStroke(0.5f));
+			  // g.drawLine(x, y1, x, y2);
+			   }
+             g.drawLine(x, y1, x, y2);
 		}
 
 		// 24点整点竖线
@@ -367,11 +381,19 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		        + chartView.leftMargin
 				+ chartView.rightMargin;
 
-		if (st.level <= chart.displayLevel) {
+		if (st.level <= chart.displayLevel && st.level != -1) {
 			g.drawLine(0, y, w, y);
 			if (st.level <= chart.boldLevel) {
 				g.drawLine(0, y + 1, w, y + 1);
 			}
+		} 
+		//如果level为-1，则该站非本线正线车站，该站横向坐标线设为虚粗线！
+		else if (st.level <= chart.displayLevel && st.level == -1)
+		{
+			((Graphics2D)g).setStroke(new BasicStroke(1.0f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_ROUND,1f,new float[]{15,10,},0f));
+			g.drawLine(0, y, w, y);
+			g.drawLine(0, y + 1, w, y + 1);
+			((Graphics2D)g).setStroke(new BasicStroke(1.0f));
 		}
 
 		// 恢复原色
@@ -483,7 +505,7 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				theTrain.setLeave(staName, theTime);
 		}
 		else {
-			Stop stop = new Stop(staName, theTime, theTime, false);
+			Stop stop = new Stop(staName, theTime, theTime, false,"0");
 			chartView.mainFrame.chart.insertNewStopToTrain(theTrain, stop);
 //			Stop prevStop = chartView.mainFrame.chart.findPrevStop(theTrain, stop.stationName);
 //			if(prevStop == null)
@@ -759,6 +781,30 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				doSetColor();
 			}
 		});
+		MenuItem miWaterMark = new MenuItem(_("Change to WaterMark"));
+		miWaterMark.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doSetWaterMark();
+			}
+		});
+		MenuItem miDashLine = new MenuItem(_("Change Line Stytle"));
+		miDashLine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doSetDash();			
+			}
+		});
+		MenuItem miWideLine = new MenuItem(_("Wide Line Width"));
+		miWideLine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doSetWide();			
+			}
+		});		
+		MenuItem miThinLine = new MenuItem(_("Thin Line Width"));
+		miThinLine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doSetThin();			
+			}
+		});				
 		MenuItem miTrainSlice = new MenuItem(_("Train Slice"));
 		miTrainSlice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -776,6 +822,10 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 		PopupMenu pop = new PopupMenu();
 		pop.add(miDelTrain);
 		pop.add(miColor);
+		pop.add(miDashLine);
+		pop.add(miWideLine);
+		pop.add(miThinLine);
+		pop.add(miWaterMark);
 		pop.add(miEditTimes);
         pop.add(miTrainSlice);
 //		pop.addSeparator();
@@ -829,14 +879,92 @@ public class LinesPanel extends JPanel implements MouseListener,MouseMotionListe
 				(frmSize.height - dlgSize.height) / 2 + loc.y);
 		dialog.setVisible(true);
 	}
+	private void doSetWaterMark() {
+		
+		
+				//chartView.activeTrainDrawing.train.color = colorChooser.getColor();
+				// 2014-07-10 Joe add below line could set the train line color to watermark, this will be saved into etrc by intention!
+				chartView.activeTrainDrawing.train.color = chartView.DEFAULT_UNDER_COLOR;
+				LinesPanel.this.repaint();
+		
+	}
+	//2014-6-10 add
+		private void doSetDash() {
+		
+		
 
+				// 2015-06-18 Joe add below line could set the train line stytle to dash line or dot-line and could be saved into etrc file by intention!
+				//chartView.dashline = true ;
+				if (chartView.activeTrainDrawing.train.linestytletype < 2) {
+				chartView.activeTrainDrawing.train.linestytletype = chartView.activeTrainDrawing.train.linestytletype + 1 ;
+				} else if (chartView.activeTrainDrawing.train.linestytletype == 2) {
+					//从2（点划线）切换到0（实线）
+				chartView.activeTrainDrawing.train.linestytletype = 0;	
+				}
+		
+				LinesPanel.this.repaint();
+		
+	}
+	
+			private void doSetWide() {
+		
+		
+
+				// 2015-06-18 Joe add below line could wide the train line width by 0.5f step and could be saved into etrc file by intention!
+				if (chartView.activeTrainDrawing.train.linewidth < 5) {
+				chartView.activeTrainDrawing.train.linewidth = chartView.activeTrainDrawing.train.linewidth + 0.5f ;
+				} 
+		
+				LinesPanel.this.repaint();
+		
+	}
+	
+				private void doSetThin() {
+		
+		
+
+				// 2015-06-18 Joe add below line could thin the train line width by 0.5f step and could be saved into etrc file by intention!
+				if (chartView.activeTrainDrawing.train.linewidth > 0.5) {
+				chartView.activeTrainDrawing.train.linewidth = chartView.activeTrainDrawing.train.linewidth - 0.5f ;
+				} 
+		
+				LinesPanel.this.repaint();
+		
+	}
+	
 	//待优化：应该滚动到第一个段（可能分段显示）尽可能位于屏幕正中
 	public void moveToTrainDrawing(TrainDrawing trainDrawing) {
-		Rectangle bounds = trainDrawing.getPreferredBounds();
-		bounds.y = 0;
-		bounds.height = this.getHeight();
-//		Rectangle bounds = trainDrawing.firstRect.getBounds();
-		scrollRectToVisible(bounds);
+	//	Rectangle bounds = trainDrawing.getPreferredBounds();
+	//	bounds.y = 0;
+	//	bounds.height = this.getHeight();
+		Rectangle bounds = trainDrawing.firstRect.getBounds();
+		//Rectangle bounds2 = trainDrawing.lastRect.getBounds();
+		
+		// System.out.println("\n this is look up train: start ");
+		// System.out.println(trainDrawing.firstRect.getBounds());
+		// System.out.println("\n this is look up train: end ");
+		// System.out.println(trainDrawing.lastRect.getBounds());
+		// System.out.println("hello\n");
+		// 向右，x变大； 向下，y变大
+
+			//上行,则显示起始框
+			//下行，仍然显示起始框
+			bounds.x = bounds.x - 20 ;
+			bounds.y = bounds.y + 50 ; 
+			bounds.height = 100;
+			bounds.width = 40;
+			scrollRectToVisible(bounds);
+
+			
+
+			// bounds2.x = bounds2.x - 20 ;
+			// bounds2.y = bounds2.y - 50 ;
+			// bounds2.height = 100;
+			// bounds2.width = 40;
+			// scrollRectToVisible(bounds2);
+		
+
+		//scrollRectToVisible(bounds);
 //		selectTrain(trainDrawing);
 //		chartView.setActiveTrain(trainDrawing.train);
 		chartView.setActiveTrain((trainDrawing == null) ? null: trainDrawing.train);	

@@ -45,7 +45,7 @@ public class ChartPoint extends Point {
 			g.setColor(TrainDrawing.notSchedularColor);
 		}
 
-		g.fillRect(x - 1, y - 1, 3, 3);
+		g.fillRect(x - 1, y - 1, 4, 4);
 
 		g.setColor(oldColor);
 	}

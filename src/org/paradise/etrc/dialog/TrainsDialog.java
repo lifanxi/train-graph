@@ -31,8 +31,8 @@ public class TrainsDialog extends JDialog {
 	MainFrame mainFrame;
 
 	TrainsTable table;
-
-	JCheckBox cbUnderColor;
+    JLabel  label_total;
+	//JCheckBox cbUnderColor;
 
 	public TrainsDialog(MainFrame _mainFrame) {
 		super(_mainFrame, _("Train Information"), true);
@@ -41,7 +41,7 @@ public class TrainsDialog extends JDialog {
 		chart = mainFrame.chart;
 		
 		table = new TrainsTable();
-
+        label_total = new JLabel();
 		try {
 			jbInit();
 			pack();
@@ -58,30 +58,40 @@ public class TrainsDialog extends JDialog {
 		table.setFont(new Font("Dialog", 0, 12));
 		table.getTableHeader().setFont(new Font("Dialog", 0, 12));
 		JScrollPane spColorTable = new JScrollPane(table);
-
-		cbUnderColor = new JCheckBox();
-		cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
-		cbUnderColor.setText(_("Display opposite direction train using watermark"));
-		cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
-		cbUnderColor.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (((JCheckBox) e.getSource()).isSelected())
-					mainFrame.chartView.underDrawingColor = ChartView.DEFAULT_UNDER_COLOR;
-				else
-					mainFrame.chartView.underDrawingColor = null;
+        
+		
+		label_total.setFont(new java.awt.Font("Dialog", 0, 12));
+		//System.out.println("下行："+dd +"，上行："+uu);
+		//label_total.setText(_("当前运行图中，下行列车："+ chart.dNum + "列，上行列车：" + chart.uNum + "列"));
+		label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all
+		+"列；本线列车"+chart.dNum_benxian+"列)，上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all
+		+"列；本线列车"+chart.uNum_benxian+"列）"));
+		JPanel labelPanel = new JPanel();
+		labelPanel.add(label_total);
+		// cbUnderColor = new JCheckBox();
+		// cbUnderColor.setFont(new java.awt.Font("Dialog", 0, 12));
+		// cbUnderColor.setText(_("Display opposite direction train using watermark"));
+		// cbUnderColor.setSelected(!(mainFrame.chartView.underDrawingColor == null));
+		// cbUnderColor.addChangeListener(new ChangeListener() {
+			// public void stateChanged(ChangeEvent e) {
+				// if (((JCheckBox) e.getSource()).isSelected())
+					// mainFrame.chartView.underDrawingColor = ChartView.DEFAULT_UNDER_COLOR;
+				// else
+					// mainFrame.chartView.underDrawingColor = null;
 				
-				mainFrame.chartView.repaint();
-			}
-		});
+				// mainFrame.chartView.repaint();
+			// }
+		// });
+		
 
-		JPanel underColorPanel = new JPanel();
-		underColorPanel.setLayout(new BorderLayout());
-		underColorPanel.add(cbUnderColor, BorderLayout.WEST);
+		//JPanel underColorPanel = new JPanel();
+		//underColorPanel.setLayout(new BorderLayout());
+		//underColorPanel.add(cbUnderColor, BorderLayout.WEST);
 
 		JPanel colorPanel = new JPanel();
 		colorPanel.setLayout(new BorderLayout());
 		colorPanel.add(spColorTable, BorderLayout.CENTER);
-		colorPanel.add(underColorPanel, BorderLayout.SOUTH);
+		//colorPanel.add(underColorPanel, BorderLayout.SOUTH);
 
 		JButton btOK = new JButton(_("OK"));
 		btOK.setFont(new Font("dialog", 0, 12));
@@ -135,6 +145,12 @@ public class TrainsDialog extends JDialog {
 					table.getCellEditor().stopCellEditing();
 
 				chart.delTrain(table.getSelectedRow());
+//System.out.println("下行："+chart.dNum_all +"，上行："+chart.uNum_all);
+//label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列，上行列车："+chart.uNum+"列"));
+//label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all+"列），上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all+"列）"));
+		label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all
+		+"列；本线列车"+chart.dNum_benxian+"列)，上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all
+		+"列；本线列车"+chart.uNum_benxian+"列）"));
 
 				table.revalidate();
 				mainFrame.chartView.repaint();
@@ -153,7 +169,7 @@ public class TrainsDialog extends JDialog {
 		rootPanel.setLayout(new BorderLayout());
 		rootPanel.add(colorPanel, BorderLayout.CENTER);
 		rootPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        rootPanel.add(labelPanel, BorderLayout.NORTH);
 		getContentPane().add(rootPanel);
 	}
 
@@ -174,6 +190,12 @@ public class TrainsDialog extends JDialog {
 				chart.addTrain(editedTrain);
 			}
 			
+			//label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列，上行列车："+chart.uNum+"列"));
+	//		label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all+"列），上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all+"列）"));
+		label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all
+		+"列；本线列车"+chart.dNum_benxian+"列)，上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all
+		+"列；本线列车"+chart.uNum_benxian+"列）"));
+
 			table.revalidate();
 			mainFrame.chartView.repaint();
 	        mainFrame.runView.refresh();
@@ -186,9 +208,9 @@ public class TrainsDialog extends JDialog {
 		newTrain.trainNameDown = "DDDD";
 		newTrain.trainNameUp   = "UUUU";
 		newTrain.stopNum = 3;
-		newTrain.stops[0] = new Stop(_("Departure"), "00:00", "00:00", false);
-		newTrain.stops[1] = new Stop(_("Middle"), "00:00", "00:00", false);
-		newTrain.stops[2] = new Stop(_("Terminal"), "00:00", "00:00", false);
+		newTrain.stops[0] = new Stop(_("Departure"), "00:00", "00:00", false,"0");
+		newTrain.stops[1] = new Stop(_("Middle"), "00:00", "00:00", false,"0");
+		newTrain.stops[2] = new Stop(_("Terminal"), "00:00", "00:00", false,"0");
 		TrainDialog dialog = new TrainDialog(mainFrame, newTrain);
 
 		dialog.editTrain();
@@ -202,7 +224,13 @@ public class TrainsDialog extends JDialog {
 			else {
 				chart.addTrain(addingTrain);
 			}
-			
+			//label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all+"列），上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all+"列）"));
+		label_total.setText(_("当前运行图中，下行列车："+chart.dNum +"列（本线全程车"+chart.dNum_all
+		+"列；本线列车"+chart.dNum_benxian+"列)，上行列车："+chart.uNum+"列（本线全程车"+chart.uNum_all
+		+"列；本线列车"+chart.uNum_benxian+"列）"));
+		//label_total.setText(_("In current graph, Down-going: "+chart.dNum +" (in-line full fare "+chart.dNum_all
+		//+", in-line train "+chart.dNum_benxian+" ),Up-going: "+chart.uNum+" (in-line full fare "+chart.uNum_all
+		//+", in-line train "+chart.uNum_benxian+" )"));			
 			table.revalidate();
 			mainFrame.chartView.repaint();
 	        mainFrame.runView.refresh();
@@ -479,7 +507,7 @@ public class TrainsDialog extends JDialog {
 		public void removeTableModelListener(TableModelListener l) {
 		}
 	}
-
+//以下为表格样式定义，如需居中对齐，请注释掉下面的定义，采用import org.paradise.etrc.wizard.addtrain.TrainTable;
 	public class TrainsTable extends JTable {
 		/**
 		 * 

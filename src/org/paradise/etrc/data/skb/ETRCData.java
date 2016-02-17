@@ -1,5 +1,6 @@
 package org.paradise.etrc.data.skb;
-
+//90 characters in the table
+// can't use \ as the element of the table
 public class ETRCData {
 	public static char[] codeTable = {
 			'0', '1', '2', '3', '4', '5', '6', '7', 
@@ -12,6 +13,8 @@ public class ETRCData {
 			'U', 'V', 'W', 'X', 'Y', 'Z', '.', ' ',
             '!', '@', '#', '$', '%', '^', '&', '*',
             '(', ')', '-', '_', '=', '+', '[', ']',
+			'{', '}', '|', '~', ':', ';', '<', '>',
+			'/', '?',
 	};
 	
 	public static int decode(char c) {

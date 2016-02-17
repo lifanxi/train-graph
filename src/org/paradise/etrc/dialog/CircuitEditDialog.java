@@ -168,16 +168,42 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JButton btLoad = new JButton(_("Load"));
+		JButton btLoad = new JButton(_("Load New Circuit(Append If possible)"));
 		btLoad.setFont(new Font("dialog", 0, 12));
 		btLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Circuit cir = doLoadCircuit();
-				if(cir != null) {
+				// joe, 20150610 added
+				Circuit oldcir = ((StationTableModel)table.getModel()).circuit;
+				
+				//System.out.println(((StationTableModel)table.getModel()).circuit);
+				//System.out.println(oldcir.stations[0].name + ",");
+				//System.out.println(oldcir.stations[0]);			
+				//System.out.println(oldcir.stationNum);
+				//cir.appendStation(oldcir.stations[0]);	
+
+//这里的动作是追加已有的线路描述到当前表格，因此要求oldcir的最后一个车站应该与新读入的线路第一个车站同名，并且新读入的线路第一个车站里程为0				
+				
+			int new_num = cir.stationNum ;
+			int old_num = oldcir.stationNum;
+
+				if(cir != null && oldcir != null  && (cir.stations[0].dist == 0) && (cir.stations[0].name).equals(oldcir.stations[old_num-1].name) )   { 
+				
+				
+				//从第2个车站开始插入（第1个车站为两线路公共站，不再插入）。 里程自动校正！
+			for (int i = 1; i < new_num; i++) {
+			oldcir.appendStation(cir.stations[i]);
+			oldcir.stations[old_num-1 + i].dist = oldcir.stations[old_num-1].dist  + cir.stations[i].dist ;
+		    }
+					((StationTableModel)table.getModel()).circuit = oldcir;
+					tfName.setText(oldcir.name + "--" + cir.name);
+					table.revalidate();
+					mainFrame.isNewCircuit = true;
+				} else if (cir != null){
 					((StationTableModel)table.getModel()).circuit = cir;
 					tfName.setText(cir.name);
 					table.revalidate();
-					mainFrame.isNewCircuit = true;
+					mainFrame.isNewCircuit = true;			
 				}
 			}
 		});
@@ -190,17 +216,30 @@ public class CircuitEditDialog extends JDialog {
 			}
 		});
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(btLoad);
-		buttonPanel.add(btSave);
-		buttonPanel.add(btOK);
-		buttonPanel.add(btCancel);
+		//JPanel buttonPanel = new JPanel();
+		//buttonPanel.add(btLoad);
+		//buttonPanel.add(btOK);
+		//buttonPanel.add(btSave);
+		//buttonPanel.add(btCancel);
 
+		//Joe 20150610 调整按钮布局，由于一个长load按钮
+		JPanel buttonPanel2 = new JPanel();
+		JPanel buttonPanel1 = new JPanel();
+		buttonPanel2.add(btLoad);
+		buttonPanel1.add(btOK);
+		buttonPanel1.add(btSave);
+		buttonPanel1.add(btCancel);
+		
+		
 		JPanel rootPanel = new JPanel();
 		rootPanel.setLayout(new BorderLayout());
-		rootPanel.add(buildCircuitPanel(), BorderLayout.CENTER);
-		rootPanel.add(buttonPanel, BorderLayout.SOUTH);
+		//rootPanel.add(buildCircuitPanel(), BorderLayout.CENTER);
+		//rootPanel.add(buttonPanel, BorderLayout.SOUTH);
 
+		//Joe 20150610 调整按钮布局，由于一个长load按钮
+		rootPanel.add(buildCircuitPanel(), BorderLayout.NORTH);
+		rootPanel.add(buttonPanel1, BorderLayout.CENTER);
+		rootPanel.add(buttonPanel2, BorderLayout.SOUTH);
 		getContentPane().add(rootPanel);
 	}
 	
@@ -230,7 +269,9 @@ public class CircuitEditDialog extends JDialog {
 				int dist = 0;
 				int level = 2;
 				boolean hide = false;
-				cir.insertStation(new Station(name, dist, level, hide), table.getSelectedRow());
+				boolean doubletrack = true;
+				String following = "";
+				cir.insertStation(new Station(name, dist, level, hide, following, doubletrack), table.getSelectedRow());
 				//System.out.println(cir);
 
 				table.revalidate();
@@ -253,8 +294,9 @@ public class CircuitEditDialog extends JDialog {
 					return;
 				
 				Circuit cir = ((StationTableModel)table.getModel()).circuit;
-				
-				cir.insertStation(new Station(name, dist, level, hide), curIndex+1);
+				boolean doubletrack = true;
+				String following = "";
+				cir.insertStation(new Station(name, dist, level, hide, following, doubletrack), curIndex+1);
 				//System.out.println(cir);
 
 				table.revalidate();
@@ -319,7 +361,8 @@ public class CircuitEditDialog extends JDialog {
 		 * @return int
 		 */
 		public int getColumnCount() {
-			return 4;
+			//return 4;
+			return 6;
 		}
 
 		/**
@@ -340,7 +383,7 @@ public class CircuitEditDialog extends JDialog {
 		 */
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return (columnIndex == 0) || (columnIndex == 1)
-					|| (columnIndex == 2)|| (columnIndex == 3);
+					|| (columnIndex == 2)|| (columnIndex == 3) || (columnIndex == 4) || (columnIndex == 5 && rowIndex !=0);
 		}
 
 		/**
@@ -357,6 +400,10 @@ public class CircuitEditDialog extends JDialog {
 			case 2:
 				return Integer.class;
 			case 3:
+				return Boolean.class;
+			case 4:
+				return String.class;
+			case 5:
 				return Boolean.class;
 			default:
 				return null;
@@ -381,6 +428,10 @@ public class CircuitEditDialog extends JDialog {
 				return new Integer(circuit.stations[rowIndex].level);
 			case 3:
 				return new Boolean(circuit.stations[rowIndex].hide);
+			case 4:
+				return circuit.stations[rowIndex].following;
+			case 5:
+				return circuit.stations[rowIndex].doubletrack;			
 			default:
 				return null;
 			}
@@ -409,6 +460,12 @@ public class CircuitEditDialog extends JDialog {
 			case 3:
 				circuit.stations[rowIndex].hide = ((Boolean) aValue).booleanValue();
 				break;
+			case 4:
+				circuit.stations[rowIndex].following = (String) aValue;
+				break;	
+			case 5:
+				circuit.stations[rowIndex].doubletrack = ((Boolean) aValue).booleanValue();
+				break;				
 			default:
 			}
 			
@@ -431,6 +488,10 @@ public class CircuitEditDialog extends JDialog {
 				return _("Level");
 			case 3:
 				return _("Hidden");
+			case 4:
+				return _("Following_Station");
+			case 5:
+				return _("Double Track");
 			default:
 				return null;
 			}

@@ -46,23 +46,24 @@ public class ETRCSKB {
 	
 	private void loadtk() throws IOException {
 		File f = new File(path + "etrc.eda");
-		
 		DataInputStream in = new DataInputStream(new FileInputStream(f));
-		
+		//inn = new FileInputStream(f);
+		//DataInputStream in = new DataInputStream(inn);
 		// Skip the BOM of UTF-8 text file
 		boolean firstTime = true;
 		byte buf = 0;
 		while(in.available() > 0) {
 			buf = in.readByte();
+			//BOM 字节为EF，BB， BF，被readByte读出后为负数，读到正数则说明读到第一个非BOM字节(例如：字符"0")
 			if (buf > 0)
 				break;
 		}
 		
 		while(in.available() > 0) {
-			byte[] buffer = new byte[8];
+			byte[] buffer = new byte[10];
 			if (firstTime)	{
 				buffer[0] = buf;
-				for (int i = 0; i < 7; ++i)
+				for (int i = 0; i < 9; ++i)
 				{
 					buffer[i + 1] = in.readByte();
 				}
@@ -104,8 +105,8 @@ public class ETRCSKB {
 	}
 	
 	private String[] decodeTK(String tk) {
-		if(tk.length() != 8)
-			return new String[] {"0000", "错误", "00:00", "00:00"};
+		if(tk.length() != 10)
+			return new String[] {"0000", "错误", "00:00", "00:00","0000"};
 		
 		int trainIndex = ETRCData.decode(tk.charAt(0)) * ETRCData.codeTable.length
 		               + ETRCData.decode(tk.charAt(1));
@@ -119,11 +120,14 @@ public class ETRCSKB {
 		int h_leave = ETRCData.decode(tk.charAt(6));
 		int m_leave = ETRCData.decode(tk.charAt(7));
 		
+		int lc = ETRCData.decode(tk.charAt(8))*80 + ETRCData.decode(tk.charAt(9));
+		
 		return new String[] {
 			(String)cc.get(trainIndex),
 			(String)zm.get(stationIndex),
 			h_arrive + ":" + m_arrive,
-			h_leave + ":" + m_leave
+			h_leave + ":" + m_leave,
+			lc + ""
 		};
 	}
 	
@@ -216,8 +220,9 @@ public class ETRCSKB {
 				String tkName = tkInfo[1];
 				String str_arrive = tkInfo[2];
 				String str_leave = tkInfo[3];
-				
-				train.appendStop(Stop.makeStop(tkName, str_arrive, str_leave, true));
+				String str_licheng = tkInfo[4];
+				System.out.println(str_licheng);
+				train.appendStop(Stop.makeStop(tkName, str_arrive, str_leave, true, str_licheng));
 	
 //				SimpleDateFormat df = new SimpleDateFormat("H:mm");
 //				Date arrive = null;
